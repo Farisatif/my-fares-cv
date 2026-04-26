@@ -440,7 +440,7 @@ export const PhysicsPills = forwardRef<PhysicsPillsHandle, Props>(function Physi
       // that rose into it get repainted cleanly each frame.
       ctx.clearRect(0, -OVERFLOW_TOP, w, h + OVERFLOW_TOP);
 
-      const now = performance.now();
+      // `now` already computed above for the fixed-timestep loop — reuse it.
       for (const b of bodiesRef.current) {
         const dy = h - (b.position.y + b.__h / 2);
         if (dy >= 0 && dy < 30) {
