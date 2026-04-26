@@ -1,6 +1,5 @@
 import { SectionBand } from "./SectionBand";
 import { DotPattern } from "./Patterns";
-import heroSplash from "@/assets/hero-splash.jpg";
 
 /**
  * PageSkeleton — full-page skeleton that EXACTLY mirrors the real
@@ -32,29 +31,7 @@ export function PageSkeleton() {
         />
         <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 grid-bg opacity-25 dark:opacity-30" />
 
-        {/* Half-background splash — matches Hero.tsx exactly */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -z-[5] inset-x-0 top-0 h-[78%] lg:inset-y-0 lg:h-full lg:w-1/2 lg:right-0 lg:left-auto rtl:lg:left-0 rtl:lg:right-auto"
-        >
-          <div
-            className="absolute inset-0 bg-cover bg-bottom opacity-[0.7] dark:opacity-[0.55]"
-            style={{
-              backgroundImage: `url(${heroSplash})`,
-              WebkitMaskImage: "linear-gradient(to bottom, black 0%, black 55%, transparent 100%)",
-              maskImage: "linear-gradient(to bottom, black 0%, black 55%, transparent 100%)",
-            }}
-          />
-          <div
-            className="hidden lg:block absolute inset-0 bg-cover bg-center opacity-[0.7] dark:opacity-[0.55]"
-            style={{
-              backgroundImage: `url(${heroSplash})`,
-              WebkitMaskImage: "linear-gradient(to left, black 30%, transparent 100%)",
-              maskImage: "linear-gradient(to left, black 30%, transparent 100%)",
-            }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-primary/15 via-primary/5 to-transparent mix-blend-multiply dark:mix-blend-soft-light" />
-        </div>
+
 
         <div className="container relative mx-auto px-6 max-w-7xl">
           {/* Top meta row — chip + edition stamp */}

@@ -23,32 +23,32 @@ type Props = {
   floorOffset?: number;
 };
 
-// Deep blue palette inspired by professional architecture (#02030a, #0b1223, #0c2042, #24374c, #244f80)
+// Professional deep blue palette from design (exact hex values)
 const PALETTE: Array<{ bg: string; fg: string; bgTop: string; bgBottom: string }> = [
-  // Darkest navy
-  { bg: "#02030a", fg: "#FFFFFF", bgTop: "#0d1825", bgBottom: "#000000" },
-  // Deep dark blue
-  { bg: "#0b1223", fg: "#FFFFFF", bgTop: "#162a4a", bgBottom: "#050a14" },
-  // Dark teal-blue
-  { bg: "#0c2042", fg: "#FFFFFF", bgTop: "#1a3860", bgBottom: "#05102a" },
-  // Medium dark blue
-  { bg: "#1a3a5e", fg: "#FFFFFF", bgTop: "#2a5080", bgBottom: "#0f2540" },
-  // Professional teal
-  { bg: "#244f80", fg: "#FFFFFF", bgTop: "#3a6fa0", bgBottom: "#142f50" },
-  // Light teal accent
-  { bg: "#3a6fa0", fg: "#FFFFFF", bgTop: "#5a8fc0", bgBottom: "#244f80" },
-  // Medium blue
-  { bg: "#2a5880", fg: "#FFFFFF", bgTop: "#3a7ca0", bgBottom: "#1a3860" },
-  // Soft blue
-  { bg: "#4a7fa0", fg: "#FFFFFF", bgTop: "#6a9fc0", bgBottom: "#2a5f80" },
-  // Deep slate blue
-  { bg: "#1a2a4a", fg: "#FFFFFF", bgTop: "#2a4a6a", bgBottom: "#0a1a3a" },
-  // Slate
-  { bg: "#2a3a5a", fg: "#FFFFFF", bgTop: "#3a5a7a", bgBottom: "#1a2a4a" },
-  // Lighter slate
-  { bg: "#3a5a7a", fg: "#FFFFFF", bgTop: "#5a7aaa", bgBottom: "#244f80" },
-  // Twilight blue
-  { bg: "#1a3a6a", fg: "#FFFFFF", bgTop: "#2a5a8a", bgBottom: "#0a1a4a" },
+  // #02203c - very dark navy
+  { bg: "#02203c", fg: "#f0f5ff", bgTop: "#0d3a5f", bgBottom: "#010d1a" },
+  // #081635 - deep navy
+  { bg: "#081635", fg: "#f0f5ff", bgTop: "#0d2858", bgBottom: "#040b21" },
+  // #0f427c - bright professional blue
+  { bg: "#0f427c", fg: "#f0f5ff", bgTop: "#1a5a99", bgBottom: "#082550" },
+  // #032c4f - darkest navy variant
+  { bg: "#032c4f", fg: "#f0f5ff", bgTop: "#0d4885", bgBottom: "#010f1f" },
+  // #0b3d72 - medium navy
+  { bg: "#0b3d72", fg: "#f0f5ff", bgTop: "#1a5a99", bgBottom: "#051e3c" },
+  // #0d3a5f - muted navy
+  { bg: "#0d3a5f", fg: "#f0f5ff", bgTop: "#1a5a99", bgBottom: "#050f1f" },
+  // #1a5a99 - lighter blue
+  { bg: "#1a5a99", fg: "#f0f5ff", bgTop: "#2a7ab8", bgBottom: "#0f2f5f" },
+  // #0d4885 - medium darker blue
+  { bg: "#0d4885", fg: "#f0f5ff", bgTop: "#1a6bb8", bgBottom: "#051d47" },
+  // #1a6bb8 - accent blue
+  { bg: "#1a6bb8", fg: "#f0f5ff", bgTop: "#2a8ad8", bgBottom: "#0f3d7f" },
+  // #0b1f47 - deep blue surface
+  { bg: "#0b1f47", fg: "#f0f5ff", bgTop: "#1a3d66", bgBottom: "#050f28" },
+  // #0d2858 - darker blue
+  { bg: "#0d2858", fg: "#f0f5ff", bgTop: "#1a4885", bgBottom: "#050f28" },
+  // #0a2f5e - twilight blue
+  { bg: "#0a2f5e", fg: "#f0f5ff", bgTop: "#1a5a99", bgBottom: "#040f2a" },
 ];
 
 type DragState =
