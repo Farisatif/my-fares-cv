@@ -145,9 +145,10 @@ export const PhysicsPills = forwardRef<PhysicsPillsHandle, Props>(function Physi
     });
     engineRef.current = engine;
 
-    const runner = Matter.Runner.create({ delta: 1000 / 60 });
-    runnerRef.current = runner;
-    Matter.Runner.run(runner, engine);
+    // Manual fixed-timestep loop replaces Matter.Runner — see the render
+    // function below. We keep a ref slot for API parity but never start the
+    // built-in runner, which would conflict with our own stepping.
+    runnerRef.current = null;
 
     Matter.Events.on(engine, "collisionStart", (ev) => {
       const now = performance.now();
