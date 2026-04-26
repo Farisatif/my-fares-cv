@@ -1025,7 +1025,7 @@ export const PhysicsPills = forwardRef<PhysicsPillsHandle, Props>(function Physi
       canvas.removeEventListener("pointerup", finishPointer);
       canvas.removeEventListener("pointercancel", finishPointer);
       canvas.removeEventListener("pointerleave", onPointerLeave);
-      Matter.Runner.stop(runner);
+      // No Matter.Runner to stop — fixed-timestep loop is cancelled via rafRef above.
       Matter.World.clear(engine.world, false);
       Matter.Engine.clear(engine);
       engineRef.current = null;
