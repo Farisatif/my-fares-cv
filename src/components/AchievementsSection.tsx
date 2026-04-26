@@ -76,7 +76,7 @@ export function AchievementsSection() {
             </p>
             <h2 className="font-display text-5xl sm:text-7xl lg:text-8xl tracking-[-0.045em] leading-[1.02] pb-2">
               {t("A few ", "بعض ")}
-              <span className="italic opacity-70">
+              <span className="italic gradient-text-primary">
                 {t("proud moments.", "اللحظات المُشرّفة.")}
               </span>
             </h2>
