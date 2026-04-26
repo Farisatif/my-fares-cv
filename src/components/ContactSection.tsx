@@ -106,9 +106,9 @@ export function ContactSection() {
 
       <div className="container mx-auto px-6 max-w-7xl mt-8 relative">
         <div className="flex flex-wrap gap-4 justify-between items-center text-xs border-t pt-4"
-          style={{ borderColor: "color-mix(in oklab, currentColor 12%, transparent)" }}>
-          <span className="opacity-60">© {new Date().getFullYear()} {p.name}</span>
-          <span className="opacity-60">{t("Built with care · Sana'a, YE", "صُنع بعناية · صنعاء، اليمن")}</span>
+          style={{ borderColor: "color-mix(in oklab, currentColor 40%, transparent)" }}>
+          <span className="text-foreground/70">© {new Date().getFullYear()} {p.name}</span>
+          <span className="text-foreground/70">{t("Built with care · Sana'a, YE", "صُنع بعناية · صنعاء، اليمن")}</span>
           <SettingsDrawer />
         </div>
       </div>

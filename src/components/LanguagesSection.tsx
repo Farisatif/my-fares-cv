@@ -44,7 +44,7 @@ export function LanguagesSection() {
   return (
     <section
       id="languages"
-      className="py-24 sm:py-32 relative overflow-hidden"
+      className="section-padding relative overflow-hidden"
     >
       {/* Brand-identity gradient backdrop — replaces the dotted pattern with
           a soft, directional wash that uses the site's primary tokens. */}

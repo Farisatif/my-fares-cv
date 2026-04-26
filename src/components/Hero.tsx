@@ -108,7 +108,7 @@ export function Hero() {
         {/* Mobile/base: image anchored to TOP, fades into the page below.
             We use bg-bottom so the densest blue area shows above the fold. */}
         <div
-          className="absolute inset-0 bg-cover bg-bottom opacity-[0.7] dark:opacity-[0.55]"
+          className="absolute inset-0 bg-cover bg-bottom opacity-[0.85] dark:opacity-[0.75]"
           style={{
             backgroundImage: `url(${heroSplash})`,
             WebkitMaskImage:
@@ -116,31 +116,33 @@ export function Hero() {
             maskImage:
               "linear-gradient(to bottom, black 0%, black 55%, transparent 100%)",
           }}
+          aria-hidden
         />
         {/* Desktop directional mask — fade from outer edge into center */}
         <div
-          className="hidden lg:block absolute inset-0 bg-cover bg-center opacity-[0.7] dark:opacity-[0.55]"
+          className="hidden lg:block absolute inset-0 bg-cover bg-center opacity-[0.85] dark:opacity-[0.75]"
           style={{
             backgroundImage: `url(${heroSplash})`,
             WebkitMaskImage:
-              "linear-gradient(to left, black 30%, transparent 100%)",
+              "linear-gradient(to left, black 30%, transparent 85%)",
             maskImage:
-              "linear-gradient(to left, black 30%, transparent 100%)",
+              "linear-gradient(to left, black 30%, transparent 85%)",
           }}
+          aria-hidden
         />
         {/* RTL desktop reverse */}
         <div
-          className="hidden rtl:lg:block lg:hidden absolute inset-0 bg-cover bg-center opacity-[0.7] dark:opacity-[0.55]"
+          className="hidden rtl:lg:block lg:hidden absolute inset-0 bg-cover bg-center opacity-[0.85] dark:opacity-[0.75]"
           style={{
             backgroundImage: `url(${heroSplash})`,
             WebkitMaskImage:
-              "linear-gradient(to right, black 30%, transparent 100%)",
+              "linear-gradient(to right, black 30%, transparent 85%)",
             maskImage:
-              "linear-gradient(to right, black 30%, transparent 100%)",
+              "linear-gradient(to right, black 30%, transparent 85%)",
           }}
+          aria-hidden
         />
-        {/* Tone down any remaining whites with a soft primary-tinted overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/15 via-primary/5 to-transparent mix-blend-multiply dark:mix-blend-soft-light" />
+
       </div>
 
       <div className="container relative mx-auto px-6 max-w-7xl">
@@ -206,7 +208,7 @@ export function Hero() {
                   transformPerspective: 1200,
                 }
           }
-          className="font-display text-[clamp(2.8rem,9vw,8.5rem)] leading-[0.88] tracking-[-0.05em] will-change-transform pb-2 [text-shadow:0_2px_24px_color-mix(in_oklab,var(--background)_55%,transparent)]"
+          className="font-display text-[clamp(1.8rem,8vw,7rem)] leading-[0.88] tracking-[-0.05em] will-change-transform pb-2 [text-shadow:0_2px_24px_color-mix(in_oklab,var(--background)_55%,transparent)]"
         >
           {heroWords.map((word, wi) => {
             const isAccent = wi === 1;
@@ -259,7 +261,7 @@ export function Hero() {
             transition={{ duration: 0.9, delay: 0.7 }}
             className="lg:col-span-7 max-w-xl rounded-2xl bg-background/55 dark:bg-background/40 backdrop-blur-md border border-border/40 px-5 py-4 sm:px-6 sm:py-5"
           >
-            <p className="text-base sm:text-lg text-foreground leading-relaxed">
+            <p className="text-lg sm:text-base text-foreground leading-relaxed">
               {t(
                 data.content?.hero?.greeting_en ?? "Hi — I'm ",
                 data.content?.hero?.greeting_ar ?? "مرحباً — أنا ",

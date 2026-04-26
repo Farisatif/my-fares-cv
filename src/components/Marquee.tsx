@@ -11,7 +11,7 @@ export function Marquee({ items, itemsAr }: { items: string[]; itemsAr?: string[
   const looped = Array.from({ length: REPEATS }, () => list).flat();
   return (
     <div
-      className="relative overflow-hidden py-3 sm:py-4 border-y border-border bg-secondary/40"
+      className="relative overflow-hidden py-4 sm:py-6 border-y border-border bg-secondary/60"
       dir="ltr"
     >
       <div
@@ -21,12 +21,12 @@ export function Marquee({ items, itemsAr }: { items: string[]; itemsAr?: string[
         {looped.map((item, i) => (
           <div key={i} className="flex shrink-0 items-center gap-8">
             <span
-              className="font-display text-lg sm:text-2xl text-foreground/80"
+              className="font-display text-xl sm:text-3xl text-foreground"
               dir={lang === "ar" ? "rtl" : "ltr"}
             >
               {item}
             </span>
-            <span className="text-lg sm:text-2xl text-[oklch(0.42_0.2_255)]">✦</span>
+            <span className="text-xl sm:text-3xl text-[oklch(0.42_0.2_255)]">✦</span>
           </div>
         ))}
       </div>

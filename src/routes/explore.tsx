@@ -111,8 +111,8 @@ function ExplorePage() {
         <ProjectsSection />
       </SectionBand>
 
-      {/* GitHub activity — surface band, no extra pattern (it has its own dots) */}
-      <SectionBand variant="surface" pattern="none" divider roundTop>
+      {/* GitHub activity — inverted band: light background in dark mode, dark in light mode */}
+      <SectionBand variant="dark" pattern="none" divider roundTop>
         <GithubActivitySection />
       </SectionBand>
     </div>

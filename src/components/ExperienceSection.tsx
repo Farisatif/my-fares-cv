@@ -26,7 +26,7 @@ export function ExperienceSection() {
   return (
     <section
       id="work"
-      className="py-24 sm:py-32 relative overflow-hidden bg-foreground text-background"
+      className="section-padding relative overflow-hidden bg-foreground text-background"
     >
       <ChevronPattern>
         <div className="container mx-auto px-6 max-w-7xl relative">
@@ -115,13 +115,17 @@ function ExperienceCard({
     el.style.setProperty("--my", `${e.clientY - r.top}px`);
   };
 
+  const isCurrent = period.includes("Present") || period.includes("الحالي");
+  
   return (
     <div
       ref={cardRef}
       onMouseMove={onMove}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="group block relative rounded-3xl p-8 sm:p-10 h-full overflow-hidden transition-all hover-lift"
+      className={`group block relative rounded-3xl p-8 sm:p-10 h-full overflow-hidden transition-all hover-lift border-l-4 ${
+        isCurrent ? "border-l-primary/80" : "border-l-muted/40"
+      }`}
       style={{
         // Inverted surface — dark card on dark section (mirrors Projects' light card on light section)
         backgroundColor: "color-mix(in oklab, var(--background) 8%, transparent)",
@@ -190,7 +194,7 @@ function ExperienceCard({
         {/* Company — matches Projects h3 size */}
         <h3 className="font-display text-3xl sm:text-4xl tracking-tight">{company}</h3>
 
-        {/* Role + location — replaces Projects' description position */}
+        {/* Role + location �� replaces Projects' description position */}
         <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-base">
           <span
             className="font-medium"

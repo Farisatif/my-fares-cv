@@ -45,7 +45,7 @@ export function AchievementsSection() {
   const { lang, t } = useLang();
 
   return (
-    <section className="relative py-28 sm:py-36 overflow-hidden">
+    <section className="relative section-padding overflow-hidden">
       {/* Interactive glowing-dots field — full-bleed, reacts to cursor / touch.
           Uses currentColor so dots/glow inherit the inverted band color
           (white in light mode, black in dark mode). */}

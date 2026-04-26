@@ -126,7 +126,7 @@ function AnimatedOutlet() {
       }}
     >
       <motion.div
-        key={loc.pathname}
+        key={loc.pathname + loc.hash}
         initial={
           reduce
             ? { opacity: 0 }
