@@ -113,7 +113,10 @@ export function ProjectsSection() {
 
                     {/* Title + description */}
                     <div className="flex-1">
-                      <h3 className="font-display text-3xl sm:text-[2.5rem] leading-[1.05] tracking-[-0.03em] transition-colors group-hover:text-[color-mix(in_oklab,var(--primary)_75%,var(--foreground))]">
+                      <h3 
+                        className="font-display text-3xl sm:text-[2.5rem] leading-[1.05] tracking-[-0.03em] transition-colors"
+                        style={{ color: langColor }}
+                      >
                         {p.name}
                       </h3>
                       <p className="mt-4 text-[15px] sm:text-base text-muted-foreground leading-relaxed line-clamp-3">

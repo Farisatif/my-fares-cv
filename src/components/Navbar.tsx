@@ -27,7 +27,7 @@ export function Navbar() {
   const onHome = loc.pathname === "/";
 
   const navLinkBase =
-    "focus-ring relative px-3 sm:px-3.5 py-1.5 text-xs sm:text-sm rounded-full transition-colors duration-300 whitespace-nowrap z-10 active:scale-[0.97]";
+    "focus-ring relative px-2 sm:px-3.5 py-1 sm:py-1.5 text-xs rounded-full transition-colors duration-300 whitespace-nowrap z-10 active:scale-[0.97]";
 
   const pillSpring = { type: "spring" as const, stiffness: 260, damping: 28, mass: 0.8 };
 
@@ -41,7 +41,7 @@ export function Navbar() {
     >
       <LayoutGroup id="navbar">
       <nav
-        className={`flex items-center gap-1 rounded-full px-1.5 py-1.5 transition-all duration-300 backdrop-blur-xl border ${
+        className={`flex items-center gap-0.5 sm:gap-1 rounded-full px-1 sm:px-1.5 py-1 sm:py-1.5 transition-all duration-300 backdrop-blur-xl border text-xs sm:text-sm ${
           scrolled
             ? "bg-[var(--surface-1)]/85 border-[var(--hairline)] brand-shadow"
             : "bg-[var(--surface-1)]/65 border-[var(--hairline)] brand-shadow-sm"
@@ -109,7 +109,7 @@ export function Navbar() {
         <Link
           to="/"
           hash="contact"
-          className="focus-ring px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm rounded-full bg-foreground text-background hover:bg-foreground/90 transition-all duration-300 whitespace-nowrap shrink-0 active:scale-[0.96]"
+          className="focus-ring px-2 sm:px-3 py-1 sm:py-1.5 text-xs rounded-full bg-foreground text-background hover:bg-foreground/90 transition-all duration-300 whitespace-nowrap shrink-0 active:scale-[0.96]"
         >
           {contactLabel}
         </Link>

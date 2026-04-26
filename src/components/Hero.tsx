@@ -142,8 +142,7 @@ export function Hero() {
           }}
           aria-hidden
         />
-        {/* Tone down any remaining whites with a soft primary-tinted overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/15 via-primary/5 to-transparent mix-blend-multiply dark:mix-blend-soft-light" />
+
       </div>
 
       <div className="container relative mx-auto px-6 max-w-7xl">
