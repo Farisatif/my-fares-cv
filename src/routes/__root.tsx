@@ -94,6 +94,7 @@ function RootComponent() {
           <HeroArrowBackdrop />
           <TopProgressBar />
           <AnimatedOutlet />
+          <AnchorPulse />
           <BackToTop />
           <Navbar />
           <Toaster position="bottom-right" />
@@ -116,7 +117,11 @@ function AnimatedOutlet() {
       initial={false}
       onExitComplete={() => {
         if (typeof window !== "undefined") {
-          window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+          // Only reset scroll for true route changes (no hash). Hash navigation
+          // is handled by AnchorPulse + native smooth-scroll.
+          if (!window.location.hash) {
+            window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+          }
         }
       }}
     >
@@ -125,25 +130,74 @@ function AnimatedOutlet() {
         initial={
           reduce
             ? { opacity: 0 }
-            : { opacity: 0, y: 12, filter: "blur(6px)" }
+            : { opacity: 0, y: 18, scale: 0.985, filter: "blur(8px)" }
         }
         animate={
           reduce
             ? { opacity: 1 }
-            : { opacity: 1, y: 0, filter: "blur(0px)" }
+            : { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }
         }
         exit={
           reduce
             ? { opacity: 0 }
-            : { opacity: 0, y: -8, filter: "blur(6px)" }
+            : { opacity: 0, y: -10, scale: 0.99, filter: "blur(6px)" }
         }
-        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-        style={{ willChange: "transform, opacity, filter" }}
+        transition={
+          reduce
+            ? { duration: 0.2 }
+            : {
+                opacity: { duration: 0.45, ease: [0.22, 1, 0.36, 1] },
+                y: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
+                scale: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
+                filter: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
+              }
+        }
+        style={{
+          willChange: "transform, opacity, filter",
+          transformOrigin: "center 30%",
+        }}
       >
         <Outlet />
       </motion.div>
     </AnimatePresence>
   );
+}
+
+/**
+ * Subtle highlight pulse on the section that matches the current URL hash.
+ * Triggers on every hash change (e.g. clicking #contact in the navbar) so
+ * users get visual confirmation of where the smooth-scroll just landed.
+ */
+function AnchorPulse() {
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    let timer: ReturnType<typeof setTimeout> | null = null;
+
+    const pulse = () => {
+      const hash = window.location.hash.slice(1);
+      if (!hash) return;
+      // Wait one tick so the route's anchor exists in the DOM after navigation.
+      requestAnimationFrame(() => {
+        const el = document.getElementById(hash);
+        if (!el) return;
+        el.classList.remove("anchor-pulse");
+        // Force reflow so re-adding the class restarts the animation.
+        void el.offsetWidth;
+        el.classList.add("anchor-pulse");
+        if (timer) clearTimeout(timer);
+        timer = setTimeout(() => el.classList.remove("anchor-pulse"), 2200);
+      });
+    };
+
+    pulse();
+    window.addEventListener("hashchange", pulse);
+    return () => {
+      window.removeEventListener("hashchange", pulse);
+      if (timer) clearTimeout(timer);
+    };
+  }, []);
+
+  return null;
 }
 
 function TopProgressBar() {

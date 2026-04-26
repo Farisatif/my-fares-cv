@@ -484,6 +484,34 @@
   .pulse-ring {
     animation: pulse-ring 1.6s ease-out 1;
   }
+  /* ---------- Anchor pulse ----------
+     Briefly highlights a section that the user just navigated to via hash.
+     A soft inset primary glow + outer ring rises and fades, giving keyboard
+     and click users visual confirmation of where they landed. */
+  @keyframes anchor-pulse {
+    0% {
+      box-shadow:
+        inset 0 0 0 0 color-mix(in oklab, var(--primary) 0%, transparent),
+        0 0 0 0 color-mix(in oklab, var(--primary) 0%, transparent);
+    }
+    20% {
+      box-shadow:
+        inset 0 0 60px 6px color-mix(in oklab, var(--primary) 22%, transparent),
+        0 0 0 4px color-mix(in oklab, var(--primary) 18%, transparent);
+    }
+    100% {
+      box-shadow:
+        inset 0 0 0 0 color-mix(in oklab, var(--primary) 0%, transparent),
+        0 0 0 0 color-mix(in oklab, var(--primary) 0%, transparent);
+    }
+  }
+  .anchor-pulse {
+    animation: anchor-pulse 2.1s cubic-bezier(0.22, 1, 0.36, 1) 1;
+    will-change: box-shadow;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .anchor-pulse { animation: none !important; }
+  }
   [dir="rtl"] .marquee { animation-direction: reverse; }
   @media (prefers-reduced-motion: reduce) {
     .animate-blob, .marquee, .pulse-ring, .animate-float-slow { animation: none !important; }

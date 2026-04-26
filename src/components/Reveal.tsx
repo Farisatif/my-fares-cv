@@ -18,9 +18,29 @@ export function Reveal({
   return (
     <motion.div
       ref={ref}
-      initial={reduce ? { opacity: 0 } : { opacity: 0, y, filter: "blur(6px)" }}
-      animate={inView ? (reduce ? { opacity: 1 } : { opacity: 1, y: 0, filter: "blur(0px)" }) : {}}
-      transition={{ duration: 0.9, delay, ease: [0.22, 1, 0.36, 1] }}
+      initial={
+        reduce
+          ? { opacity: 0 }
+          : { opacity: 0, y, scale: 0.985, filter: "blur(8px)" }
+      }
+      animate={
+        inView
+          ? reduce
+            ? { opacity: 1 }
+            : { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }
+          : {}
+      }
+      transition={
+        reduce
+          ? { duration: 0.4, delay }
+          : {
+              opacity: { duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] },
+              y: { duration: 0.85, delay, ease: [0.22, 1, 0.36, 1] },
+              scale: { duration: 0.95, delay, ease: [0.22, 1, 0.36, 1] },
+              filter: { duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] },
+            }
+      }
+      style={{ willChange: "transform, opacity, filter" }}
       className={className}
     >
       {children}
