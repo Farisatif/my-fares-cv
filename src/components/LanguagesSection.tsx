@@ -132,7 +132,11 @@ function Gauge({
   const STROKE = 30;
   const R = (SIZE - STROKE) / 2;
   const CX = SIZE / 2;
-  const CY = SIZE / 2;
+  // Place the circle's center near the TOP of the viewBox so its bottom
+  // half (the only portion drawn via stroke-dasharray) fits inside the
+  // 204-tall viewBox. The whole SVG is then CSS-rotated 180° so the arc
+  // appears at the top of the rendered container as a speedometer shape.
+  const CY = STROKE / 2;
   const HALF = Math.PI * R;
 
   const ref = useRef<SVGSVGElement>(null);
