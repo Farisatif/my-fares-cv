@@ -316,12 +316,9 @@ export const PhysicsPills = forwardRef<PhysicsPillsHandle, Props>(function Physi
       return Math.min(Math.max(floorOffset, intrusion), Math.max(0, h * 0.6));
     };
 
-    // Ceiling has two states:
+    // Ceiling has two states (see ceilingSealedRef declared above):
     //  - "open": parked far above so pills can fall in from outside the section.
-    //  - "sealed": flush at y=0 so it behaves exactly like the floor and
-    //    blocks pills from poking back into the band above.
-    // We start "open" each spawn, then seal once the pills have entered.
-    const ceilingSealedRef = { current: false } as { current: boolean };
+    //  - "sealed": flush at y=0 so it behaves exactly like the floor.
 
     const buildWalls = (w: number, h: number) => {
       for (const wallBody of wallsRef.current) Matter.World.remove(engine.world, wallBody);
