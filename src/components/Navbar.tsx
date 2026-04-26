@@ -23,6 +23,7 @@ export function Navbar() {
   }, []);
 
   const onComments = loc.pathname === "/comments";
+  const onExplore = loc.pathname === "/explore";
   const onHome = loc.pathname === "/";
 
   const navLinkBase =
@@ -61,6 +62,25 @@ export function Navbar() {
             />
           )}
           <span className="relative">Fares.</span>
+        </Link>
+        <span className="w-px h-5 bg-border mx-0.5" />
+        <Link
+          to="/explore"
+          preload="intent"
+          className={`${navLinkBase} ${
+            onExplore
+              ? "text-foreground"
+              : "text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          {onExplore && (
+            <motion.span
+              layoutId="nav-active-pill"
+              className="absolute inset-0 rounded-full bg-secondary"
+              transition={pillSpring}
+            />
+          )}
+          <span className="relative">{t("Explore", "استكشف")}</span>
         </Link>
         {showComments && (
           <>
