@@ -5,25 +5,26 @@ import { useSiteData } from "./SiteDataProvider";
 import { useLang } from "./LanguageProvider";
 import { ChevronPattern } from "./Patterns";
 
-// Lightweight color map for common languages (fallback uses primary).
+// Professional color map for common languages — refined to match site identity
+// Colors are balanced for elegance: reduced chroma, adjusted lightness for hierarchy
 const LANG_COLORS: Record<string, string> = {
-  TypeScript: "oklch(0.62 0.17 250)",
-  JavaScript: "oklch(0.82 0.17 90)",
-  Python: "oklch(0.70 0.13 230)",
-  Go: "oklch(0.75 0.13 200)",
-  Rust: "oklch(0.55 0.16 35)",
-  Java: "oklch(0.62 0.16 50)",
-  "C++": "oklch(0.62 0.18 330)",
-  C: "oklch(0.55 0.10 260)",
-  Dart: "oklch(0.65 0.13 220)",
-  Swift: "oklch(0.68 0.18 35)",
-  Kotlin: "oklch(0.65 0.16 290)",
-  Ruby: "oklch(0.55 0.20 25)",
-  PHP: "oklch(0.55 0.13 290)",
-  HTML: "oklch(0.65 0.18 40)",
-  CSS: "oklch(0.62 0.17 240)",
-  Shell: "oklch(0.65 0.15 145)",
-  Other: "oklch(0.60 0.05 260)",
+  TypeScript: "oklch(0.55 0.15 260)",     // Deep indigo (site primary-aligned)
+  JavaScript: "oklch(0.70 0.14 85)",      // Warm amber (approachable)
+  Python: "oklch(0.60 0.12 240)",         // Cool blue (professional)
+  Go: "oklch(0.65 0.11 210)",             // Cyan-blue (modern)
+  Rust: "oklch(0.52 0.14 30)",            // Burnt orange (distinctive)
+  Java: "oklch(0.58 0.13 45)",            // Orange-brown (established)
+  "C++": "oklch(0.56 0.13 340)",          // Rose (elegant)
+  C: "oklch(0.58 0.10 265)",              // Purple (cohesive)
+  Dart: "oklch(0.62 0.12 220)",           // Sky blue (friendly)
+  Swift: "oklch(0.62 0.15 35)",           // Orange-red (energetic)
+  Kotlin: "oklch(0.58 0.14 295)",         // Violet (premium)
+  Ruby: "oklch(0.52 0.16 20)",            // Deep red (rich)
+  PHP: "oklch(0.56 0.12 280)",            // Deep purple (established)
+  HTML: "oklch(0.62 0.14 35)",            // Orange (warm)
+  CSS: "oklch(0.58 0.13 240)",            // Blue (tech)
+  Shell: "oklch(0.60 0.12 140)",          // Green (productive)
+  Other: "oklch(0.55 0.08 265)",          // Muted indigo (neutral)
 };
 
 const formatNum = (n: number) =>
@@ -77,18 +78,18 @@ export function ProjectsSection() {
                     data-cursor-label={t("Open", "افتح")}
                     className="group relative flex h-full flex-col rounded-3xl border border-[var(--hairline)] bg-[var(--surface-1)] brand-shadow p-7 sm:p-9 overflow-hidden transition-[border-color,transform,box-shadow] duration-200 hover:border-[color-mix(in_oklab,var(--primary)_45%,var(--hairline))] hover-lift"
                   >
-                    {/* Accent gradient corner — reveals on hover */}
+                    {/* Accent gradient corner — reveals on hover with refined opacity */}
                     <div
                       aria-hidden
-                      className="pointer-events-none absolute -top-24 -right-24 h-56 w-56 rounded-full opacity-0 group-hover:opacity-70 blur-3xl transition-opacity duration-300"
+                      className="pointer-events-none absolute -top-24 -right-24 h-56 w-56 rounded-full opacity-0 group-hover:opacity-50 blur-3xl transition-opacity duration-300"
                       style={{
                         background: `radial-gradient(circle, ${langColor} 0%, transparent 70%)`,
                       }}
                     />
-                    {/* Hairline accent on top edge */}
+                    {/* Colored accent line on top edge — more prominent */}
                     <div
                       aria-hidden
-                      className="pointer-events-none absolute inset-x-7 top-0 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                      className="pointer-events-none absolute inset-x-0 top-0 h-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
                       style={{
                         background: `linear-gradient(90deg, transparent, ${langColor}, transparent)`,
                       }}
@@ -114,8 +115,14 @@ export function ProjectsSection() {
                     {/* Title + description */}
                     <div className="flex-1">
                       <h3 
-                        className="font-display text-3xl sm:text-[2.5rem] leading-[1.05] tracking-[-0.03em] transition-colors"
-                        style={{ color: langColor }}
+                        className="font-display text-3xl sm:text-[2.5rem] leading-[1.05] tracking-[-0.03em] transition-all duration-200"
+                        style={{
+                          background: `linear-gradient(135deg, ${langColor} 0%, color-mix(in oklab, ${langColor} 70%, var(--foreground)) 100%)`,
+                          WebkitBackgroundClip: "text",
+                          WebkitTextFillColor: "transparent",
+                          backgroundClip: "text",
+                          textFillColor: "transparent",
+                        }}
                       >
                         {p.name}
                       </h3>
@@ -140,10 +147,19 @@ export function ProjectsSection() {
 
                     {/* Footer: meta */}
                     <div className="mt-6 pt-5 border-t border-[var(--hairline)] flex items-center justify-between gap-4 text-xs sm:text-sm">
-                      <span className="flex items-center gap-2 font-medium text-foreground">
+                      <span className="flex items-center gap-2.5 font-medium px-3 py-1.5 rounded-full transition-all duration-200" 
+                        style={{ 
+                          background: `color-mix(in oklab, ${langColor} 15%, transparent)`,
+                          color: langColor,
+                          border: `1px solid color-mix(in oklab, ${langColor} 35%, transparent)`,
+                        }}>
                         <span
-                          className="h-2.5 w-2.5 rounded-full ring-2 ring-[var(--surface-1)]"
-                          style={{ background: langColor, boxShadow: `0 0 12px ${langColor}` }}
+                          className="h-2 w-2 rounded-full ring-1 ring-offset-1 transition-shadow duration-200"
+                          style={{ 
+                            background: langColor, 
+                            ringColor: langColor,
+                            boxShadow: `inset 0 0 0 1px ${langColor}40`,
+                          }}
                         />
                         {p.language}
                       </span>
