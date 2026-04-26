@@ -401,8 +401,37 @@ export const PhysicsPills = forwardRef<PhysicsPillsHandle, Props>(function Physi
     );
     io.observe(wrap);
 
+    // Fixed-timestep simulation constants. Stepping the engine ourselves
+    // (rather than relying on Matter.Runner) lets us split a long delta —
+    // common when the browser throttles rAF during fast scrolling — into
+    // many small 16.6ms sub-steps. This keeps physics deterministic and
+    // prevents the "ghost jump" artefact where pills would teleport after
+    // a single oversized engine update.
+    const FIXED_DT = 1000 / 60; // 16.667ms
+    const MAX_DELTA = 250;       // cap accumulated catch-up at 250ms
+    const MAX_SUBSTEPS = 5;      // never run more than N steps per frame
+    let lastTime = performance.now();
+    let accumulator = 0;
+
     const render = () => {
       rafRef.current = requestAnimationFrame(render);
+
+      // Always advance physics — even when off-screen — so positions evolve
+      // naturally and pills don't jump on return. Use a clamped delta and
+      // sub-stepping to absorb rAF throttling without losing accuracy.
+      const now = performance.now();
+      let frameDelta = now - lastTime;
+      lastTime = now;
+      if (frameDelta > MAX_DELTA) frameDelta = FIXED_DT; // treat huge gaps as one frame
+      accumulator += frameDelta;
+      let steps = 0;
+      while (accumulator >= FIXED_DT && steps < MAX_SUBSTEPS) {
+        Matter.Engine.update(engine, FIXED_DT);
+        accumulator -= FIXED_DT;
+        steps += 1;
+      }
+      if (steps >= MAX_SUBSTEPS) accumulator = 0; // drop leftover to avoid spiral
+
       if (!visibleRef.current) return;
       const ctx = canvas.getContext("2d");
       if (!ctx) return;
