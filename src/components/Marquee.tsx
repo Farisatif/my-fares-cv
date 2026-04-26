@@ -10,14 +10,22 @@ export function Marquee({ items, itemsAr }: { items: string[]; itemsAr?: string[
   const REPEATS = 6;
   const looped = Array.from({ length: REPEATS }, () => list).flat();
   return (
-    <div className="relative overflow-hidden py-3 sm:py-4 border-y border-border bg-secondary/40">
+    <div
+      className="relative overflow-hidden py-3 sm:py-4 border-y border-border bg-secondary/40"
+      dir="ltr"
+    >
       <div
         className={`flex gap-8 marquee whitespace-nowrap ${lang === "ar" ? "marquee-rtl" : ""}`}
         style={{ width: "max-content" }}
       >
         {looped.map((item, i) => (
           <div key={i} className="flex shrink-0 items-center gap-8">
-            <span className="font-display text-lg sm:text-2xl text-foreground/80">{item}</span>
+            <span
+              className="font-display text-lg sm:text-2xl text-foreground/80"
+              dir={lang === "ar" ? "rtl" : "ltr"}
+            >
+              {item}
+            </span>
             <span className="text-lg sm:text-2xl text-[oklch(0.42_0.2_255)]">✦</span>
           </div>
         ))}
