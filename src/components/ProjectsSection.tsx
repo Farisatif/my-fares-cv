@@ -44,7 +44,15 @@ export function ProjectsSection() {
             </p>
             <h2 className="font-display h-display-lg pb-2 max-w-4xl">
               {t("Projects ", "مشاريع ")}
-              <span className="italic gradient-text-primary">
+              <span 
+                className="italic"
+                style={{
+                  background: "linear-gradient(135deg, var(--primary) 0%, color-mix(in oklab, var(--primary) 60%, var(--foreground)) 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                }}
+              >
                 {t("in the wild.", "على أرض الواقع.")}
               </span>
             </h2>

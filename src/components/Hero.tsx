@@ -108,7 +108,7 @@ export function Hero() {
         {/* Mobile/base: image anchored to TOP, fades into the page below.
             We use bg-bottom so the densest blue area shows above the fold. */}
         <div
-          className="absolute inset-0 bg-cover bg-bottom opacity-[0.45] dark:opacity-[0.40]"
+          className="absolute inset-0 bg-cover bg-bottom opacity-[0.70] dark:opacity-[0.60]"
           style={{
             backgroundImage: `url(${heroSplash})`,
             WebkitMaskImage:
@@ -120,7 +120,7 @@ export function Hero() {
         />
         {/* Desktop directional mask — fade from outer edge into center */}
         <div
-          className="hidden lg:block absolute inset-0 bg-cover bg-center opacity-[0.50] dark:opacity-[0.45]"
+          className="hidden lg:block absolute inset-0 bg-cover bg-center opacity-[0.70] dark:opacity-[0.60]"
           style={{
             backgroundImage: `url(${heroSplash})`,
             WebkitMaskImage:
@@ -132,7 +132,7 @@ export function Hero() {
         />
         {/* RTL desktop reverse */}
         <div
-          className="hidden rtl:lg:block lg:hidden absolute inset-0 bg-cover bg-center opacity-[0.50] dark:opacity-[0.45]"
+          className="hidden rtl:lg:block lg:hidden absolute inset-0 bg-cover bg-center opacity-[0.70] dark:opacity-[0.60]"
           style={{
             backgroundImage: `url(${heroSplash})`,
             WebkitMaskImage:
