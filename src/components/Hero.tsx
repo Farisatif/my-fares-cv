@@ -158,7 +158,10 @@ export function Hero() {
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
             </span>
             <span className="relative text-xs sm:text-sm text-muted-foreground tracking-wide font-medium">
-              {t("Available for new opportunities", "متاح لفرص جديدة")}
+              {t(
+                data.content?.hero?.chip_en ?? "Available for new opportunities",
+                data.content?.hero?.chip_ar ?? "متاح لفرص جديدة",
+              )}
             </span>
             {!reduce && (
               <motion.span
@@ -184,7 +187,10 @@ export function Hero() {
           >
             <span className="h-px w-8 bg-border" />
             <span>
-              {t("Edition", "إصدار")} 01 · {t("Hero", "البداية")}
+              {t(
+                data.content?.hero?.edition_en ?? "Edition 01 · Hero",
+                data.content?.hero?.edition_ar ?? "إصدار 01 · البداية",
+              )}
             </span>
           </motion.div>
         </div>
@@ -254,7 +260,10 @@ export function Hero() {
             className="lg:col-span-7 max-w-xl rounded-2xl bg-background/55 dark:bg-background/40 backdrop-blur-md border border-border/40 px-5 py-4 sm:px-6 sm:py-5"
           >
             <p className="text-base sm:text-lg text-foreground leading-relaxed">
-              {t("Hi — I'm ", "مرحباً — أنا ")}
+              {t(
+                data.content?.hero?.greeting_en ?? "Hi — I'm ",
+                data.content?.hero?.greeting_ar ?? "مرحباً — أنا ",
+              )}
               <span className="text-foreground font-semibold">{p.name}</span>
               {t(", ", "، ")}
               {loc.bio}
@@ -263,12 +272,18 @@ export function Hero() {
               <Link to="/" hash="contact" className="inline-block">
                 <MagneticButton>
                   <Mail className="h-4 w-4" />
-                  {t("Get in touch", "تواصل معي")}
+                  {t(
+                    data.content?.hero?.ctaPrimary_en ?? "Get in touch",
+                    data.content?.hero?.ctaPrimary_ar ?? "تواصل معي",
+                  )}
                 </MagneticButton>
               </Link>
               <MagneticButton href={`https://${p.github}`} variant="ghost">
                 <Github className="h-4 w-4" />
-                {t("GitHub", "جيت‌هاب")}
+                {t(
+                  data.content?.hero?.ctaSecondary_en ?? "GitHub",
+                  data.content?.hero?.ctaSecondary_ar ?? "جيت‌هاب",
+                )}
               </MagneticButton>
             </div>
           </motion.div>
@@ -314,12 +329,18 @@ export function Hero() {
         >
           <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-muted-foreground">
             <ArrowDown className="h-3.5 w-3.5 animate-bounce" />
-            {t("Scroll to explore", "مرر للاستكشاف")}
+            {t(
+              data.content?.hero?.scrollPrompt_en ?? "Scroll to explore",
+              data.content?.hero?.scrollPrompt_ar ?? "مرر للاستكشاف",
+            )}
           </div>
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <Sparkles className="h-3.5 w-3.5 text-primary" />
             <span className="tracking-wide">
-              {t("Engineering · Systems · Product", "هندسة · أنظمة · منتج")}
+              {t(
+                data.content?.hero?.tagline_en ?? "Engineering · Systems · Product",
+                data.content?.hero?.tagline_ar ?? "هندسة · أنظمة · منتج",
+              )}
             </span>
           </div>
         </motion.div>

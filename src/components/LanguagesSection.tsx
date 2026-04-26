@@ -70,13 +70,22 @@ export function LanguagesSection() {
               }}
             />
             <p className="text-xs uppercase tracking-[0.28em] opacity-60 font-mono">
-              / 06 — {t("Languages", "اللغات")}
+              / 06 — {t(
+                data.content?.languages?.eyebrow_en ?? "Languages",
+                data.content?.languages?.eyebrow_ar ?? "اللغات",
+              )}
             </p>
           </div>
           <h2 className="font-display h-display-lg pb-2 max-w-4xl">
-            {t("Fluent in ", "أتحدث ")}
+            {t(
+              data.content?.languages?.titlePrefix_en ?? "Fluent in ",
+              data.content?.languages?.titlePrefix_ar ?? "أتحدث ",
+            )}
             <span className="italic gradient-text-primary">
-              {t("many tongues.", "لغات عديدة.")}
+              {t(
+                data.content?.languages?.titleAccent_en ?? "many tongues.",
+                data.content?.languages?.titleAccent_ar ?? "لغات عديدة.",
+              )}
             </span>
           </h2>
           <p className="mt-5 text-base sm:text-lg opacity-65 max-w-2xl leading-relaxed">

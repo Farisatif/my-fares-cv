@@ -72,12 +72,21 @@ export function AchievementsSection() {
         <Reveal>
           <div className="text-center max-w-3xl mx-auto">
             <p className="text-xs uppercase tracking-[0.3em] opacity-60 mb-5">
-              / 05 — {t("Milestones", "إنجازات")}
+              / 05 — {t(
+                data.content?.achievements?.eyebrow_en ?? "Milestones",
+                data.content?.achievements?.eyebrow_ar ?? "إنجازات",
+              )}
             </p>
             <h2 className="font-display h-display-xl pb-2">
-              {t("A few ", "بعض ")}
+              {t(
+                data.content?.achievements?.titlePrefix_en ?? "A few ",
+                data.content?.achievements?.titlePrefix_ar ?? "بعض ",
+              )}
               <span className="italic gradient-text-primary">
-                {t("proud moments.", "اللحظات المُشرّفة.")}
+                {t(
+                  data.content?.achievements?.titleAccent_en ?? "proud moments.",
+                  data.content?.achievements?.titleAccent_ar ?? "اللحظات المُشرّفة.",
+                )}
               </span>
             </h2>
             <p className="mt-6 text-base sm:text-lg opacity-60 leading-relaxed max-w-xl mx-auto">

@@ -322,5 +322,100 @@
     "showComments": true,
     "contactLabelEn": "Contact",
     "contactLabelAr": "تواصل"
+  },
+
+  "content": {
+    "hero": {
+      "chip_en": "Available for new opportunities",
+      "chip_ar": "متاح لفرص جديدة",
+      "edition_en": "Edition 01 · Hero",
+      "edition_ar": "إصدار 01 · البداية",
+      "greeting_en": "Hi — I'm ",
+      "greeting_ar": "مرحباً — أنا ",
+      "ctaPrimary_en": "Get in touch",
+      "ctaPrimary_ar": "تواصل معي",
+      "ctaSecondary_en": "GitHub",
+      "ctaSecondary_ar": "جيت‌هاب",
+      "scrollPrompt_en": "Scroll to explore",
+      "scrollPrompt_ar": "مرر للاستكشاف",
+      "tagline_en": "Engineering · Systems · Product",
+      "tagline_ar": "هندسة · أنظمة · منتج"
+    },
+    "about": {
+      "eyebrow_en": "About",
+      "eyebrow_ar": "نبذة",
+      "titlePrefix_en": "Crafting software ",
+      "titlePrefix_ar": "أصنع برمجيات ",
+      "titleAccent_en": "that ships.",
+      "titleAccent_ar": "تصل للمستخدم."
+    },
+    "skills": {
+      "eyebrow_en": "Toolkit",
+      "eyebrow_ar": "الأدوات",
+      "titlePrefix_en": "Drag the things ",
+      "titlePrefix_ar": "اسحب الأشياء ",
+      "titleAccent_en": "I build with.",
+      "titleAccent_ar": "التي أبني بها."
+    },
+    "experience": {
+      "eyebrow_en": "Experience",
+      "eyebrow_ar": "الخبرة",
+      "titlePrefix_en": "Where I've ",
+      "titlePrefix_ar": "أين قضيت ",
+      "titleAccent_en": "put in the hours.",
+      "titleAccent_ar": "ساعات العمل."
+    },
+    "achievements": {
+      "eyebrow_en": "Milestones",
+      "eyebrow_ar": "إنجازات",
+      "titlePrefix_en": "A few ",
+      "titlePrefix_ar": "بعض ",
+      "titleAccent_en": "proud moments.",
+      "titleAccent_ar": "اللحظات المُشرّفة."
+    },
+    "languages": {
+      "eyebrow_en": "Languages",
+      "eyebrow_ar": "اللغات",
+      "titlePrefix_en": "Fluent in ",
+      "titlePrefix_ar": "أتحدث ",
+      "titleAccent_en": "many tongues.",
+      "titleAccent_ar": "لغات عديدة."
+    },
+    "contact": {
+      "eyebrow_en": "Let's talk",
+      "eyebrow_ar": "لنتحدث",
+      "titlePrefix_en": "Got an idea?",
+      "titlePrefix_ar": "لديك فكرة؟",
+      "titleAccent_en": "Let's build it.",
+      "titleAccent_ar": "لنبنها معاً.",
+      "description_en": "Open to freelance projects, collaborations, and full-time roles. I usually reply within a day.",
+      "description_ar": "متاح لمشاريع العمل الحر والتعاون والوظائف بدوام كامل. عادةً ما أرد خلال يوم.",
+      "whatsappLabel_en": "WhatsApp",
+      "whatsappLabel_ar": "واتساب",
+      "footerCredit_en": "Built with care · Sana'a, YE",
+      "footerCredit_ar": "صُنع بعناية · صنعاء، اليمن"
+    },
+    "comments": {
+      "eyebrow_en": "Guestbook",
+      "eyebrow_ar": "سجل الزوار",
+      "titlePrefix_en": "Leave a ",
+      "titlePrefix_ar": "اترك ",
+      "titleAccent_en": "trace.",
+      "titleAccent_ar": "أثرًا.",
+      "description_en": "Drop a note, a kind word, a question — anything. Comments stream in real-time.",
+      "description_ar": "اترك ملاحظة، كلمة طيبة، سؤالًا — أيًا كان. التعليقات تتدفق فورًا.",
+      "nameLabel_en": "Your name",
+      "nameLabel_ar": "اسمك",
+      "namePlaceholder_en": "Ada Lovelace",
+      "namePlaceholder_ar": "أحمد العربي",
+      "messageLabel_en": "Message",
+      "messageLabel_ar": "الرسالة",
+      "messagePlaceholder_en": "Say hi…",
+      "messagePlaceholder_ar": "قل مرحبا…",
+      "postLabel_en": "Post",
+      "postLabel_ar": "نشر",
+      "emptyState_en": "No comments yet — be the first.",
+      "emptyState_ar": "لا توجد تعليقات بعد — كن الأول."
+    }
   }
 }

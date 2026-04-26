@@ -574,11 +574,17 @@ export function AboutSection() {
         <div className="grid lg:grid-cols-12 gap-12">
           <Reveal className="lg:col-span-5">
             <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-4">
-              / 01 — {t("About", "نبذة")}
+              / 01 — {t(data.content?.about?.eyebrow_en ?? "About", data.content?.about?.eyebrow_ar ?? "نبذة")}
             </p>
             <PhysicsHeading
-              prefix={t("Crafting software ", "أصنع برمجيات ")}
-              accent={t("that ships.", "تصل للمستخدم.")}
+              prefix={t(
+                data.content?.about?.titlePrefix_en ?? "Crafting software ",
+                data.content?.about?.titlePrefix_ar ?? "أصنع برمجيات ",
+              )}
+              accent={t(
+                data.content?.about?.titleAccent_en ?? "that ships.",
+                data.content?.about?.titleAccent_ar ?? "تصل للمستخدم.",
+              )}
             />
           </Reveal>
 

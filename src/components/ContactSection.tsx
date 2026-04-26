@@ -31,13 +31,22 @@ export function ContactSection() {
       <div className="container mx-auto px-6 max-w-5xl relative text-center">
         <Reveal>
           <p className="relative z-10 text-xs uppercase tracking-[0.25em] opacity-55 mb-6">
-            / 06 — {t("Let's talk", "لنتحدث")}
+            / 06 — {t(
+              data.content?.contact?.eyebrow_en ?? "Let's talk",
+              data.content?.contact?.eyebrow_ar ?? "لنتحدث",
+            )}
           </p>
           <h2 className="relative z-10 font-display h-display-xl pb-2 mix-blend-difference">
-            {t("Got an idea?", "لديك فكرة؟")}
+            {t(
+              data.content?.contact?.titlePrefix_en ?? "Got an idea?",
+              data.content?.contact?.titlePrefix_ar ?? "لديك فكرة؟",
+            )}
             <br />
             <span className="italic inline-block pb-1" style={{ color: "color-mix(in oklab, var(--primary) 70%, currentColor)" }}>
-              {t("Let's build it.", "لنبنها معاً.")}
+              {t(
+                data.content?.contact?.titleAccent_en ?? "Let's build it.",
+                data.content?.contact?.titleAccent_ar ?? "لنبنها معاً.",
+              )}
             </span>
           </h2>
         </Reveal>
@@ -45,8 +54,10 @@ export function ContactSection() {
         <Reveal delay={0.2}>
           <p className="mt-10 text-lg opacity-75 max-w-xl mx-auto">
             {t(
-              "Open to freelance projects, collaborations, and full-time roles. I usually reply within a day.",
-              "متاح لمشاريع العمل الحر والتعاون والوظائف بدوام كامل. عادةً ما أرد خلال يوم.",
+              data.content?.contact?.description_en ??
+                "Open to freelance projects, collaborations, and full-time roles. I usually reply within a day.",
+              data.content?.contact?.description_ar ??
+                "متاح لمشاريع العمل الحر والتعاون والوظائف بدوام كامل. عادةً ما أرد خلال يوم.",
             )}
           </p>
         </Reveal>
@@ -60,7 +71,10 @@ export function ContactSection() {
               href={`https://wa.me/${p.whatsapp}`}
               variant="ghost"
             >
-              <MessageCircle className="h-4 w-4" /> {t("WhatsApp", "واتساب")}
+              <MessageCircle className="h-4 w-4" /> {t(
+                data.content?.contact?.whatsappLabel_en ?? "WhatsApp",
+                data.content?.contact?.whatsappLabel_ar ?? "واتساب",
+              )}
             </MagneticButton>
           </div>
         </Reveal>

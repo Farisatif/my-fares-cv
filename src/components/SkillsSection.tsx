@@ -59,7 +59,10 @@ export function SkillsSection() {
             <div className="pointer-events-auto text-center max-w-4xl">
               <div className="flex items-center justify-center gap-3 mb-4">
                 <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">
-                  / 02 — {t("Toolkit", "الأدوات")}
+                  / 02 — {t(
+                    data.content?.skills?.eyebrow_en ?? "Toolkit",
+                    data.content?.skills?.eyebrow_ar ?? "الأدوات",
+                  )}
                 </p>
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-background/70 backdrop-blur px-2.5 py-1 text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
                   <Sparkles className="h-3 w-3 text-[oklch(0.55_0.2_255)]" />
@@ -70,9 +73,15 @@ export function SkillsSection() {
                 </span>
               </div>
               <h2 className="font-display h-display-xl pb-2">
-                {t("Drag the things ", "اسحب الأشياء ")}
+                {t(
+                  data.content?.skills?.titlePrefix_en ?? "Drag the things ",
+                  data.content?.skills?.titlePrefix_ar ?? "اسحب الأشياء ",
+                )}
                 <span className="italic text-[oklch(0.42_0.2_255)] relative">
-                  {t("I build with.", "التي أبني بها.")}
+                  {t(
+                    data.content?.skills?.titleAccent_en ?? "I build with.",
+                    data.content?.skills?.titleAccent_ar ?? "التي أبني بها.",
+                  )}
                   <span className="absolute left-0 right-0 -bottom-1 h-[3px] rounded-full bg-gradient-to-r from-transparent via-[oklch(0.55_0.22_255)] to-transparent opacity-60" />
                 </span>
               </h2>
