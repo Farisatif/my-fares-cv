@@ -1,14 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 
+import { Link } from "@tanstack/react-router";
+import { ArrowUpRight } from "lucide-react";
 import { Hero } from "@/components/Hero";
 import { Marquee } from "@/components/Marquee";
 import { AboutSection } from "@/components/AboutSection";
 import { SkillsSection } from "@/components/SkillsSection";
 import { ExperienceSection } from "@/components/ExperienceSection";
-import { ProjectsSection } from "@/components/ProjectsSection";
 import { AchievementsSection } from "@/components/AchievementsSection";
 import { ContactSection } from "@/components/ContactSection";
-import { GithubActivitySection } from "@/components/GithubActivitySection";
 import { LanguagesSection } from "@/components/LanguagesSection";
 import { SectionBand } from "@/components/SectionBand";
 import { useSiteData } from "@/components/SiteDataProvider";
