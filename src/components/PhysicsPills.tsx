@@ -223,6 +223,11 @@ export const PhysicsPills = forwardRef<PhysicsPillsHandle, Props>(function Physi
       bodiesRef.current = [];
       clearSpawnTimers();
 
+      // Open the ceiling so pills can drop in from outside the section, then
+      // seal it once they've all had time to enter + settle.
+      if (sealCeilingTimer !== null) clearTimeout(sealCeilingTimer);
+      ceilingSealedRef.current = false;
+      buildWalls(sizeRef.current.w, sizeRef.current.h);
       const { w } = sizeRef.current;
       if (w === 0) return;
 
