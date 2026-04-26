@@ -322,11 +322,12 @@ export const PhysicsPills = forwardRef<PhysicsPillsHandle, Props>(function Physi
       };
       const dynOffset = computeDynamicFloorOffset(h);
       const floor = Matter.Bodies.rectangle(w / 2, h - dynOffset + WALL_T / 2, w * 2, WALL_T, opts);
-      // Ceiling sits ABOVE the overflow zone so pills are free to enter the
-      // dark area visually but still bounded by the page chrome.
+      // Ceiling sits flush with the top of the visible section (y=0), mirroring
+      // the floor's contact surface. Pills bounce off it cleanly instead of
+      // sinking halfway into the band above.
       const ceil = Matter.Bodies.rectangle(
         w / 2,
-        -OVERFLOW_TOP - WALL_T * 4 - WALL_T / 2,
+        -WALL_T / 2,
         w * 2,
         WALL_T,
         opts,
