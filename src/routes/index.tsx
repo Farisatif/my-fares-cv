@@ -1,0 +1,93 @@
+import { createFileRoute } from "@tanstack/react-router";
+
+import { Hero } from "@/components/Hero";
+import { Marquee } from "@/components/Marquee";
+import { AboutSection } from "@/components/AboutSection";
+import { SkillsSection } from "@/components/SkillsSection";
+import { ExperienceSection } from "@/components/ExperienceSection";
+import { ProjectsSection } from "@/components/ProjectsSection";
+import { AchievementsSection } from "@/components/AchievementsSection";
+import { ContactSection } from "@/components/ContactSection";
+import { GithubActivitySection } from "@/components/GithubActivitySection";
+import { LanguagesSection } from "@/components/LanguagesSection";
+import { SectionBand } from "@/components/SectionBand";
+import { useSiteData } from "@/components/SiteDataProvider";
+import { useLang } from "@/components/LanguageProvider";
+import { ScrollProgress } from "@/components/motion-primitives";
+
+export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Fares Ahmed — Software Engineer & Builder" },
+      {
+        name: "description",
+        content:
+          "Fares Ahmed is a bilingual full-stack engineer from Sana'a, Yemen — building scalable systems, mobile experiences, and elegant UIs.",
+      },
+      { property: "og:title", content: "Fares Ahmed — Software Engineer" },
+      {
+        property: "og:description",
+        content:
+          "Full-stack engineer building scalable systems and elegant user experiences across web, mobile, and systems.",
+      },
+    ],
+  }),
+  component: Index,
+});
+
+function Index() {
+  const { data } = useSiteData();
+  const { lang } = useLang();
+  const tagsEn = data.personal.en.taglines;
+  const tagsAr = data.personal.ar.taglines;
+  return (
+    <div className="relative z-[2] min-h-screen text-foreground">
+      <ScrollProgress />
+      {/* Hero keeps default background to anchor the page */}
+      <Hero />
+      <Marquee items={tagsEn} itemsAr={tagsAr} key={lang} />
+
+      {/* Curated rhythm — five-tone band system creates magazine-style
+          progression: light → surface → dark → soft → dark. Each transition
+          is intentional and the contrast walks the eye down the page. */}
+      <SectionBand variant="light" pattern="grid-fine" divider roundBottom>
+        <AboutSection />
+      </SectionBand>
+
+      {/* Languages — moved above Skills. Uses an inverted-theme band so it
+          reads as a "negative" of the surrounding sections (dark in light
+          mode, light in dark mode). */}
+      <SectionBand variant="dark" pattern="none" divider roundTop roundBottom>
+        <LanguagesSection />
+      </SectionBand>
+
+      <SectionBand variant="surface" pattern="grid-dots" divider roundTop roundBottom>
+        <SkillsSection />
+      </SectionBand>
+
+      <SectionBand variant="dark" pattern="grid-fine" divider roundTop roundBottom>
+        <ExperienceSection />
+      </SectionBand>
+
+      <SectionBand variant="soft" pattern="aurora" divider roundTop roundBottom>
+        <ProjectsSection />
+      </SectionBand>
+
+      {/* Signature inverted band — pure black in light, pure white in dark. */}
+      <SectionBand variant="dark" pattern="none" divider roundTop roundBottom>
+        <AchievementsSection />
+      </SectionBand>
+
+      {/* GitHub section keeps its own animated GlowDots backdrop — no band
+          pattern here so the physics layer reads cleanly without a second
+          dotted background underneath. */}
+      <SectionBand variant="surface" pattern="none" divider roundTop roundBottom>
+        <GithubActivitySection />
+      </SectionBand>
+
+      <SectionBand variant="dark" pattern="grid-fine" divider roundTop>
+        <ContactSection />
+      </SectionBand>
+    </div>
+  );
+}
