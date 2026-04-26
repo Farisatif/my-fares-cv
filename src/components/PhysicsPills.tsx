@@ -145,10 +145,9 @@ export const PhysicsPills = forwardRef<PhysicsPillsHandle, Props>(function Physi
     });
     engineRef.current = engine;
 
-    // Manual fixed-timestep loop replaces Matter.Runner — see the render
-    // function below. We keep a ref slot for API parity but never start the
-    // built-in runner, which would conflict with our own stepping.
-    runnerRef.current = null;
+    const runner = Matter.Runner.create({ delta: 1000 / 60 });
+    runnerRef.current = runner;
+    Matter.Runner.run(runner, engine);
 
     Matter.Events.on(engine, "collisionStart", (ev) => {
       const now = performance.now();
@@ -401,37 +400,8 @@ export const PhysicsPills = forwardRef<PhysicsPillsHandle, Props>(function Physi
     );
     io.observe(wrap);
 
-    // Fixed-timestep simulation constants. Stepping the engine ourselves
-    // (rather than relying on Matter.Runner) lets us split a long delta —
-    // common when the browser throttles rAF during fast scrolling — into
-    // many small 16.6ms sub-steps. This keeps physics deterministic and
-    // prevents the "ghost jump" artefact where pills would teleport after
-    // a single oversized engine update.
-    const FIXED_DT = 1000 / 60; // 16.667ms
-    const MAX_DELTA = 250;       // cap accumulated catch-up at 250ms
-    const MAX_SUBSTEPS = 5;      // never run more than N steps per frame
-    let lastTime = performance.now();
-    let accumulator = 0;
-
     const render = () => {
       rafRef.current = requestAnimationFrame(render);
-
-      // Always advance physics — even when off-screen — so positions evolve
-      // naturally and pills don't jump on return. Use a clamped delta and
-      // sub-stepping to absorb rAF throttling without losing accuracy.
-      const now = performance.now();
-      let frameDelta = now - lastTime;
-      lastTime = now;
-      if (frameDelta > MAX_DELTA) frameDelta = FIXED_DT; // treat huge gaps as one frame
-      accumulator += frameDelta;
-      let steps = 0;
-      while (accumulator >= FIXED_DT && steps < MAX_SUBSTEPS) {
-        Matter.Engine.update(engine, FIXED_DT);
-        accumulator -= FIXED_DT;
-        steps += 1;
-      }
-      if (steps >= MAX_SUBSTEPS) accumulator = 0; // drop leftover to avoid spiral
-
       if (!visibleRef.current) return;
       const ctx = canvas.getContext("2d");
       if (!ctx) return;
@@ -440,7 +410,7 @@ export const PhysicsPills = forwardRef<PhysicsPillsHandle, Props>(function Physi
       // that rose into it get repainted cleanly each frame.
       ctx.clearRect(0, -OVERFLOW_TOP, w, h + OVERFLOW_TOP);
 
-      // `now` already computed above for the fixed-timestep loop — reuse it.
+      const now = performance.now();
       for (const b of bodiesRef.current) {
         const dy = h - (b.position.y + b.__h / 2);
         if (dy >= 0 && dy < 30) {
@@ -1054,7 +1024,7 @@ export const PhysicsPills = forwardRef<PhysicsPillsHandle, Props>(function Physi
       canvas.removeEventListener("pointerup", finishPointer);
       canvas.removeEventListener("pointercancel", finishPointer);
       canvas.removeEventListener("pointerleave", onPointerLeave);
-      // No Matter.Runner to stop — fixed-timestep loop is cancelled via rafRef above.
+      Matter.Runner.stop(runner);
       Matter.World.clear(engine.world, false);
       Matter.Engine.clear(engine);
       engineRef.current = null;
