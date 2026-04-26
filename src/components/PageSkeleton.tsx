@@ -218,7 +218,7 @@ export function PageSkeleton() {
 
       {/* ---------- BRIDGE band (soft, aurora) ---------- */}
       <SectionBand variant="soft" pattern="aurora" divider roundTop roundBottom>
-        <section className="relative py-20 sm:py-28">
+        <section className="relative section-padding">
           <div className="container mx-auto px-6 max-w-5xl text-center">
             <div className="skeleton skeleton-soft h-3 w-28 rounded-full mx-auto mb-5" />
             <div

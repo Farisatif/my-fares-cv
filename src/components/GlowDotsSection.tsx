@@ -3,7 +3,7 @@ import { GlowDots } from "./GlowDots";
 
 export function GlowDotsSection() {
   return (
-    <section className="py-24 sm:py-32">
+    <section className="section-padding">
       <div className="container mx-auto px-6 max-w-7xl">
         <Reveal>
           <div className="mb-10 max-w-3xl">

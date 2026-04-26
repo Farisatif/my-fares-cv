@@ -95,7 +95,7 @@
   --primary-soft: oklch(0.92 0.05 265);
   --primary-deep: oklch(0.32 0.2 268);
   --primary-glow: oklch(0.62 0.24 268);
-  --secondary: oklch(0.965 0.008 255);
+  --secondary: oklch(0.965 0.015 255);
   --secondary-foreground: oklch(0.18 0.04 260);
   --muted: oklch(0.965 0.008 255);
   --muted-foreground: oklch(0.5 0.025 258);
@@ -169,7 +169,7 @@
   --secondary: oklch(0.18 0.025 268);
   --secondary-foreground: oklch(0.985 0.004 255);
   --muted: oklch(0.18 0.025 268);
-  --muted-foreground: oklch(0.68 0.025 260);
+  --muted-foreground: oklch(0.74 0.03 260);
   --accent: oklch(0.22 0.05 265);
   --accent-foreground: oklch(0.985 0.004 255);
   --destructive: oklch(0.704 0.191 22.216);
@@ -383,7 +383,7 @@
   /* ---------- Fluid type scale ----------
      Replaces jumpy text-5xl→text-7xl breakpoints with a smooth viewport-driven
      scale. Pair with `font-display` for headlines. */
-  .h-display-xl { font-size: clamp(2.75rem, 7.5vw, 7rem);   line-height: 1.02; letter-spacing: -0.045em; }
+  .h-display-xl { font-size: clamp(1.8rem, 7vw, 6.5rem);   line-height: 1.02; letter-spacing: -0.045em; }
   .h-display-lg { font-size: clamp(2.5rem, 6.5vw, 5.5rem);  line-height: 1.04; letter-spacing: -0.04em; }
   .h-display-md { font-size: clamp(2.25rem, 5.5vw, 4.5rem); line-height: 1.06; letter-spacing: -0.035em; }
   .h-display-sm { font-size: clamp(1.875rem, 4.5vw, 3.25rem); line-height: 1.1; letter-spacing: -0.03em; }
@@ -391,21 +391,21 @@
   /* Subtle grid pattern for premium section backgrounds */
   .grid-bg {
     background-image:
-      linear-gradient(to right, color-mix(in oklab, currentColor 6%, transparent) 1px, transparent 1px),
-      linear-gradient(to bottom, color-mix(in oklab, currentColor 6%, transparent) 1px, transparent 1px);
+      linear-gradient(to right, color-mix(in oklab, currentColor 9%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in oklab, currentColor 9%, transparent) 1px, transparent 1px);
     background-size: 56px 56px;
     mask-image: radial-gradient(ellipse at center, black 40%, transparent 75%);
   }
   .grid-bg-fine {
     background-image:
-      linear-gradient(to right, color-mix(in oklab, currentColor 4%, transparent) 1px, transparent 1px),
-      linear-gradient(to bottom, color-mix(in oklab, currentColor 4%, transparent) 1px, transparent 1px);
+      linear-gradient(to right, color-mix(in oklab, currentColor 10%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in oklab, currentColor 10%, transparent) 1px, transparent 1px);
     background-size: 32px 32px;
   }
   /* Premium dotted grid for elevated bands — visible on both light & dark */
   .grid-bg-dots {
     background-image: radial-gradient(
-      color-mix(in oklab, currentColor 26%, transparent) 1.2px,
+      color-mix(in oklab, currentColor 45%, transparent) 1.2px,
       transparent 1.4px
     );
     background-size: 24px 24px;
@@ -457,6 +457,17 @@
     border-radius: 9999px;
     background: var(--primary);
     box-shadow: 0 0 12px var(--primary);
+  }
+  /* Consistent section padding across breakpoints */
+  .section-padding {
+    @apply py-16 sm:py-20 lg:py-28;
+  }
+  /* Button feedback utilities */
+  .button-primary-feedback {
+    @apply hover:shadow-lg hover:scale-[1.02] active:scale-95 transition-[transform,box-shadow] duration-150;
+  }
+  .button-ghost-feedback {
+    @apply hover:bg-secondary/50 hover:translate-y-[-2px] transition-all duration-200;
   }
   .comments-spotlight {
     background:

@@ -34,7 +34,7 @@ export function ProjectsSection() {
   const { lang, t } = useLang();
   const reduce = useReducedMotion();
   return (
-    <section id="projects" className="py-24 sm:py-32">
+    <section id="projects" className="section-padding">
       <ChevronPattern>
         <div className="container mx-auto px-6 max-w-7xl">
           <Reveal>

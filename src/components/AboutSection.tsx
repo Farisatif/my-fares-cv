@@ -388,7 +388,7 @@ function CodeCommentCard({
       </div>
 
       {/* Code body */}
-      <div className="relative p-5 sm:p-6 font-mono text-[13px] sm:text-sm leading-[1.85]">
+      <div className="relative p-5 sm:p-6 font-mono text-sm sm:text-base leading-[1.85]" style={{ letterSpacing: "0.3px" }}>
         {/* Subtle gradient sheen */}
         <div
           aria-hidden
@@ -400,7 +400,7 @@ function CodeCommentCard({
         />
         <div className="relative">
           {/* Block opener */}
-          <div className="flex gap-4 text-muted-foreground/60">
+          <div className="flex gap-4 text-muted-foreground/70">
             <span className="select-none w-5 text-right tabular-nums">1</span>
             <span>
               <span className="text-muted-foreground/50">/**</span>
@@ -426,7 +426,7 @@ function CodeCommentCard({
               >
                 <span
                   dir="ltr"
-                  className="select-none w-5 text-right tabular-nums text-muted-foreground/40"
+                  className="select-none w-5 text-right tabular-nums text-muted-foreground/60"
                 >
                   {i + 2}
                 </span>
@@ -569,7 +569,7 @@ export function AboutSection() {
   });
 
   return (
-    <section id="about" ref={sectionRef} className="py-24 sm:py-32 relative">
+    <section id="about" ref={sectionRef} className="section-padding relative">
       <div className="container mx-auto px-6 max-w-7xl">
         <div className="grid lg:grid-cols-12 gap-12">
           <Reveal className="lg:col-span-5">

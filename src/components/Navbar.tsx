@@ -106,14 +106,15 @@ export function Navbar() {
           </>
         )}
         <span className="w-px h-5 bg-border mx-0.5" />
-        <ThemeLangToggle />
         <Link
           to="/"
           hash="contact"
-          className="focus-ring ml-1 px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm rounded-full bg-foreground text-background hover:bg-foreground/90 transition-all duration-300 whitespace-nowrap shrink-0 active:scale-[0.96]"
+          className="focus-ring px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm rounded-full bg-foreground text-background hover:bg-foreground/90 transition-all duration-300 whitespace-nowrap shrink-0 active:scale-[0.96]"
         >
           {contactLabel}
         </Link>
+        <span className="w-px h-5 bg-border mx-0.5" />
+        <ThemeLangToggle />
       </nav>
       </LayoutGroup>
     </motion.header>

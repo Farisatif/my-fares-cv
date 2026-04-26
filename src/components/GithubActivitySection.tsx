@@ -194,7 +194,7 @@ export function GithubActivitySection() {
   };
 
   return (
-    <section id="github" className="relative py-24 sm:py-32 overflow-hidden">
+    <section id="github" className="relative section-padding overflow-hidden">
       {/* Interactive glowing dots backdrop — reacts to cursor/touch
           across the entire section. pointer-events:none so it never blocks
           card interactions. Auto-themes via currentColor. */}
