@@ -69,20 +69,39 @@ function Index() {
         <ExperienceSection />
       </SectionBand>
 
-      <SectionBand variant="soft" pattern="aurora" divider roundTop roundBottom>
-        <ProjectsSection />
-      </SectionBand>
-
       {/* Signature inverted band — pure black in light, pure white in dark. */}
       <SectionBand variant="dark" pattern="none" divider roundTop roundBottom>
         <AchievementsSection />
       </SectionBand>
 
-      {/* GitHub section keeps its own animated GlowDots backdrop — no band
-          pattern here so the physics layer reads cleanly without a second
-          dotted background underneath. */}
-      <SectionBand variant="surface" pattern="none" divider roundTop roundBottom>
-        <GithubActivitySection />
+      {/* Bridge to /explore — projects + GitHub activity now live there */}
+      <SectionBand variant="soft" pattern="aurora" divider roundTop roundBottom>
+        <section className="relative py-20 sm:py-28">
+          <div className="container mx-auto px-6 max-w-5xl text-center">
+            <p className="text-[10px] sm:text-xs uppercase tracking-[0.35em] text-muted-foreground">
+              {t("Beyond the CV", "ما وراء السيرة")}
+            </p>
+            <h2 className="mt-5 font-display text-[clamp(2rem,6vw,4.5rem)] leading-[0.95] tracking-[-0.04em]">
+              {t("Projects, code & live activity.", "المشاريع، الأكواد، والنشاط المباشر.")}
+            </h2>
+            <p className="mt-6 max-w-2xl mx-auto text-base sm:text-lg text-muted-foreground leading-relaxed">
+              {t(
+                "Open source projects and a live look at GitHub contributions live in their own dedicated space.",
+                "تجد المشاريع مفتوحة المصدر ونظرة مباشرة على نشاط جيت‌هاب في مساحتها المخصصة."
+              )}
+            </p>
+            <div className="mt-10 flex justify-center">
+              <Link
+                to="/explore"
+                preload="intent"
+                className="group inline-flex items-center gap-3 px-6 py-3 rounded-full bg-foreground text-background hover:bg-foreground/90 transition-all duration-300 active:scale-[0.97] text-sm sm:text-base font-medium"
+              >
+                {t("Explore the workshop", "ادخل الورشة")}
+                <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 rtl:rotate-180" />
+              </Link>
+            </div>
+          </div>
+        </section>
       </SectionBand>
 
       <SectionBand variant="dark" pattern="grid-fine" divider roundTop>
