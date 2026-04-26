@@ -266,7 +266,9 @@ function CodeCommentCard({
     if (!inView || reduce) return;
     const total = text.length;
     const start = performance.now();
-    const duration = Math.min(6500, 1800 + total * 22);
+    // Slower, more deliberate reveal — feels like the thought is being
+    // written out word-by-word instead of dashed off in a few seconds.
+    const duration = Math.min(13000, 3000 + total * 40);
     let raf = 0;
     const tick = (now: number) => {
       const p = Math.min(1, (now - start) / duration);
