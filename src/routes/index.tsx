@@ -37,7 +37,7 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   const { data } = useSiteData();
-  const { lang } = useLang();
+  const { lang, t } = useLang();
   const tagsEn = data.personal.en.taglines;
   const tagsAr = data.personal.ar.taglines;
   return (
