@@ -10,6 +10,7 @@ import { Link } from "@tanstack/react-router";
 import { useEffect, useRef, type PointerEvent } from "react";
 import { MagneticButton } from "./MagneticButton";
 import faresImg from "@/assets/fares.jpg";
+import heroSplash from "@/assets/hero-splash.jpg";
 import { DotPattern } from "./Patterns";
 import { useSiteData } from "./SiteDataProvider";
 import { useLang } from "./LanguageProvider";
@@ -91,7 +92,58 @@ export function Hero() {
       {/* Faint grid for depth, masked to fade at edges */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 grid-bg opacity-25 dark:opacity-30" />
 
+      {/* ───── Half-background splash (the uploaded blue/silver painting) ─────
+          Sits ABOVE the soft mesh/grid but BELOW the global arrow field.
+          On mobile: bottom half. On desktop: end-side (right in LTR / left in RTL) half.
+          A directional gradient mask makes it dissolve into the page edge-to-edge. */}
+      <div
+        aria-hidden
+        className="
+          pointer-events-none absolute -z-[5]
+          inset-x-0 top-0 h-[78%]
+          lg:inset-y-0 lg:h-full lg:w-1/2
+          lg:right-0 lg:left-auto rtl:lg:left-0 rtl:lg:right-auto
+        "
+      >
+        {/* Mobile/base: image anchored to TOP, fades into the page below.
+            We use bg-bottom so the densest blue area shows above the fold. */}
+        <div
+          className="absolute inset-0 bg-cover bg-bottom opacity-[0.85] dark:opacity-[0.75]"
+          style={{
+            backgroundImage: `url(${heroSplash})`,
+            WebkitMaskImage:
+              "linear-gradient(to bottom, black 0%, black 55%, transparent 100%)",
+            maskImage:
+              "linear-gradient(to bottom, black 0%, black 55%, transparent 100%)",
+          }}
+          aria-hidden
+        />
+        {/* Desktop directional mask — fade from outer edge into center */}
+        <div
+          className="hidden lg:block absolute inset-0 bg-cover bg-center opacity-[0.85] dark:opacity-[0.75]"
+          style={{
+            backgroundImage: `url(${heroSplash})`,
+            WebkitMaskImage:
+              "linear-gradient(to left, black 30%, transparent 85%)",
+            maskImage:
+              "linear-gradient(to left, black 30%, transparent 85%)",
+          }}
+          aria-hidden
+        />
+        {/* RTL desktop reverse */}
+        <div
+          className="hidden rtl:lg:block lg:hidden absolute inset-0 bg-cover bg-center opacity-[0.85] dark:opacity-[0.75]"
+          style={{
+            backgroundImage: `url(${heroSplash})`,
+            WebkitMaskImage:
+              "linear-gradient(to right, black 30%, transparent 85%)",
+            maskImage:
+              "linear-gradient(to right, black 30%, transparent 85%)",
+          }}
+          aria-hidden
+        />
 
+      </div>
 
       <div className="container relative mx-auto px-6 max-w-7xl">
         {/* Top meta row — chip + edition counter */}

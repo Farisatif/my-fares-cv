@@ -7,6 +7,7 @@ import { GithubActivitySection } from "@/components/GithubActivitySection";
 import { SectionBand } from "@/components/SectionBand";
 import { ScrollProgress } from "@/components/motion-primitives";
 import { useLang } from "@/components/LanguageProvider";
+import exploreSplash from "@/assets/explore-splash.jpg";
 
 export const Route = createFileRoute("/explore")({
   head: () => ({
@@ -36,11 +37,18 @@ function ExplorePage() {
     <div className="relative z-[2] min-h-screen text-foreground">
       <ScrollProgress />
 
-      {/* ───────── Hero header ───────── */}
+      {/* ───────── Hero header — uses the uploaded grunge image as a bold,
+          full-bleed banner. Dark, fragmented, electric blue palette. ───────── */}
       <header
         id="top"
-        className="relative isolate overflow-hidden min-h-[88vh] sm:min-h-[92vh] flex items-end pt-28 pb-16 sm:pb-20 bg-gradient-to-b from-primary/20 to-transparent"
+        className="relative isolate overflow-hidden min-h-[88vh] sm:min-h-[92vh] flex items-end pt-28 pb-16 sm:pb-20"
       >
+        {/* Background image — fills the hero at full clarity, no overlays */}
+        <div
+          aria-hidden
+          className="absolute inset-0 -z-20 bg-cover bg-center"
+          style={{ backgroundImage: `url(${exploreSplash})` }}
+        />
 
         <div className="container relative mx-auto px-6 max-w-7xl">
           {/* Back-to-CV link */}
