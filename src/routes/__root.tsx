@@ -10,7 +10,6 @@ import { useEffect, useState } from "react";
 import { PageBoot } from "@/components/PageBoot";
 import { KitsysArrowField } from "@/components/KitsysArrowField";
 import { Navbar } from "@/components/Navbar";
-import { MobileNav } from "@/components/MobileNav";
 import { BackToTop } from "@/components/BackToTop";
 
 
@@ -78,7 +77,7 @@ function RootShell({ children }: { children: React.ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body className="pl-0 sm:pl-64 pb-20 sm:pb-0">
+      <body>
         {children}
         <Scripts />
       </body>
@@ -98,7 +97,6 @@ function RootComponent() {
           <AnchorPulse />
           <BackToTop />
           <Navbar />
-          <MobileNav />
           <Toaster position="bottom-right" />
         </SiteDataProvider>
       </LanguageProvider>
