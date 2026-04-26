@@ -199,7 +199,7 @@ export function Comments() {
           <div className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-muted-foreground mb-5">
             <MessageSquareText className="h-3.5 w-3.5" /> {t("Guestbook", "سجل الزوار")}
           </div>
-          <h2 className="font-display text-5xl sm:text-6xl tracking-[-0.04em] leading-[1.02] pb-2">
+          <h2 className="font-display h-display-lg pb-2">
             {t("Leave a ", "اترك ")}
             <span className="italic text-[oklch(0.42_0.2_255)]">
               {t("trace.", "أثرًا.")}

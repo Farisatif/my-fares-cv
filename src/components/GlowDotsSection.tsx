@@ -10,7 +10,7 @@ export function GlowDotsSection() {
             <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-4">
               / Interactive
             </p>
-            <h2 className="font-display text-4xl sm:text-6xl tracking-[-0.04em] leading-[1.02] pb-2">
+            <h2 className="font-display h-display-md pb-2">
               Touch the panel — <span className="italic text-[oklch(0.42_0.2_255)]">dots come alive.</span>
             </h2>
             <p className="mt-4 text-sm text-muted-foreground">

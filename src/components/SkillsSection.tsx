@@ -69,7 +69,7 @@ export function SkillsSection() {
                   {t("tech", "تقنية")}
                 </span>
               </div>
-              <h2 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl tracking-[-0.045em] leading-[1.0] pb-2">
+              <h2 className="font-display h-display-xl pb-2">
                 {t("Drag the things ", "اسحب الأشياء ")}
                 <span className="italic text-[oklch(0.42_0.2_255)] relative">
                   {t("I build with.", "التي أبني بها.")}

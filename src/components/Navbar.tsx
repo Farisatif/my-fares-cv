@@ -27,7 +27,7 @@ export function Navbar() {
   const onHome = loc.pathname === "/";
 
   const navLinkBase =
-    "relative px-3 sm:px-3.5 py-1.5 text-xs sm:text-sm rounded-full transition-colors duration-300 whitespace-nowrap z-10 active:scale-[0.97]";
+    "focus-ring relative px-3 sm:px-3.5 py-1.5 text-xs sm:text-sm rounded-full transition-colors duration-300 whitespace-nowrap z-10 active:scale-[0.97]";
 
   const pillSpring = { type: "spring" as const, stiffness: 260, damping: 28, mass: 0.8 };
 
@@ -110,7 +110,7 @@ export function Navbar() {
         <Link
           to="/"
           hash="contact"
-          className="ml-1 px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm rounded-full bg-foreground text-background hover:bg-foreground/90 transition-all duration-300 whitespace-nowrap shrink-0 active:scale-[0.96]"
+          className="focus-ring ml-1 px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm rounded-full bg-foreground text-background hover:bg-foreground/90 transition-all duration-300 whitespace-nowrap shrink-0 active:scale-[0.96]"
         >
           {contactLabel}
         </Link>

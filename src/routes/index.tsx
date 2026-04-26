@@ -81,7 +81,7 @@ function Index() {
             <p className="text-[10px] sm:text-xs uppercase tracking-[0.35em] text-muted-foreground">
               {t("Beyond the CV", "ما وراء السيرة")}
             </p>
-            <h2 className="mt-5 font-display text-[clamp(2rem,6vw,4.5rem)] leading-[0.95] tracking-[-0.04em]">
+            <h2 className="mt-5 font-display h-display-md">
               {t("Projects, code & live activity.", "المشاريع، الأكواد، والنشاط المباشر.")}
             </h2>
             <p className="mt-6 max-w-2xl mx-auto text-base sm:text-lg text-muted-foreground leading-relaxed">
@@ -94,7 +94,7 @@ function Index() {
               <Link
                 to="/explore"
                 preload="intent"
-                className="group inline-flex items-center gap-3 px-6 py-3 rounded-full bg-foreground text-background hover:bg-foreground/90 transition-all duration-300 active:scale-[0.97] text-sm sm:text-base font-medium"
+                className="focus-ring group inline-flex items-center gap-3 px-6 py-3 rounded-full bg-foreground text-background hover:bg-foreground/90 hover:shadow-[0_14px_40px_-16px_color-mix(in_oklab,var(--foreground)_45%,transparent)] transition-all duration-300 active:scale-[0.97] text-sm sm:text-base font-medium"
               >
                 {t("Explore the workshop", "ادخل الورشة")}
                 <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 rtl:rotate-180" />

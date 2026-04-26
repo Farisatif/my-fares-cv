@@ -33,7 +33,7 @@ export function ContactSection() {
           <p className="relative z-10 text-xs uppercase tracking-[0.25em] opacity-55 mb-6">
             / 06 — {t("Let's talk", "لنتحدث")}
           </p>
-          <h2 className="relative z-10 font-display text-5xl sm:text-7xl lg:text-8xl tracking-[-0.04em] leading-[1.05] pb-2 mix-blend-difference">
+          <h2 className="relative z-10 font-display h-display-xl pb-2 mix-blend-difference">
             {t("Got an idea?", "لديك فكرة؟")}
             <br />
             <span className="italic inline-block pb-1" style={{ color: "color-mix(in oklab, var(--primary) 70%, currentColor)" }}>
@@ -66,14 +66,24 @@ export function ContactSection() {
         </Reveal>
 
         <Reveal delay={0.4}>
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-4 text-sm opacity-65">
-            <a href={`https://${p.github}`} target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:opacity-100 transition-opacity">
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-x-6 sm:gap-x-8 gap-y-3 text-sm opacity-70">
+            <a
+              href={`https://${p.github}`}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="focus-ring inline-flex items-center gap-2 px-2 py-1 rounded-full hover:opacity-100 transition-opacity"
+            >
               <Github className="h-4 w-4" /> {p.github}
             </a>
-            <a href={`https://${p.linkedin}`} target="_blank" rel="noreferrer" className="flex items-center gap-2 hover:opacity-100 transition-opacity">
+            <a
+              href={`https://${p.linkedin}`}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="focus-ring inline-flex items-center gap-2 px-2 py-1 rounded-full hover:opacity-100 transition-opacity"
+            >
               <Linkedin className="h-4 w-4" /> LinkedIn
             </a>
-            <span className="flex items-center gap-2">
+            <span className="inline-flex items-center gap-2 px-2 py-1">
               <MapPin className="h-4 w-4" /> {loc.location}
             </span>
           </div>

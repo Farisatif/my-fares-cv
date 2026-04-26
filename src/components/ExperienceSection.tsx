@@ -34,7 +34,7 @@ export function ExperienceSection() {
             <p className="text-xs uppercase tracking-[0.25em] opacity-60 mb-4">
               / 03 — {t("Experience", "الخبرة")}
             </p>
-            <h2 className="font-display text-5xl sm:text-7xl tracking-[-0.04em] leading-[1.02] pb-2 max-w-4xl">
+            <h2 className="font-display h-display-lg pb-2 max-w-4xl">
               {t("Where I've ", "أين قضيت ")}
               <span className="italic gradient-text-primary">
                 {t("put in the hours.", "ساعات العمل.")}

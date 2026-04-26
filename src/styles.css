@@ -220,12 +220,27 @@
     border-color: var(--color-border);
   }
 
+  html {
+    scroll-behavior: smooth;
+    /* Bottom-fixed navbar floats; offset hash jumps so they don't tuck under it. */
+    scroll-padding-top: 1rem;
+    scroll-padding-bottom: 6rem;
+    text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: "Inter", "Helvetica Neue", system-ui, -apple-system, sans-serif;
     font-feature-settings: "ss01", "cv11";
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
     overflow-x: hidden;
     transition: background-color 0.6s ease, color 0.6s ease;
   }
@@ -347,6 +362,32 @@
   .surface-1 { background-color: var(--surface-1); }
   .surface-2 { background-color: var(--surface-2); }
   .surface-3 { background-color: var(--surface-3); }
+
+  /* ---------- Accessible focus ring ----------
+     Used on every interactive element (buttons, links, toggles).
+     Only shows for keyboard users via :focus-visible, never on mouse click. */
+  .focus-ring {
+    outline: none;
+  }
+  .focus-ring:focus-visible {
+    outline: 2px solid color-mix(in oklab, var(--primary) 75%, transparent);
+    outline-offset: 3px;
+    border-radius: 9999px;
+    transition: outline-offset 120ms ease;
+  }
+  .focus-ring-inset:focus-visible {
+    outline: 2px solid color-mix(in oklab, var(--primary) 80%, transparent);
+    outline-offset: 0;
+  }
+
+  /* ---------- Fluid type scale ----------
+     Replaces jumpy text-5xl→text-7xl breakpoints with a smooth viewport-driven
+     scale. Pair with `font-display` for headlines. */
+  .h-display-xl { font-size: clamp(2.75rem, 7.5vw, 7rem);   line-height: 1.02; letter-spacing: -0.045em; }
+  .h-display-lg { font-size: clamp(2.5rem, 6.5vw, 5.5rem);  line-height: 1.04; letter-spacing: -0.04em; }
+  .h-display-md { font-size: clamp(2.25rem, 5.5vw, 4.5rem); line-height: 1.06; letter-spacing: -0.035em; }
+  .h-display-sm { font-size: clamp(1.875rem, 4.5vw, 3.25rem); line-height: 1.1; letter-spacing: -0.03em; }
+
   /* Subtle grid pattern for premium section backgrounds */
   .grid-bg {
     background-image:

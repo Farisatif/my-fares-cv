@@ -225,7 +225,7 @@ export function GithubActivitySection() {
                   </span>
                 )}
               </div>
-              <h2 className="font-display text-4xl sm:text-5xl md:text-6xl tracking-[-0.04em] leading-[1.02] pb-2 max-w-2xl">
+              <h2 className="font-display h-display-md pb-2 max-w-2xl">
                 {t("Real activity. ", "نشاط حقيقي. ")}
                 <span className="italic text-[oklch(0.42_0.2_255)]">
                   {t("Synced live.", "متزامن لحظياً.")}

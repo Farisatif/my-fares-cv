@@ -73,7 +73,7 @@ export function LanguagesSection() {
               / 06 — {t("Languages", "اللغات")}
             </p>
           </div>
-          <h2 className="font-display text-5xl sm:text-7xl tracking-[-0.04em] leading-[1.02] pb-2 max-w-4xl">
+          <h2 className="font-display h-display-lg pb-2 max-w-4xl">
             {t("Fluent in ", "أتحدث ")}
             <span className="italic gradient-text-primary">
               {t("many tongues.", "لغات عديدة.")}

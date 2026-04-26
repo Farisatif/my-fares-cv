@@ -65,7 +65,7 @@ function PhysicsHeading({
   return (
     <h2
       ref={ref}
-      className="font-display text-5xl sm:text-7xl tracking-[-0.04em] leading-[1.02] pb-2"
+      className="font-display h-display-lg pb-2"
     >
       {renderChars(prefix, 0)}
       <span className="italic gradient-text-primary">
@@ -211,7 +211,7 @@ function StatCard({
       />
 
       <motion.div
-        className="font-display text-4xl sm:text-6xl tracking-tight relative"
+        className="font-display h-display-md tracking-tight relative"
         style={{ translateZ: 24 }}
         whileHover={reduce ? undefined : { y: -2 }}
         transition={{ type: "spring", stiffness: 300, damping: 18 }}

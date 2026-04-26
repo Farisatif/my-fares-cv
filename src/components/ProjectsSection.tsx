@@ -41,7 +41,7 @@ export function ProjectsSection() {
             <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-4">
               / 04 — {t("Selected work", "أعمال مختارة")}
             </p>
-            <h2 className="font-display text-5xl sm:text-7xl tracking-[-0.04em] leading-[1.02] pb-2 max-w-4xl">
+            <h2 className="font-display h-display-lg pb-2 max-w-4xl">
               {t("Projects ", "مشاريع ")}
               <span className="italic gradient-text-primary">
                 {t("in the wild.", "على أرض الواقع.")}

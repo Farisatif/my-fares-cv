@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { PageBoot } from "@/components/PageBoot";
 import { KitsysArrowField } from "@/components/KitsysArrowField";
 import { Navbar } from "@/components/Navbar";
+import { BackToTop } from "@/components/BackToTop";
 
 
 function NotFoundComponent() {
@@ -93,6 +94,7 @@ function RootComponent() {
           <HeroArrowBackdrop />
           <TopProgressBar />
           <AnimatedOutlet />
+          <BackToTop />
           <Navbar />
           <Toaster position="bottom-right" />
         </SiteDataProvider>
