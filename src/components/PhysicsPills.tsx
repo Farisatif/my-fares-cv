@@ -23,20 +23,32 @@ type Props = {
   floorOffset?: number;
 };
 
-// Kitsys-style 12-variant palette (background / foreground)
+// Deep blue palette inspired by professional architecture (#02030a, #0b1223, #0c2042, #24374c, #244f80)
 const PALETTE: Array<{ bg: string; fg: string; bgTop: string; bgBottom: string }> = [
-  { bg: "#0F1B4C", fg: "#FFFFFF", bgTop: "#1A2A66", bgBottom: "#08123A" },
-  { bg: "#2747D8", fg: "#FFFFFF", bgTop: "#4664EE", bgBottom: "#1A35B8" },
-  { bg: "#C9DAF8", fg: "#0B2A4A", bgTop: "#E0EBFC", bgBottom: "#A9C2EF" },
-  { bg: "#1E3A8A", fg: "#FFFFFF", bgTop: "#2E50AC", bgBottom: "#142868" },
-  { bg: "#B7B9F2", fg: "#1E2A6B", bgTop: "#CFD0F8", bgBottom: "#9B9DE5" },
-  { bg: "#0F172A", fg: "#FFFFFF", bgTop: "#1E2942", bgBottom: "#070C1A" },
-  { bg: "#DCE7FA", fg: "#0B2A4A", bgTop: "#EEF4FE", bgBottom: "#BFD2F2" },
-  { bg: "#3B5BDB", fg: "#FFFFFF", bgTop: "#5878EE", bgBottom: "#2944B8" },
-  { bg: "#1E40AF", fg: "#FFFFFF", bgTop: "#3056C8", bgBottom: "#142E88" },
-  { bg: "#93C5FD", fg: "#0B2A4A", bgTop: "#B4D7FE", bgBottom: "#6FAEF6" },
-  { bg: "#BFD7F2", fg: "#0B2A4A", bgTop: "#D6E5F8", bgBottom: "#9CBFE5" },
-  { bg: "#1F2937", fg: "#FFFFFF", bgTop: "#324153", bgBottom: "#111722" },
+  // Darkest navy
+  { bg: "#02030a", fg: "#FFFFFF", bgTop: "#0d1825", bgBottom: "#000000" },
+  // Deep dark blue
+  { bg: "#0b1223", fg: "#FFFFFF", bgTop: "#162a4a", bgBottom: "#050a14" },
+  // Dark teal-blue
+  { bg: "#0c2042", fg: "#FFFFFF", bgTop: "#1a3860", bgBottom: "#05102a" },
+  // Medium dark blue
+  { bg: "#1a3a5e", fg: "#FFFFFF", bgTop: "#2a5080", bgBottom: "#0f2540" },
+  // Professional teal
+  { bg: "#244f80", fg: "#FFFFFF", bgTop: "#3a6fa0", bgBottom: "#142f50" },
+  // Light teal accent
+  { bg: "#3a6fa0", fg: "#FFFFFF", bgTop: "#5a8fc0", bgBottom: "#244f80" },
+  // Medium blue
+  { bg: "#2a5880", fg: "#FFFFFF", bgTop: "#3a7ca0", bgBottom: "#1a3860" },
+  // Soft blue
+  { bg: "#4a7fa0", fg: "#FFFFFF", bgTop: "#6a9fc0", bgBottom: "#2a5f80" },
+  // Deep slate blue
+  { bg: "#1a2a4a", fg: "#FFFFFF", bgTop: "#2a4a6a", bgBottom: "#0a1a3a" },
+  // Slate
+  { bg: "#2a3a5a", fg: "#FFFFFF", bgTop: "#3a5a7a", bgBottom: "#1a2a4a" },
+  // Lighter slate
+  { bg: "#3a5a7a", fg: "#FFFFFF", bgTop: "#5a7aaa", bgBottom: "#244f80" },
+  // Twilight blue
+  { bg: "#1a3a6a", fg: "#FFFFFF", bgTop: "#2a5a8a", bgBottom: "#0a1a4a" },
 ];
 
 type DragState =

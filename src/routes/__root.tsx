@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { PageBoot } from "@/components/PageBoot";
 import { KitsysArrowField } from "@/components/KitsysArrowField";
 import { Navbar } from "@/components/Navbar";
+import { MobileNav } from "@/components/MobileNav";
 import { BackToTop } from "@/components/BackToTop";
 
 
@@ -73,11 +74,11 @@ export const Route = createRootRoute({
 
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className="bg-background">
       <head>
         <HeadContent />
       </head>
-      <body>
+      <body className="pl-0 sm:pl-64 pb-20 sm:pb-0">
         {children}
         <Scripts />
       </body>
@@ -97,6 +98,7 @@ function RootComponent() {
           <AnchorPulse />
           <BackToTop />
           <Navbar />
+          <MobileNav />
           <Toaster position="bottom-right" />
         </SiteDataProvider>
       </LanguageProvider>

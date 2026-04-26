@@ -6,7 +6,6 @@ import { useLang } from "./LanguageProvider";
 import { useSiteData } from "./SiteDataProvider";
 
 export function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
   const loc = useLocation();
   const { t, lang } = useLang();
   const { data } = useSiteData();
@@ -15,107 +14,132 @@ export function Navbar() {
   const contactLabel = lang === "ar"
     ? nav?.contactLabelAr || "تواصل"
     : nav?.contactLabelEn || "Contact";
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
-    onScroll();
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   const onComments = loc.pathname === "/comments";
   const onExplore = loc.pathname === "/explore";
   const onHome = loc.pathname === "/";
 
   const navLinkBase =
-    "focus-ring relative px-2 sm:px-3.5 py-1 sm:py-1.5 text-xs rounded-full transition-colors duration-300 whitespace-nowrap z-10 active:scale-[0.97]";
+    "focus-ring relative px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm rounded-lg transition-all duration-300 whitespace-nowrap z-10 active:scale-[0.97] group";
 
   const pillSpring = { type: "spring" as const, stiffness: 260, damping: 28, mass: 0.8 };
+  const isActive = onHome || onExplore || onComments;
 
   return (
     <motion.header
-      initial={{ y: 60, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
-      style={{ bottom: "calc(env(safe-area-inset-bottom, 0px) + 1rem)" }}
-      className="fixed left-0 right-0 z-50 flex justify-center px-3 pointer-events-none [&>*]:pointer-events-auto"
+      initial={{ x: -80, opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
+      className="hidden sm:flex fixed left-0 top-0 h-screen z-50 w-64 flex-col pointer-events-none [&>*]:pointer-events-auto p-6 sm:p-8"
     >
       <LayoutGroup id="navbar">
-      <nav
-        className={`flex items-center gap-0.5 sm:gap-1 rounded-full px-1 sm:px-1.5 py-1 sm:py-1.5 transition-all duration-300 backdrop-blur-xl border text-xs sm:text-sm ${
-          scrolled
-            ? "bg-[var(--surface-1)]/85 border-[var(--hairline)] brand-shadow"
-            : "bg-[var(--surface-1)]/65 border-[var(--hairline)] brand-shadow-sm"
-        }`}
-      >
+        {/* Logo area */}
         <Link
           to="/"
           preload="intent"
-          className={`relative ${navLinkBase} font-display text-sm sm:text-base shrink-0 ${
-            onHome ? "text-foreground" : "text-foreground/90 hover:text-foreground"
-          }`}
+          className="mb-8 sm:mb-12 focus-ring rounded-lg p-2 -m-2 inline-flex"
         >
-          {onHome && (
-            <motion.span
-              layoutId="nav-active-pill"
-              className="absolute inset-0 rounded-full bg-secondary"
-              transition={pillSpring}
-            />
-          )}
-          <span className="relative">Fares.</span>
+          <motion.div
+            initial={false}
+            animate={{ scale: onHome ? 1.05 : 1 }}
+            transition={{ type: "spring", stiffness: 200, damping: 12 }}
+            className="font-display text-lg sm:text-xl font-semibold bg-gradient-to-br from-primary to-accent bg-clip-text text-transparent"
+          >
+            Fares.
+          </motion.div>
         </Link>
-        <span className="w-px h-5 bg-border mx-0.5" />
-        <Link
-          to="/explore"
-          preload="intent"
-          className={`${navLinkBase} ${
-            onExplore
-              ? "text-foreground"
-              : "text-muted-foreground hover:text-foreground"
-          }`}
-        >
-          {onExplore && (
-            <motion.span
-              layoutId="nav-active-pill"
-              className="absolute inset-0 rounded-full bg-secondary"
-              transition={pillSpring}
-            />
-          )}
-          <span className="relative">{t("Explore", "استكشف")}</span>
-        </Link>
-        {showComments && (
-          <>
-            <span className="w-px h-5 bg-border mx-0.5" />
+
+        {/* Navigation links */}
+        <nav className="flex-1 flex flex-col gap-1">
+          <div className="space-y-1 mb-6">
             <Link
-              to="/comments"
+              to="/"
               preload="intent"
               className={`${navLinkBase} ${
-                onComments
-                  ? "text-foreground"
-                  : "text-muted-foreground hover:text-foreground"
+                onHome
+                  ? "text-foreground bg-[var(--surface-2)]"
+                  : "text-muted-foreground hover:text-foreground hover:bg-[var(--surface-2)]/50"
               }`}
             >
-              {onComments && (
+              {onHome && (
                 <motion.span
-                  layoutId="nav-active-pill"
-                  className="absolute inset-0 rounded-full bg-secondary"
+                  layoutId="nav-active-indicator"
+                  className="absolute left-0 top-0 bottom-0 w-1 bg-primary rounded-r-lg"
                   transition={pillSpring}
                 />
               )}
-              <span className="relative">{t("Comments", "التعليقات")}</span>
+              <span className="relative flex items-center gap-2">
+                <span>Home</span>
+              </span>
             </Link>
-          </>
-        )}
-        <span className="w-px h-5 bg-border mx-0.5" />
-        <Link
-          to="/"
-          hash="contact"
-          className="focus-ring px-2 sm:px-3 py-1 sm:py-1.5 text-xs rounded-full bg-foreground text-background hover:bg-foreground/90 transition-all duration-300 whitespace-nowrap shrink-0 active:scale-[0.96]"
-        >
-          {contactLabel}
-        </Link>
-        <span className="w-px h-5 bg-border mx-0.5" />
-        <ThemeLangToggle />
-      </nav>
+
+            <Link
+              to="/explore"
+              preload="intent"
+              className={`${navLinkBase} ${
+                onExplore
+                  ? "text-foreground bg-[var(--surface-2)]"
+                  : "text-muted-foreground hover:text-foreground hover:bg-[var(--surface-2)]/50"
+              }`}
+            >
+              {onExplore && (
+                <motion.span
+                  layoutId="nav-active-indicator"
+                  className="absolute left-0 top-0 bottom-0 w-1 bg-primary rounded-r-lg"
+                  transition={pillSpring}
+                />
+              )}
+              <span className="relative flex items-center gap-2">
+                <span>{t("Explore", "استكشف")}</span>
+              </span>
+            </Link>
+
+            {showComments && (
+              <Link
+                to="/comments"
+                preload="intent"
+                className={`${navLinkBase} ${
+                  onComments
+                    ? "text-foreground bg-[var(--surface-2)]"
+                    : "text-muted-foreground hover:text-foreground hover:bg-[var(--surface-2)]/50"
+                }`}
+              >
+                {onComments && (
+                  <motion.span
+                    layoutId="nav-active-indicator"
+                    className="absolute left-0 top-0 bottom-0 w-1 bg-primary rounded-r-lg"
+                    transition={pillSpring}
+                  />
+                )}
+                <span className="relative flex items-center gap-2">
+                  <span>{t("Comments", "التعليقات")}</span>
+                </span>
+              </Link>
+            )}
+          </div>
+
+          {/* Divider */}
+          <div className="my-4 h-px bg-[var(--hairline)]" />
+
+          {/* Contact link */}
+          <motion.div
+            layout
+            className="mt-auto space-y-3"
+          >
+            <Link
+              to="/"
+              hash="contact"
+              className="focus-ring w-full px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-300 text-center font-medium active:scale-[0.96] inline-block"
+            >
+              {contactLabel}
+            </Link>
+          </motion.div>
+        </nav>
+
+        {/* Theme toggle at bottom */}
+        <div className="flex justify-between items-center pt-6 border-t border-[var(--hairline)]">
+          <ThemeLangToggle />
+        </div>
       </LayoutGroup>
     </motion.header>
   );
