@@ -212,6 +212,10 @@ export const PhysicsPills = forwardRef<PhysicsPillsHandle, Props>(function Physi
       spawnTimersRef.current = [];
     };
 
+    // Ceiling state — see buildWalls for the two positions.
+    const ceilingSealedRef = { current: false } as { current: boolean };
+    let sealCeilingTimer: number | null = null;
+
     const spawnAll = () => {
       const eng = engineRef.current;
       if (!eng) return;
