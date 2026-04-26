@@ -43,31 +43,11 @@ function ExplorePage() {
         id="top"
         className="relative isolate overflow-hidden min-h-[88vh] sm:min-h-[92vh] flex items-end pt-28 pb-16 sm:pb-20"
       >
-        {/* Background image — fills the hero, anchored center */}
+        {/* Background image — fills the hero at full clarity, no overlays */}
         <div
           aria-hidden
           className="absolute inset-0 -z-20 bg-cover bg-center"
           style={{ backgroundImage: `url(${exploreSplash})` }}
-        />
-        {/* Vertical fade so text stays legible at the bottom */}
-        <div
-          aria-hidden
-          className="absolute inset-0 -z-10"
-          style={{
-            background:
-              "linear-gradient(180deg, rgba(2,6,23,0.55) 0%, rgba(2,6,23,0.25) 35%, rgba(2,6,23,0.85) 78%, rgba(2,6,23,0.98) 100%)",
-          }}
-        />
-        {/* Subtle electric blue glow accent */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -top-24 -left-24 h-[420px] w-[420px] rounded-full blur-3xl"
-          style={{ background: "radial-gradient(circle, rgba(56,114,255,0.35), transparent 70%)" }}
-        />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute -bottom-32 -right-24 h-[480px] w-[480px] rounded-full blur-3xl"
-          style={{ background: "radial-gradient(circle, rgba(30,64,175,0.45), transparent 70%)" }}
         />
 
         <div className="container relative mx-auto px-6 max-w-7xl">
