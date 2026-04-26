@@ -212,6 +212,10 @@ export const PhysicsPills = forwardRef<PhysicsPillsHandle, Props>(function Physi
       spawnTimersRef.current = [];
     };
 
+    // Ceiling state — see buildWalls for the two positions.
+    const ceilingSealedRef = { current: false } as { current: boolean };
+    let sealCeilingTimer: number | null = null;
+
     const spawnAll = () => {
       const eng = engineRef.current;
       if (!eng) return;
@@ -219,6 +223,11 @@ export const PhysicsPills = forwardRef<PhysicsPillsHandle, Props>(function Physi
       bodiesRef.current = [];
       clearSpawnTimers();
 
+      // Open the ceiling so pills can drop in from outside the section, then
+      // seal it once they've all had time to enter + settle.
+      if (sealCeilingTimer !== null) clearTimeout(sealCeilingTimer);
+      ceilingSealedRef.current = false;
+      buildWalls(sizeRef.current.w, sizeRef.current.h);
       const { w } = sizeRef.current;
       if (w === 0) return;
 
@@ -255,6 +264,14 @@ export const PhysicsPills = forwardRef<PhysicsPillsHandle, Props>(function Physi
         }, delay);
         spawnTimersRef.current.push(t);
       });
+
+      // Wait for the last pill to spawn + ~1.6s of settle time, then seal
+      // the ceiling so future bounces can't escape upward.
+      const lastDelay = (pillData.length - 1) * 140;
+      sealCeilingTimer = window.setTimeout(() => {
+        ceilingSealedRef.current = true;
+        buildWalls(sizeRef.current.w, sizeRef.current.h);
+      }, lastDelay + 1600);
     };
     spawnAllRef.current = spawnAll;
 
@@ -312,6 +329,10 @@ export const PhysicsPills = forwardRef<PhysicsPillsHandle, Props>(function Physi
       return Math.min(Math.max(floorOffset, intrusion), Math.max(0, h * 0.6));
     };
 
+    // Ceiling has two states (see ceilingSealedRef declared above):
+    //  - "open": parked far above so pills can fall in from outside the section.
+    //  - "sealed": flush at y=0 so it behaves exactly like the floor.
+
     const buildWalls = (w: number, h: number) => {
       for (const wallBody of wallsRef.current) Matter.World.remove(engine.world, wallBody);
       const opts = {
@@ -322,21 +343,18 @@ export const PhysicsPills = forwardRef<PhysicsPillsHandle, Props>(function Physi
       };
       const dynOffset = computeDynamicFloorOffset(h);
       const floor = Matter.Bodies.rectangle(w / 2, h - dynOffset + WALL_T / 2, w * 2, WALL_T, opts);
-      // Ceiling sits flush with the top of the visible section (y=0), mirroring
-      // the floor's contact surface. Pills bounce off it cleanly instead of
-      // sinking halfway into the band above.
-      const ceil = Matter.Bodies.rectangle(
-        w / 2,
-        -WALL_T / 2,
-        w * 2,
-        WALL_T,
-        opts,
-      );
+      // Ceiling Y depends on whether we've sealed it yet.
+      const ceilY = ceilingSealedRef.current
+        ? -WALL_T / 2
+        : -OVERFLOW_TOP - WALL_T * 4 - WALL_T / 2;
+      const ceil = Matter.Bodies.rectangle(w / 2, ceilY, w * 2, WALL_T, opts);
       const left = Matter.Bodies.rectangle(-WALL_T / 2, h / 2, WALL_T, h * 4, opts);
       const right = Matter.Bodies.rectangle(w + WALL_T / 2, h / 2, WALL_T, h * 4, opts);
       wallsRef.current = [floor, ceil, left, right];
       Matter.World.add(engine.world, wallsRef.current);
     };
+
+
 
     const setSize = () => {
       const rect = wrap.getBoundingClientRect();
