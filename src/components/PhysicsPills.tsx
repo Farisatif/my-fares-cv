@@ -354,11 +354,7 @@ export const PhysicsPills = forwardRef<PhysicsPillsHandle, Props>(function Physi
       Matter.World.add(engine.world, wallsRef.current);
     };
 
-    const sealCeiling = () => {
-      if (ceilingSealedRef.current) return;
-      ceilingSealedRef.current = true;
-      buildWalls(sizeRef.current.w, sizeRef.current.h);
-    };
+
 
     const setSize = () => {
       const rect = wrap.getBoundingClientRect();
