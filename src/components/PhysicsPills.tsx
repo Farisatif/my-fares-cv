@@ -264,6 +264,14 @@ export const PhysicsPills = forwardRef<PhysicsPillsHandle, Props>(function Physi
         }, delay);
         spawnTimersRef.current.push(t);
       });
+
+      // Wait for the last pill to spawn + ~1.6s of settle time, then seal
+      // the ceiling so future bounces can't escape upward.
+      const lastDelay = (pillData.length - 1) * 140;
+      sealCeilingTimer = window.setTimeout(() => {
+        ceilingSealedRef.current = true;
+        buildWalls(sizeRef.current.w, sizeRef.current.h);
+      }, lastDelay + 1600);
     };
     spawnAllRef.current = spawnAll;
 
