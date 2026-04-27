@@ -156,6 +156,7 @@ function AnimatedOutlet() {
           willChange: "transform, opacity, filter",
           transformOrigin: "center 30%",
         }}
+        className="pl-16 md:pl-20"
       >
         <Outlet />
       </motion.div>
