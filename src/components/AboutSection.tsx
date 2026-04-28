@@ -322,7 +322,7 @@ function CodeCommentCard({
         delay: 0.25,
       }}
       dir="ltr"
-      className="group relative rounded-2xl overflow-hidden border border-[var(--hairline)] bg-[var(--surface-1)] brand-shadow transition-all duration-300"
+      className="mt-8 group relative rounded-2xl overflow-hidden border border-[var(--hairline)] bg-[var(--surface-1)] brand-shadow"
     >
       {/* Header bar */}
       <div className="flex items-center justify-between px-4 py-2.5 border-b border-[var(--hairline)] bg-[var(--surface-2)]/60">
@@ -588,20 +588,18 @@ export function AboutSection() {
             />
           </Reveal>
 
-          <Reveal delay={0.15} className="lg:col-span-7 lg:pt-4 flex flex-col">
+          <Reveal delay={0.15} className="lg:col-span-7 lg:pt-4">
             <p className="text-xl sm:text-2xl leading-relaxed text-foreground/80 font-light">
               {loc.bio}
             </p>
-            <div className="mt-10 sm:mt-12 lg:mt-14 min-h-[380px] sm:min-h-[420px]">
-              <CodeCommentCard
-                language={lang === "ar" ? "ar" : "en"}
-                filename={lang === "ar" ? "about.dev.ts" : "about.dev.ts"}
-                text={t(
-                  "I started coding in 2019 — middle school. Today I build full-stack web apps, mobile experiences, and systems-level tools. I care about details: spacing, motion, edge cases, and the small joys that make software feel alive.",
-                  "بدأت البرمجة في ٢٠١٩ في المرحلة الإعدادية. اليوم أبني تطبيقات ويب متكاملة وتجارب جوال وأدوات أنظمة. أهتم بالتفاصيل: التباعد، الحركة، الحالات الحدية، والتفاصيل الصغيرة التي تمنح البرمجيات حياة.",
-                )}
-              />
-            </div>
+            <CodeCommentCard
+              language={lang === "ar" ? "ar" : "en"}
+              filename={lang === "ar" ? "about.dev.ts" : "about.dev.ts"}
+              text={t(
+                "I started coding in 2019 — middle school. Today I build full-stack web apps, mobile experiences, and systems-level tools. I care about details: spacing, motion, edge cases, and the small joys that make software feel alive.",
+                "بدأت البرمجة في ٢٠١٩ في المرحلة الإعدادية. اليوم أبني تطبيقات ويب متكاملة وتجارب جوال وأدوات أنظمة. أهتم بالتفاصيل: التباعد، الحركة، الحالات الحدية، والتفاصيل الصغيرة التي تمنح البرمجيات حياة.",
+              )}
+            />
           </Reveal>
         </div>
 
