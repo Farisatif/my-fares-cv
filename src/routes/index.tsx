@@ -41,7 +41,7 @@ function Index() {
   const tagsEn = data.personal.en.taglines;
   const tagsAr = data.personal.ar.taglines;
   return (
-    <div className="relative z-[2] min-h-screen text-foreground">
+    <main id="main" className="relative z-[2] min-h-screen text-foreground">
       <ScrollProgress />
       {/* Hero keeps default background to anchor the page */}
       <Hero />
@@ -107,6 +107,6 @@ function Index() {
       <SectionBand variant="dark" pattern="grid-fine" divider roundTop>
         <ContactSection />
       </SectionBand>
-    </div>
+    </main>
   );
 }

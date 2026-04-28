@@ -27,9 +27,10 @@ export function Navbar() {
   const onHome = loc.pathname === "/";
 
   const navLinkBase =
-    "focus-ring relative px-2 sm:px-3.5 py-1 sm:py-1.5 text-xs rounded-full transition-colors duration-300 whitespace-nowrap z-10 active:scale-[0.97]";
+    "focus-ring relative px-2 sm:px-3.5 py-1.5 sm:py-2 text-xs sm:text-sm rounded-full transition-all duration-300 whitespace-nowrap z-10 active:scale-[0.97] hover:scale-105 font-medium";
 
   const pillSpring = { type: "spring" as const, stiffness: 260, damping: 28, mass: 0.8 };
+  const hoverTransition = { type: "spring" as const, stiffness: 400, damping: 30 };
 
   return (
     <motion.header
@@ -38,6 +39,8 @@ export function Navbar() {
       transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
       style={{ bottom: "calc(env(safe-area-inset-bottom, 0px) + 1rem)" }}
       className="fixed left-0 right-0 z-50 flex justify-center px-3 pointer-events-none [&>*]:pointer-events-auto"
+      role="navigation"
+      aria-label="Main navigation"
     >
       <LayoutGroup id="navbar">
       <nav
@@ -47,73 +50,83 @@ export function Navbar() {
             : "bg-[var(--surface-1)]/65 border-[var(--hairline)] brand-shadow-sm"
         }`}
       >
-        <Link
-          to="/"
-          preload="intent"
-          className={`relative ${navLinkBase} font-display text-sm sm:text-base shrink-0 ${
-            onHome ? "text-foreground" : "text-foreground/90 hover:text-foreground"
-          }`}
-        >
-          {onHome && (
-            <motion.span
-              layoutId="nav-active-pill"
-              className="absolute inset-0 rounded-full bg-secondary"
-              transition={pillSpring}
-            />
-          )}
-          <span className="relative">Fares.</span>
-        </Link>
+        <motion.div whileHover={{ scale: 1.05 }} transition={hoverTransition}>
+          <Link
+            to="/"
+            preload="intent"
+            className={`relative ${navLinkBase} font-display text-sm sm:text-base shrink-0 ${
+              onHome 
+                ? "text-foreground bg-secondary/20" 
+                : "text-foreground/90 hover:text-foreground"
+            }`}
+          >
+            {onHome && (
+              <motion.span
+                layoutId="nav-active-pill"
+                className="absolute inset-0 rounded-full bg-secondary"
+                transition={pillSpring}
+              />
+            )}
+            <span className="relative">Fares.</span>
+          </Link>
+        </motion.div>
         <span className="w-px h-5 bg-border mx-0.5" />
-        <Link
-          to="/explore"
-          preload="intent"
-          className={`${navLinkBase} ${
-            onExplore
-              ? "text-foreground"
-              : "text-muted-foreground hover:text-foreground"
-          }`}
-        >
-          {onExplore && (
-            <motion.span
-              layoutId="nav-active-pill"
-              className="absolute inset-0 rounded-full bg-secondary"
-              transition={pillSpring}
-            />
-          )}
-          <span className="relative">{t("Explore", "استكشف")}</span>
-        </Link>
+        <motion.div whileHover={{ scale: 1.05 }} transition={hoverTransition}>
+          <Link
+            to="/explore"
+            preload="intent"
+            className={`${navLinkBase} ${
+              onExplore
+                ? "text-foreground bg-secondary/20"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            {onExplore && (
+              <motion.span
+                layoutId="nav-active-pill"
+                className="absolute inset-0 rounded-full bg-secondary"
+                transition={pillSpring}
+              />
+            )}
+            <span className="relative">{t("Explore", "استكشف")}</span>
+          </Link>
+        </motion.div>
         {showComments && (
           <>
-            <span className="w-px h-5 bg-border mx-0.5" />
-            <Link
-              to="/comments"
-              preload="intent"
-              className={`${navLinkBase} ${
-                onComments
-                  ? "text-foreground"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              {onComments && (
-                <motion.span
-                  layoutId="nav-active-pill"
-                  className="absolute inset-0 rounded-full bg-secondary"
-                  transition={pillSpring}
-                />
-              )}
-              <span className="relative">{t("Comments", "التعليقات")}</span>
-            </Link>
+            <span className="w-px h-5 bg-border/50 mx-0.5" />
+            <motion.div whileHover={{ scale: 1.05 }} transition={hoverTransition}>
+              <Link
+                to="/comments"
+                preload="intent"
+                className={`${navLinkBase} ${
+                  onComments
+                    ? "text-foreground bg-secondary/20"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {onComments && (
+                  <motion.span
+                    layoutId="nav-active-pill"
+                    className="absolute inset-0 rounded-full bg-secondary"
+                    transition={pillSpring}
+                  />
+                )}
+                <span className="relative">{t("Comments", "التعليقات")}</span>
+              </Link>
+            </motion.div>
           </>
         )}
-        <span className="w-px h-5 bg-border mx-0.5" />
-        <Link
-          to="/"
-          hash="contact"
-          className="focus-ring px-2 sm:px-3 py-1 sm:py-1.5 text-xs rounded-full bg-foreground text-background hover:bg-foreground/90 transition-all duration-300 whitespace-nowrap shrink-0 active:scale-[0.96]"
-        >
-          {contactLabel}
-        </Link>
-        <span className="w-px h-5 bg-border mx-0.5" />
+        <span className="w-px h-5 bg-border/50 mx-0.5" />
+        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} transition={hoverTransition}>
+          <Link
+            to="/"
+            hash="contact"
+            className="focus-ring px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium rounded-full bg-foreground text-background hover:bg-foreground/90 transition-all duration-300 whitespace-nowrap shrink-0 shadow-md hover:shadow-lg"
+          >
+            {contactLabel}
+          </Link>
+        </motion.div>
+        <span className="w-px h-5 bg-border/50 mx-0.5" />
         <ThemeLangToggle />
       </nav>
       </LayoutGroup>
