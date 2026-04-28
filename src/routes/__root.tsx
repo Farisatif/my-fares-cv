@@ -73,11 +73,17 @@ export const Route = createRootRoute({
 
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className="scroll-smooth">
       <head>
         <HeadContent />
+        <meta name="color-scheme" content="light dark" />
+        <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+        <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
       </head>
-      <body>
+      <body className="bg-background text-foreground">
+        <a href="#main" className="sr-only focus:not-sr-only">
+          Skip to main content
+        </a>
         {children}
         <Scripts />
       </body>

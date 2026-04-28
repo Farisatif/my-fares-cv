@@ -1,6 +1,15 @@
 import { motion, LayoutGroup } from "framer-motion";
 import { Link, useLocation } from "@tanstack/react-router";
-import { Hop as Home, Compass, MessageSquare, Mail, Sun, Moon, Globe } from "lucide-react";
+import {
+  Hop as Home,
+  Compass,
+  MessageSquare,
+  Mail,
+  Sun,
+  Moon,
+  Globe,
+} from "lucide-react";
+import type { ComponentType } from "react";
 import {
   Tooltip,
   TooltipContent,
@@ -16,6 +25,7 @@ export function Navbar() {
   const { t, lang, setLang } = useLang();
   const { data } = useSiteData();
   const { theme, setTheme } = useTheme();
+
   const nav = data.navigation;
   const showComments = nav?.showComments !== false;
 
@@ -41,7 +51,7 @@ export function Navbar() {
     onClick,
   }: {
     to?: string;
-    icon: React.ComponentType<{ size: number; className?: string }>;
+    icon: ComponentType<{ size?: number; className?: string }>;
     label: string;
     isActive: boolean;
     onClick?: () => void;
@@ -91,10 +101,11 @@ export function Navbar() {
       animate={{ x: 0, opacity: 1 }}
       transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
       className="fixed left-3 md:left-4 top-0 bottom-0 z-50 flex flex-col items-center py-6 pointer-events-none [&>*]:pointer-events-auto"
+      role="navigation"
+      aria-label="Main navigation"
     >
       <LayoutGroup id="navbar">
         <nav className="flex flex-col items-center gap-3 rounded-2xl px-2 py-4 backdrop-blur-xl border border-[var(--hairline)] bg-[var(--surface-1)]/80 brand-shadow-sm h-fit">
-          {/* Home */}
           <NavIcon
             to="/"
             icon={Home}
@@ -102,7 +113,6 @@ export function Navbar() {
             isActive={onHome}
           />
 
-          {/* Explore */}
           <NavIcon
             to="/explore"
             icon={Compass}
@@ -110,7 +120,6 @@ export function Navbar() {
             isActive={onExplore}
           />
 
-          {/* Comments */}
           {showComments && (
             <NavIcon
               to="/comments"
@@ -120,7 +129,6 @@ export function Navbar() {
             />
           )}
 
-          {/* Contact */}
           <NavIcon
             to="/"
             icon={Mail}
@@ -132,10 +140,8 @@ export function Navbar() {
             }}
           />
 
-          {/* Divider */}
           <div className="w-6 h-px bg-border my-1" />
 
-          {/* Theme Toggle */}
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -159,7 +165,6 @@ export function Navbar() {
             </Tooltip>
           </TooltipProvider>
 
-          {/* Language Toggle */}
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -172,9 +177,7 @@ export function Navbar() {
                 </button>
               </TooltipTrigger>
               <TooltipContent side="right">
-                {lang === "ar"
-                  ? t("English", "English")
-                  : t("العربية", "العربية")}
+                {lang === "ar" ? t("English", "English") : t("العربية", "العربية")}
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
