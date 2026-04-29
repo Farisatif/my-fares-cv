@@ -458,35 +458,39 @@ function CodeCommentCard({
                 >
                   {i + 2}
                 </span>
-                <span className="flex-1 text-foreground/85 relative">
+                <span className="flex-1 text-foreground/85">
                   <span className="text-muted-foreground/50 select-none">
                     *{line ? " " : ""}
                   </span>
-                  {/* Invisible placeholder — locks the line width/height
-                      to the final wrapped layout. */}
-                  <span aria-hidden className="opacity-0 select-none">
-                    {line || "\u00A0"}
-                  </span>
-                  {/* Visible reveal overlay */}
-                  <span className="absolute inset-0 pl-[1.6em]" dir={isRTL ? "rtl" : "ltr"}>
-                    {renderHighlighted(visibleInLine)}
-                    {isWriting && (
-                      <motion.span
-                        aria-hidden
-                        className="inline-block w-[2px] h-[1em] align-[-2px] ml-0.5"
-                        style={{
-                          background:
-                            "color-mix(in oklab, var(--primary) 90%, transparent)",
-                        }}
-                        animate={{ opacity: [1, 0, 1] }}
-                        transition={{
-                          duration: 0.9,
-                          repeat: Infinity,
-                          ease: "easeInOut",
-                        }}
-                      />
-                    )}
-                  </span>
+                  {renderHighlighted(visibleInLine)}
+                  {isWriting && (
+                    <motion.span
+                      aria-hidden
+                      className="inline-block w-[2px] h-[1em] align-[-2px] ml-0.5"
+                      style={{
+                        background:
+                          "color-mix(in oklab, var(--primary) 90%, transparent)",
+                      }}
+                      animate={{ opacity: [1, 0, 1] }}
+                      transition={{
+                        duration: 0.9,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
+                    />
+                  )}
+                  {/* Invisible remainder — reserves the rest of the line so
+                      width/height never changes as characters reveal. */}
+                  {line.length > visibleInLine.length && (
+                    <span aria-hidden className="opacity-0 select-none">
+                      {line.slice(visibleInLine.length) || "\u00A0"}
+                    </span>
+                  )}
+                  {line.length === 0 && (
+                    <span aria-hidden className="opacity-0 select-none">
+                      {"\u00A0"}
+                    </span>
+                  )}
                 </span>
               </div>
             );
