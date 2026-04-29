@@ -129,7 +129,7 @@ export function ProjectsSection() {
                           WebkitBackgroundClip: "text",
                           WebkitTextFillColor: "transparent",
                           backgroundClip: "text",
-                          textFillColor: "transparent",
+                          color: "transparent",
                         }}
                       >
                         {p.name}
@@ -165,8 +165,7 @@ export function ProjectsSection() {
                           className="h-2 w-2 rounded-full ring-1 ring-offset-1 transition-shadow duration-200"
                           style={{ 
                             background: langColor, 
-                            ringColor: langColor,
-                            boxShadow: `inset 0 0 0 1px ${langColor}40`,
+                            boxShadow: `inset 0 0 0 1px ${langColor}40, 0 0 0 1px ${langColor}40`,
                           }}
                         />
                         {p.language}
