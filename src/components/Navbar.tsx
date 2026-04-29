@@ -61,9 +61,17 @@ export function Navbar() {
     show: boolean;
   };
 
-  // Brand-identity translucent surface — adapts via foreground token:
-  //   light theme → translucent black, dark theme → translucent white.
-  const chipBg = "color-mix(in oklab, var(--foreground) 10%, transparent)";
+  // Unified chip style — every icon is a solid filled half-pill (matches the
+  // contact CTA's visual weight) so the rail reads as one cohesive ribbon.
+  // Uses the foreground token so it auto-inverts: black-on-light, white-on-dark.
+  const chipBg = "var(--foreground)";
+  const chipText = "var(--background)";
+  // Professional layered shadow — soft ambient + tight contact shadow for depth.
+  const chipShadow =
+    "0 12px 28px -14px color-mix(in oklab, var(--foreground) 55%, transparent), 0 4px 10px -6px color-mix(in oklab, var(--foreground) 35%, transparent), inset 0 1px 0 0 color-mix(in oklab, #ffffff 14%, transparent)";
+  // Brand-blue shadow for the contact CTA so it carries identity weight.
+  const mailShadow =
+    "0 14px 32px -12px color-mix(in oklab, var(--primary) 65%, transparent), 0 4px 12px -6px color-mix(in oklab, var(--primary) 50%, transparent), inset 0 1px 0 0 color-mix(in oklab, #ffffff 18%, transparent)";
 
   const items: NavItem[] = [
     {
@@ -115,23 +123,27 @@ export function Navbar() {
               tooltipSide={tooltipSide}
               halfPillRadius={halfPillRadius}
               chipBg={chipBg}
+              chipText={chipText}
+              chipShadow={chipShadow}
               isRTL={isRTL}
               pillSpring={pillSpring}
             />
           ))}
 
-          {/* Contact CTA — solid foreground filled half-pill */}
+          {/* Contact CTA — anchored brand-blue identity color, never inverts */}
           <Link
             to="/"
             hash="contact"
             preload="intent"
             aria-label={contactLabel}
             title={contactLabel}
-            className={`group/icon relative flex items-center justify-center h-10 w-11 sm:h-11 sm:w-12 ${halfPillRadius} bg-foreground text-background hover:scale-x-[1.04] active:scale-95 transition-transform duration-200 focus-ring`}
+            className={`group/icon relative flex items-center justify-center h-10 w-11 sm:h-11 sm:w-12 ${halfPillRadius} hover:scale-x-[1.04] active:scale-95 transition-transform duration-200 focus-ring`}
             style={{
               transformOrigin: isRTL ? "left center" : "right center",
-              boxShadow:
-                "0 8px 22px -10px color-mix(in oklab, var(--foreground) 55%, transparent)",
+              background:
+                "linear-gradient(140deg, oklch(0.42 0.16 260) 0%, oklch(0.30 0.13 265) 100%)",
+              color: "#ffffff",
+              boxShadow: mailShadow,
             }}
           >
             <Mail className="h-[18px] w-[18px]" strokeWidth={2.1} />
@@ -144,14 +156,12 @@ export function Navbar() {
             onClick={toggleLang}
             aria-label={t("Toggle language", "تبديل اللغة")}
             title={t("Toggle language", "تبديل اللغة")}
-            className={`group/icon relative flex items-center justify-center h-10 w-11 sm:h-11 sm:w-12 ${halfPillRadius} text-foreground hover:scale-x-[1.04] active:scale-95 transition-transform duration-200 focus-ring overflow-hidden`}
+            className={`group/icon relative flex items-center justify-center h-10 w-11 sm:h-11 sm:w-12 ${halfPillRadius} hover:scale-x-[1.04] active:scale-95 transition-transform duration-200 focus-ring overflow-hidden`}
             style={{
               transformOrigin: isRTL ? "left center" : "right center",
               background: chipBg,
-              backdropFilter: "blur(18px) saturate(160%)",
-              WebkitBackdropFilter: "blur(18px) saturate(160%)",
-              boxShadow:
-                "inset 0 1px 0 0 color-mix(in oklab, var(--foreground) 5%, transparent), 0 6px 16px -10px color-mix(in oklab, var(--foreground) 22%, transparent)",
+              color: chipText,
+              boxShadow: chipShadow,
             }}
           >
             <AnimatePresence mode="wait" initial={false}>
@@ -184,14 +194,12 @@ export function Navbar() {
             }}
             aria-label={t("Toggle theme", "تبديل المظهر")}
             title={t("Toggle theme", "تبديل المظهر")}
-            className={`group/icon relative flex items-center justify-center h-10 w-11 sm:h-11 sm:w-12 ${halfPillRadius} text-foreground hover:scale-x-[1.04] active:scale-95 transition-transform duration-200 focus-ring overflow-hidden`}
+            className={`group/icon relative flex items-center justify-center h-10 w-11 sm:h-11 sm:w-12 ${halfPillRadius} hover:scale-x-[1.04] active:scale-95 transition-transform duration-200 focus-ring overflow-hidden`}
             style={{
               transformOrigin: isRTL ? "left center" : "right center",
               background: chipBg,
-              backdropFilter: "blur(18px) saturate(160%)",
-              WebkitBackdropFilter: "blur(18px) saturate(160%)",
-              boxShadow:
-                "inset 0 1px 0 0 color-mix(in oklab, var(--foreground) 5%, transparent), 0 6px 16px -10px color-mix(in oklab, var(--foreground) 22%, transparent)",
+              color: chipText,
+              boxShadow: chipShadow,
             }}
           >
             <AnimatePresence mode="wait" initial={false}>
@@ -236,6 +244,8 @@ function RailIcon({
   tooltipSide,
   halfPillRadius,
   chipBg,
+  chipText,
+  chipShadow,
   isRTL,
   pillSpring,
 }: {
@@ -247,6 +257,8 @@ function RailIcon({
   tooltipSide: string;
   halfPillRadius: string;
   chipBg: string;
+  chipText: string;
+  chipShadow: string;
   isRTL: boolean;
   pillSpring: { type: "spring"; stiffness: number; damping: number; mass: number };
 }) {
@@ -257,14 +269,12 @@ function RailIcon({
       preload="intent"
       aria-label={label}
       title={label}
-      className={`group/icon relative flex items-center justify-center h-10 w-11 sm:h-11 sm:w-12 ${halfPillRadius} text-foreground/80 hover:text-foreground transition-[color,transform] duration-300 focus-ring active:scale-95 overflow-hidden`}
+      className={`group/icon relative flex items-center justify-center h-10 w-11 sm:h-11 sm:w-12 ${halfPillRadius} hover:scale-x-[1.04] transition-transform duration-300 focus-ring active:scale-95 overflow-hidden`}
       style={{
         transformOrigin: isRTL ? "left center" : "right center",
         background: chipBg,
-        backdropFilter: "blur(18px) saturate(160%)",
-        WebkitBackdropFilter: "blur(18px) saturate(160%)",
-        boxShadow:
-          "inset 0 1px 0 0 color-mix(in oklab, var(--foreground) 5%, transparent), 0 6px 16px -10px color-mix(in oklab, var(--foreground) 22%, transparent)",
+        color: chipText,
+        boxShadow: chipShadow,
       }}
     >
       {/* Hover sheen — soft inner highlight on the inner side */}
@@ -278,7 +288,7 @@ function RailIcon({
         }}
       />
 
-      {/* Active brand wash — sliding shared layout */}
+      {/* Active brand wash — sliding shared layout, blue tint on the chip */}
       {active && (
         <motion.span
           layoutId="rail-edge-active"
@@ -286,9 +296,9 @@ function RailIcon({
           className={`absolute inset-0 ${halfPillRadius}`}
           style={{
             background:
-              "linear-gradient(140deg, color-mix(in oklab, var(--primary) 32%, transparent), color-mix(in oklab, var(--primary-glow) 22%, transparent))",
+              "linear-gradient(140deg, oklch(0.50 0.18 260) 0%, oklch(0.38 0.15 265) 100%)",
             boxShadow:
-              "inset 0 0 0 1px color-mix(in oklab, var(--primary) 40%, transparent)",
+              "inset 0 0 0 1px color-mix(in oklab, var(--primary-glow) 55%, transparent)",
           }}
           transition={pillSpring}
         />
@@ -310,7 +320,10 @@ function RailIcon({
         />
       )}
 
-      <span className="relative z-10 flex items-center justify-center">
+      <span
+        className="relative z-10 flex items-center justify-center"
+        style={active ? { color: "#ffffff" } : undefined}
+      >
         <Icon className="h-[17px] w-[17px]" strokeWidth={2.1} />
       </span>
 
