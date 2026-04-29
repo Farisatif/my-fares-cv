@@ -81,7 +81,7 @@ export function LanguagesSection() {
               data.content?.languages?.titlePrefix_en ?? "Fluent in ",
               data.content?.languages?.titlePrefix_ar ?? "أتحدث ",
             )}
-            <span className="italic gradient-text-primary">
+            <span className="italic gradient-text-sky inline-block pb-1">
               {t(
                 data.content?.languages?.titleAccent_en ?? "many tongues.",
                 data.content?.languages?.titleAccent_ar ?? "لغات عديدة.",

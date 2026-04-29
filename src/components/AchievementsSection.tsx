@@ -82,7 +82,7 @@ export function AchievementsSection() {
                 data.content?.achievements?.titlePrefix_en ?? "A few ",
                 data.content?.achievements?.titlePrefix_ar ?? "بعض ",
               )}
-              <span className="italic gradient-text-primary">
+              <span className="italic gradient-text-sky inline-block pb-1">
                 {t(
                   data.content?.achievements?.titleAccent_en ?? "proud moments.",
                   data.content?.achievements?.titleAccent_ar ?? "اللحظات المُشرّفة.",

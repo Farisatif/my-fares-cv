@@ -99,11 +99,26 @@ export function ContactSection() {
         </Reveal>
       </div>
 
-      <div className="container mx-auto px-6 max-w-7xl mt-8 relative">
-        <div className="flex flex-wrap gap-4 justify-between items-center text-xs border-t pt-4"
-          style={{ borderColor: "color-mix(in oklab, currentColor 40%, transparent)" }}>
-          <span className="text-foreground/70">© {new Date().getFullYear()} {p.name}</span>
-          <span className="text-foreground/70">{t("Built with care · Sana'a, YE", "صُنع بعناية · صنعاء، اليمن")}</span>
+      <div className="container mx-auto px-6 max-w-7xl mt-16 sm:mt-20 relative">
+        <div
+          className="rounded-2xl border backdrop-blur-md px-5 sm:px-6 py-4 flex flex-wrap gap-3 sm:gap-4 justify-between items-center text-xs"
+          style={{
+            borderColor: "color-mix(in oklab, currentColor 14%, transparent)",
+            background: "color-mix(in oklab, var(--surface-1) 60%, transparent)",
+            boxShadow:
+              "inset 0 1px 0 0 color-mix(in oklab, var(--foreground) 5%, transparent), 0 12px 30px -18px color-mix(in oklab, var(--primary) 28%, transparent)",
+          }}
+        >
+          <span className="inline-flex items-center gap-2 font-medium tracking-tight">
+            <span
+              className="inline-block h-1.5 w-1.5 rounded-full"
+              style={{ background: "var(--primary)", boxShadow: "0 0 10px var(--primary)" }}
+            />
+            © {new Date().getFullYear()} {p.name}
+          </span>
+          <span className="text-foreground/65 tracking-wide">
+            {t("Built with care · Sana'a, YE", "صُنع بعناية · صنعاء، اليمن")}
+          </span>
           <SettingsDrawer />
         </div>
       </div>
