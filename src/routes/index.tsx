@@ -74,8 +74,10 @@ function Index() {
         <AchievementsSection />
       </SectionBand>
 
-      {/* Bridge to /explore — projects + GitHub activity now live there */}
-      <SectionBand variant="dark" pattern="none" divider roundTop roundBottom>
+      {/* Bridge to /explore — projects + GitHub activity now live there.
+          Inverted vs. the Achievements band above (light in light theme,
+          dark surface in dark theme via tokens). */}
+      <SectionBand variant="light" pattern="gradient" divider roundTop roundBottom>
         <section className="relative py-20 sm:py-28">
           <div className="container mx-auto px-6 max-w-5xl text-center">
             <p className="text-[10px] sm:text-xs uppercase tracking-[0.35em] text-muted-foreground">

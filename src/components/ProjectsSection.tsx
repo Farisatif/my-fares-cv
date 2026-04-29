@@ -3,7 +3,7 @@ import { ArrowUpRight, GitFork, Star, Github } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import { useSiteData } from "./SiteDataProvider";
 import { useLang } from "./LanguageProvider";
-import { ChevronPattern } from "./Patterns";
+
 
 // Professional color map for common languages — refined to match site identity
 // Colors are balanced for elegance: reduced chroma, adjusted lightness for hierarchy
@@ -36,7 +36,6 @@ export function ProjectsSection() {
   const reduce = useReducedMotion();
   return (
     <section id="projects" className="section-padding">
-      <ChevronPattern>
         <div className="container mx-auto px-6 max-w-7xl">
           <Reveal>
             <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-4">
@@ -185,7 +184,6 @@ export function ProjectsSection() {
             })}
           </div>
         </div>
-      </ChevronPattern>
     </section>
   );
 }
