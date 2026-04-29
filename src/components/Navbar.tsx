@@ -114,7 +114,7 @@ export function Navbar() {
               active={item.active === true}
               tooltipSide={tooltipSide}
               halfPillRadius={halfPillRadius}
-              tone={item.tone}
+              chipBg={chipBg}
               isRTL={isRTL}
               pillSpring={pillSpring}
             />
@@ -147,8 +147,7 @@ export function Navbar() {
             className={`group/icon relative flex items-center justify-center h-10 w-11 sm:h-11 sm:w-12 ${halfPillRadius} text-foreground hover:scale-x-[1.04] active:scale-95 transition-transform duration-200 focus-ring overflow-hidden`}
             style={{
               transformOrigin: isRTL ? "left center" : "right center",
-              background:
-                "color-mix(in oklab, oklch(0.78 0.14 145) 18%, var(--surface-1) 82%)",
+              background: chipBg,
               backdropFilter: "blur(18px) saturate(160%)",
               WebkitBackdropFilter: "blur(18px) saturate(160%)",
               boxShadow:
@@ -188,8 +187,7 @@ export function Navbar() {
             className={`group/icon relative flex items-center justify-center h-10 w-11 sm:h-11 sm:w-12 ${halfPillRadius} text-foreground hover:scale-x-[1.04] active:scale-95 transition-transform duration-200 focus-ring overflow-hidden`}
             style={{
               transformOrigin: isRTL ? "left center" : "right center",
-              background:
-                "color-mix(in oklab, oklch(0.74 0.18 75) 18%, var(--surface-1) 82%)",
+              background: chipBg,
               backdropFilter: "blur(18px) saturate(160%)",
               WebkitBackdropFilter: "blur(18px) saturate(160%)",
               boxShadow:
@@ -237,7 +235,7 @@ function RailIcon({
   active,
   tooltipSide,
   halfPillRadius,
-  tone,
+  chipBg,
   isRTL,
   pillSpring,
 }: {
@@ -248,7 +246,7 @@ function RailIcon({
   active: boolean;
   tooltipSide: string;
   halfPillRadius: string;
-  tone: string;
+  chipBg: string;
   isRTL: boolean;
   pillSpring: { type: "spring"; stiffness: number; damping: number; mass: number };
 }) {
@@ -262,7 +260,7 @@ function RailIcon({
       className={`group/icon relative flex items-center justify-center h-10 w-11 sm:h-11 sm:w-12 ${halfPillRadius} text-foreground/80 hover:text-foreground transition-[color,transform] duration-300 focus-ring active:scale-95 overflow-hidden`}
       style={{
         transformOrigin: isRTL ? "left center" : "right center",
-        background: tone,
+        background: chipBg,
         backdropFilter: "blur(18px) saturate(160%)",
         WebkitBackdropFilter: "blur(18px) saturate(160%)",
         boxShadow:
