@@ -195,28 +195,16 @@ export function GithubActivitySection() {
 
   return (
     <section id="github" className="relative section-padding overflow-hidden">
-      {/* Interactive glowing dots backdrop — reacts to cursor/touch
-          across the entire section. pointer-events:none so it never blocks
-          card interactions. Auto-themes via currentColor. */}
-      <div className="pointer-events-none absolute inset-0 -z-0 opacity-[0.55]">
-        <GlowDots
-          asBackground
-          height="100%"
-          dotColor="currentColor"
-          glowColor="oklch(0.62 0.24 268)"
-          spacing={32}
-        />
-      </div>
       <div className="container mx-auto px-6 max-w-7xl relative z-10">
         <Reveal>
           <div className="flex items-end justify-between flex-wrap gap-6 mb-10 sm:mb-14">
             <div>
-              <div className="flex items-center gap-3 mb-3">
-                <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">
+              <div className="flex items-center gap-3 mb-4">
+                <p className="text-[11px] sm:text-xs uppercase tracking-[0.3em] opacity-60">
                   / 06 — {t("Live from GitHub", "مباشر من جيت‌هاب")}
                 </p>
                 {bundle?.ok && (
-                  <span className="inline-flex items-center gap-1.5 rounded-full border border-[#2ea043]/40 bg-[#2ea043]/10 px-2 py-0.5 text-[10px] font-medium uppercase tracking-[0.18em] text-[#2ea043]">
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-[#2ea043]/40 bg-[#2ea043]/10 px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-[0.18em] text-[#2ea043]">
                     <span className="relative flex h-1.5 w-1.5">
                       <span className="absolute inset-0 animate-ping rounded-full bg-[#2ea043] opacity-75" />
                       <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#2ea043]" />
@@ -225,9 +213,9 @@ export function GithubActivitySection() {
                   </span>
                 )}
               </div>
-              <h2 className="font-display h-display-md pb-2 max-w-2xl">
+              <h2 className="font-display h-display-lg pb-2 max-w-3xl tracking-[-0.04em]">
                 {t("Real activity. ", "نشاط حقيقي. ")}
-                <span className="italic text-[oklch(0.42_0.2_255)]">
+                <span className="italic gradient-text-sky">
                   {t("Synced live.", "متزامن لحظياً.")}
                 </span>
               </h2>
@@ -236,7 +224,11 @@ export function GithubActivitySection() {
               type="button"
               onClick={refresh}
               disabled={refreshing}
-              className="inline-flex items-center gap-2 rounded-full border border-border bg-background hover:bg-secondary px-4 py-2 text-xs disabled:opacity-50 transition"
+              className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs disabled:opacity-50 transition backdrop-blur-xl"
+              style={{
+                borderColor: "color-mix(in oklab, currentColor 20%, transparent)",
+                backgroundColor: "color-mix(in oklab, currentColor 6%, transparent)",
+              }}
             >
               {refreshing ? <DotPulse /> : <RefreshCw className="h-3.5 w-3.5" />}
               {t("Refresh", "تحديث")}
