@@ -417,6 +417,32 @@
       radial-gradient(ellipse 80% 50% at 20% 0%, color-mix(in oklab, var(--primary) 18%, transparent), transparent 60%),
       radial-gradient(ellipse 70% 60% at 90% 100%, color-mix(in oklab, var(--primary-glow) 14%, transparent), transparent 60%);
   }
+  /* Smooth blue→white gradient wash — replaces square grid backgrounds.
+     Auto-flips for dark mode via the .dark scope override below. */
+  .gradient-bg {
+    background:
+      radial-gradient(ellipse 70% 55% at 0% 0%, color-mix(in oklab, oklch(0.72 0.16 250) 38%, transparent), transparent 65%),
+      radial-gradient(ellipse 65% 50% at 100% 100%, color-mix(in oklab, oklch(0.78 0.12 245) 22%, transparent), transparent 70%),
+      linear-gradient(135deg, oklch(0.94 0.05 250) 0%, oklch(0.985 0.005 255) 55%, oklch(0.96 0.025 255) 100%);
+  }
+  .dark .gradient-bg {
+    background:
+      radial-gradient(ellipse 70% 55% at 0% 0%, color-mix(in oklab, oklch(0.5 0.18 260) 35%, transparent), transparent 65%),
+      radial-gradient(ellipse 65% 50% at 100% 100%, color-mix(in oklab, oklch(0.4 0.16 265) 28%, transparent), transparent 70%),
+      linear-gradient(135deg, oklch(0.13 0.03 265) 0%, oklch(0.08 0.02 268) 55%, oklch(0.115 0.025 265) 100%);
+  }
+  /* Bright sky-blue italic accent for display headings */
+  .gradient-text-sky {
+    background-image: linear-gradient(95deg, oklch(0.78 0.16 240), oklch(0.62 0.22 255) 60%, oklch(0.55 0.24 260));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: inline-block;
+    padding-inline: 0.12em;
+    padding-block: 0.05em;
+    margin-inline: -0.12em;
+    line-height: 1.05;
+  }
   /* Noise overlay for refined depth */
   .noise-overlay {
     position: relative;
