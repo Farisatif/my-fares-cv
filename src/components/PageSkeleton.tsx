@@ -30,7 +30,7 @@ export function PageSkeleton() {
           aria-hidden
           className="pointer-events-none absolute -top-32 -right-32 h-[420px] w-[420px] rounded-full bg-primary/15 dark:bg-primary/20 blur-3xl"
         />
-        <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 grid-bg opacity-25 dark:opacity-30" />
+        <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 chevron-bg" />
 
         {/* Half-background splash — matches Hero.tsx exactly */}
         <div
@@ -126,7 +126,7 @@ export function PageSkeleton() {
       </div>
 
       {/* ---------- ABOUT band (light, grid-fine, roundBottom) ---------- */}
-      <SectionBand variant="light" pattern="grid-fine" divider roundBottom>
+      <SectionBand variant="light" pattern="chevron" divider roundBottom>
         <SectionHeaderSkeleton container="max-w-7xl" />
         <div className="container mx-auto px-6 max-w-7xl pb-24">
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -153,7 +153,7 @@ export function PageSkeleton() {
       </SectionBand>
 
       {/* ---------- SKILLS band (surface, grid-dots) ---------- */}
-      <SectionBand variant="surface" pattern="grid-dots" divider roundTop roundBottom>
+      <SectionBand variant="surface" pattern="chevron" divider roundTop roundBottom>
         <div className="container mx-auto px-6 max-w-4xl pt-20 sm:pt-28 pb-24 text-center">
           <div className="skeleton skeleton-soft h-3 w-32 rounded-full mx-auto mb-5" />
           <div
@@ -177,7 +177,7 @@ export function PageSkeleton() {
       </SectionBand>
 
       {/* ---------- EXPERIENCE band (dark, grid-fine) ---------- */}
-      <SectionBand variant="dark" pattern="grid-fine" divider roundTop roundBottom>
+      <SectionBand variant="dark" pattern="chevron" divider roundTop roundBottom>
         <SectionHeaderSkeleton container="max-w-7xl" />
         <div className="container mx-auto px-6 max-w-7xl pb-24 space-y-5">
           {Array.from({ length: 3 }).map((_, i) => (
@@ -237,7 +237,7 @@ export function PageSkeleton() {
       </SectionBand>
 
       {/* ---------- CONTACT band (dark, grid-fine) ---------- */}
-      <SectionBand variant="dark" pattern="grid-fine" divider roundTop>
+      <SectionBand variant="dark" pattern="chevron" divider roundTop>
         <section className="pt-20 sm:pt-32 pb-6 relative overflow-hidden">
           <div className="container mx-auto px-6 max-w-5xl text-center">
             <div className="skeleton skeleton-soft h-3 w-32 rounded-full mx-auto mb-6" />

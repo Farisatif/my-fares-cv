@@ -59,11 +59,11 @@ export function Navbar() {
     hash?: string;
     active?: boolean;
     show: boolean;
-    /** Brand-tinted background tone (semantic CSS color expression). */
-    tone: string;
-    /** Active-state foreground color. */
-    activeColor?: string;
   };
+
+  // Brand-identity translucent surface — adapts via foreground token:
+  //   light theme → translucent black, dark theme → translucent white.
+  const chipBg = "color-mix(in oklab, var(--foreground) 10%, transparent)";
 
   const items: NavItem[] = [
     {
@@ -73,7 +73,6 @@ export function Navbar() {
       to: "/",
       active: onHome,
       show: true,
-      tone: "color-mix(in oklab, var(--primary) 12%, var(--surface-1) 88%)",
     },
     {
       key: "explore",
@@ -82,7 +81,6 @@ export function Navbar() {
       to: "/explore",
       active: onExplore,
       show: true,
-      tone: "color-mix(in oklab, oklch(0.7 0.18 200) 14%, var(--surface-1) 86%)",
     },
     {
       key: "comments",
@@ -91,7 +89,6 @@ export function Navbar() {
       to: "/comments",
       active: onComments,
       show: showComments,
-      tone: "color-mix(in oklab, oklch(0.72 0.16 295) 14%, var(--surface-1) 86%)",
     },
   ].filter((i) => i.show);
 
@@ -117,7 +114,7 @@ export function Navbar() {
               active={item.active === true}
               tooltipSide={tooltipSide}
               halfPillRadius={halfPillRadius}
-              tone={item.tone}
+              chipBg={chipBg}
               isRTL={isRTL}
               pillSpring={pillSpring}
             />
@@ -150,8 +147,7 @@ export function Navbar() {
             className={`group/icon relative flex items-center justify-center h-10 w-11 sm:h-11 sm:w-12 ${halfPillRadius} text-foreground hover:scale-x-[1.04] active:scale-95 transition-transform duration-200 focus-ring overflow-hidden`}
             style={{
               transformOrigin: isRTL ? "left center" : "right center",
-              background:
-                "color-mix(in oklab, oklch(0.78 0.14 145) 18%, var(--surface-1) 82%)",
+              background: chipBg,
               backdropFilter: "blur(18px) saturate(160%)",
               WebkitBackdropFilter: "blur(18px) saturate(160%)",
               boxShadow:
@@ -191,8 +187,7 @@ export function Navbar() {
             className={`group/icon relative flex items-center justify-center h-10 w-11 sm:h-11 sm:w-12 ${halfPillRadius} text-foreground hover:scale-x-[1.04] active:scale-95 transition-transform duration-200 focus-ring overflow-hidden`}
             style={{
               transformOrigin: isRTL ? "left center" : "right center",
-              background:
-                "color-mix(in oklab, oklch(0.74 0.18 75) 18%, var(--surface-1) 82%)",
+              background: chipBg,
               backdropFilter: "blur(18px) saturate(160%)",
               WebkitBackdropFilter: "blur(18px) saturate(160%)",
               boxShadow:
@@ -240,7 +235,7 @@ function RailIcon({
   active,
   tooltipSide,
   halfPillRadius,
-  tone,
+  chipBg,
   isRTL,
   pillSpring,
 }: {
@@ -251,7 +246,7 @@ function RailIcon({
   active: boolean;
   tooltipSide: string;
   halfPillRadius: string;
-  tone: string;
+  chipBg: string;
   isRTL: boolean;
   pillSpring: { type: "spring"; stiffness: number; damping: number; mass: number };
 }) {
@@ -265,7 +260,7 @@ function RailIcon({
       className={`group/icon relative flex items-center justify-center h-10 w-11 sm:h-11 sm:w-12 ${halfPillRadius} text-foreground/80 hover:text-foreground transition-[color,transform] duration-300 focus-ring active:scale-95 overflow-hidden`}
       style={{
         transformOrigin: isRTL ? "left center" : "right center",
-        background: tone,
+        background: chipBg,
         backdropFilter: "blur(18px) saturate(160%)",
         WebkitBackdropFilter: "blur(18px) saturate(160%)",
         boxShadow:
