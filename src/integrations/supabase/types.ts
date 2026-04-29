@@ -14,7 +14,69 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      admin_settings: {
+        Row: {
+          id: string
+          password_hash: string
+          recovery_code_hash: string
+          updated_at: string
+        }
+        Insert: {
+          id: string
+          password_hash: string
+          recovery_code_hash: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          password_hash?: string
+          recovery_code_hash?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      comments: {
+        Row: {
+          author_name: string
+          created_at: string
+          id: string
+          message: string
+          status: string
+        }
+        Insert: {
+          author_name: string
+          created_at?: string
+          id?: string
+          message: string
+          status?: string
+        }
+        Update: {
+          author_name?: string
+          created_at?: string
+          id?: string
+          message?: string
+          status?: string
+        }
+        Relationships: []
+      }
+      site_settings: {
+        Row: {
+          data: Json
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          data?: Json
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          data?: Json
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
