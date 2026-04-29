@@ -237,7 +237,13 @@ export function GithubActivitySection() {
 
         {/* Profile + stats */}
         <Reveal delay={0.1}>
-          <div className="rounded-3xl border border-[var(--hairline)] bg-[var(--surface-1)] backdrop-blur-md p-5 sm:p-8 flex flex-col md:flex-row md:items-center gap-6 brand-shadow">
+          <div
+            className="rounded-3xl border backdrop-blur-xl p-5 sm:p-8 flex flex-col md:flex-row md:items-center gap-6 brand-shadow"
+            style={{
+              borderColor: "color-mix(in oklab, currentColor 14%, transparent)",
+              backgroundColor: "color-mix(in oklab, currentColor 6%, transparent)",
+            }}
+          >
             <div className="flex items-center gap-4 min-w-0">
               <img
                 src={profile?.avatar_url || (data.personal as { avatar?: string }).avatar || `https://github.com/${username}.png`}
