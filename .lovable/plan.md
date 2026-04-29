@@ -1,71 +1,53 @@
-## What will change
+## Goal
 
-### 1. GitHub activity section ("Real activity. Synced live.") — invert + polish
-File: `src/components/GithubActivitySection.tsx` and `src/routes/index.tsx`.
+Two refinements:
+1. Invert the colors of the descending disc behind the contact heading so it harmonizes with the band (dark disc in dark mode, light disc in light mode).
+2. Rebuild the floating side rail without a surrounding capsule — exclusive, container-less, premium vertical icon column.
 
-- In `index.tsx`, the section currently sits in `SectionBand variant="soft"`. Switch it to `variant="dark"` (which auto-inverts between modes via the `--band-dark` tokens) so the section reads inverted vs. the surrounding bands in both light and dark themes.
-- Drop the `pattern="aurora"` grid backdrop (replaced by the new gradient — see #4).
-- Inside the section:
-  - Refresh the heading hierarchy: bigger eyebrow with live pulse, and an italic gradient accent that adapts to the inverted band (use `color-mix` against `currentColor` so it works on both themes).
-  - Upgrade the profile card and stats with stronger glass surfaces (`backdrop-blur`, hairline borders against currentColor) so they feel premium on the dark inverted background.
-  - **RTL horizontal scroll fix for the contributions heatmap**: the heatmap container currently relies on `overflow-x-auto`, but in Arabic the outer `dir="rtl"` makes the scroll origin start at the right edge — users can't drag the grid into view. Wrap the heatmap in a `dir="ltr"` scroll container (the inner heatmap is already `dir="ltr"`) and add an explicit `min-width` on the grid so horizontal scroll always engages. Add subtle edge-fade masks (left+right gradient) so the user gets a visual hint that it scrolls, and on mobile show a tiny "← →" hint chip in Arabic identical to English.
-  - Add momentum scroll (`scroll-snap-type: x proximity`) per week column so the swipe feels deliberate.
+## 1. Disc color inversion (`src/components/PageEndCircle.tsx`)
 
-### 2. Experience section ("Where I've put in the hours.") — invert between themes
-File: `src/components/ExperienceSection.tsx`.
+Swap the core gradients in `DiscLayers()`:
+- **Light mode**: white/paper disc (`oklch(1 0 0)` → `oklch(0.86 0.03 262)`) — blends into the soft sky-blue gradient band instead of clashing as a black orb.
+- **Dark mode**: deep indigo-black disc (`oklch(0.22 0.04 268)` → `oklch(0.07 0.018 268)`) — reads as a richer shadow against the dark band.
 
-- The section is hard-coded `bg-foreground text-background`, so it always uses the inverted palette regardless of theme — that's the opposite of "invert between themes." Replace with the band token system: remove the inline `bg-foreground text-background` and rely on the `SectionBand variant` from `index.tsx`. Switch the band wrapper from `dark` to `light` (or vice-versa) so it inverts cleanly per theme.
-- Update the inner card surfaces to use `currentColor`-mixed backgrounds (instead of hard-coded `var(--background)` mixes) so the cards stay legible on whichever side of the inversion the user is viewing.
-- Keep the existing chevron pattern but lower its opacity so it doesn't fight the new gradient backdrop (#4).
+Keep all surrounding layers (conic halo, orbital ring, specular highlight, rim light, vignette) intact — they already adapt via brand tokens.
 
-### 3. Typewriter heading (`about.dev.ts`) — stop the page-jump on mobile
-File: `src/components/AboutSection.tsx` (`CodeCommentCard`).
+## 2. Container-less navbar rebuild (`src/components/Navbar.tsx`)
 
-The current `wrapByWords` re-flows lines as characters arrive, so the card height grows line-by-line and pushes the page on phones. Fix:
-- Pre-compute the **final** wrapped lines from the full `text` once. Render those final lines as the layout skeleton (transparent / placeholder spans reserving height), then overlay the typed slice character-by-character on top so the container height is locked from frame 1.
-- Slow the typewriter further on mobile (use a width-aware `duration` floor — e.g. 5500ms minimum for ≤640px viewports) and switch from RAF-by-character to a steadier, eased per-word interval so it reads as a deliberate, professional reveal.
-- Keep the blinking caret at the current write-head; never call `setTyped` with a value that would change the reserved line count.
+Remove the glass capsule wrapper entirely. Each icon becomes a standalone floating glyph in a tight vertical column.
 
-### 4. Replace square-grid backgrounds with a smooth blue gradient
-Target: every section that currently shows a grid pattern.
+**Layout**
+- `flex flex-col items-center gap-3 sm:gap-3.5` — clean vertical rhythm
+- Anchored: `right-3 sm:right-5` (LTR) / `left-3 sm:left-5` (RTL)
+- No background, no border, no shadow on the wrapper
 
-- In `src/routes/index.tsx`, change `pattern="grid-fine"` / `pattern="grid-dots"` / `pattern="aurora"` on every `SectionBand` to `pattern="none"` (or a new `pattern="gradient"` variant — see below).
-- Add a new `gradient` variant to `SectionBand` (`src/components/SectionBand.tsx`) and a matching `.gradient-bg` class in `src/styles.css` that paints the same soft blue → white wash from the reference screenshot:
-  - Light mode: `linear-gradient(135deg, oklch(0.92 0.07 255) 0%, oklch(0.985 0.005 255) 60%, oklch(0.96 0.02 255) 100%)` plus a subtle radial highlight in the top-left.
-  - Dark mode: mirror with deep navy → near-black so the same composition reads in both themes.
-- Remove `ChevronPattern` overlays from `ContactSection.tsx` (or drop opacity to ~0.04) so the gradient stays clean.
-- Also remove the `GlowDots` square-grid backdrop inside `GithubActivitySection.tsx` (replaced by the new gradient at the band level).
+**Icon states (per glyph)**
+- **Idle**: bare icon at `text-foreground/55`, size `h-4 w-4` (mobile) / `h-[17px] w-[17px]` (desktop)
+- **Hover**: a soft glass disc fades in *behind only that icon* (backdrop-blur + hairline border) — appears only on demand
+- **Active**:
+  - Brand-gradient halo (linear primary → primary-glow) with `LayoutGroup` sliding between items
+  - Crisp 1px primary ring inset
+  - Small brand-colored indicator dot pinned to the inner edge (also animates between active items via shared layout id)
+- **Tooltip**: appears on the inner side on hover — pill with hairline + backdrop blur
 
-### 5. Headlines polish (match reference screenshot)
-- Bump the heading scale on the contact + experience + github + about sections via the existing `h-display-xl` / `h-display-lg` utilities so they read with the same weight as the screenshot ("Got an idea? / Let's build it.").
-- Make the italic accent line use a brighter sky-blue gradient (`linear-gradient(90deg, oklch(0.72 0.18 245), oklch(0.55 0.22 255))`) — exposed as a new `.gradient-text-sky` utility in `styles.css`. Apply it to: GitHub "Synced live.", Experience "put in the hours.", and About's accent line.
-- Tighten letter-spacing slightly on the display headings (`tracking-[-0.04em]`) for the magazine-poster feel.
+**Section dividers**
+Replace the inline hairline `<span>` with tiny opacity-40 dots (`h-1 w-1 rounded-full`) between groups — minimal, exclusive feel.
 
-### 6. New floating side navbar — icon-only, glass, edge-anchored
-File: `src/components/Navbar.tsx`.
+**Groups (top → bottom)**
+1. Home / Explore / Comments (filtered by settings)
+2. Separator dot
+3. Contact CTA — solid `bg-foreground` filled circle (only this one keeps a surface, as a deliberate "primary action" anchor)
+4. Separator dot
+5. Theme + Language toggle stack (existing `<ThemeLangToggle/>`)
 
-Replace the current bottom-center pill with a vertical floating rail:
-- Position: `fixed top-1/2 -translate-y-1/2`. In LTR, anchor to the **right** edge (`right-3`). In RTL, anchor to the **left** edge (`left-3`). Read `lang` from `useLang()` to pick the side.
-- Style: same pill DNA as the current navbar — `backdrop-blur-xl`, `bg-[var(--surface-1)]/55`, `border border-[var(--hairline)]`, `brand-shadow`, full rounding (`rounded-full`). Slightly more transparent than today (≈55%) per the "شبه شفاف" requirement.
-- Icons only (no text labels): Home (`Home`), Explore (`Compass`), Comments (`MessageSquare`, conditional on `showComments`), Contact (`Mail`, hashes to `#contact`). Each has an accessible `aria-label` and a tooltip on hover (small floating chip on the inner side of the rail).
-- Active state: keep the existing `LayoutGroup` / `motion.span` pill highlight — animates vertically between icons instead of horizontally.
-- Theme/lang toggle: keep `ThemeLangToggle` but render it at the bottom of the rail (stacked) so the right edge stays the single nav surface.
-- Mobile: the rail collapses to a smaller width (icons ~36px) and stays anchored to the side; on very narrow viewports (`<360px`) it auto-shifts to bottom-center as a safety fallback so it never overlaps content.
-- Remove the bottom-padding the page reserved for the old bottom navbar (search for any `pb-` spacers tied to `Navbar`); replace with side padding equal to the rail width on `lg+` so content never hides behind it.
+**Animation specs**
+- Active pill spring: `stiffness: 320, damping: 30, mass: 0.7`
+- Shared `layoutId="rail-edge-pill"` on the halo, `layoutId="rail-edge-indicator"` on the edge dot
+- Reveal: `x: 32 → 0` over 0.7s with `[0.22, 1, 0.36, 1]` ease (mirrored for RTL)
 
-### 7. Cleanup pass
-- Delete unused imports left over from removed grid backgrounds (`GlowDots` in GitHub section, `ChevronPattern` in Contact if fully removed).
-- Verify `useReducedMotion` paths still work for the new typewriter (instant fill, no caret).
-- Smoke-test both `lang === "en"` and `lang === "ar"` for: navbar side, heatmap horizontal scroll, gradient backgrounds, inverted Experience colors.
+## Files modified
 
-## Files touched
-- `src/routes/index.tsx` — band variants, pattern flags
-- `src/components/SectionBand.tsx` — add `gradient` pattern
-- `src/components/Navbar.tsx` — full rebuild (vertical, icon-only, glass, side-anchored)
-- `src/components/GithubActivitySection.tsx` — invert via band, polish, RTL scroll fix, drop GlowDots
-- `src/components/ExperienceSection.tsx` — remove hard-coded inversion, use band tokens
-- `src/components/AboutSection.tsx` — typewriter height-lock + slower mobile pacing
-- `src/components/ContactSection.tsx` — drop chevron grid, lean on band gradient
-- `src/styles.css` — add `.gradient-bg` (light + dark) and `.gradient-text-sky`
+- `src/components/PageEndCircle.tsx` — gradient inversion in `DiscLayers()` only
+- `src/components/Navbar.tsx` — full rewrite of the rail (no capsule, per-icon states)
 
-No database/auth changes; no new dependencies.
+No new dependencies. No CSS additions needed — uses existing tokens (`--primary`, `--primary-glow`, `--surface-1`, `--hairline`, `--foreground`).

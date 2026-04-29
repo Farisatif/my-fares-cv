@@ -108,20 +108,20 @@ export function PageEndCircle() {
 function DiscLayers() {
   return (
     <div className="absolute inset-0">
-      {/* Core disc — opposite of heading color (dark in light, light in dark) */}
+      {/* Core disc — INVERTED: matches band tone (light in light, dark in dark) */}
       <div
         className="absolute inset-0 rounded-full will-change-transform"
         style={{
           background:
-            "radial-gradient(circle at 32% 28%, oklch(0.22 0.04 268) 0%, oklch(0.085 0.025 268) 70%)",
+            "radial-gradient(circle at 32% 28%, oklch(1 0 0) 0%, oklch(0.94 0.012 258) 60%, oklch(0.86 0.03 262) 100%)",
         }}
       />
-      {/* Dark-mode override: light disc with subtle indigo tint at the bottom */}
+      {/* Dark-mode override: deep indigo-black disc */}
       <div
         className="hidden dark:block absolute inset-0 rounded-full will-change-transform"
         style={{
           background:
-            "radial-gradient(circle at 32% 28%, oklch(1 0 0) 0%, oklch(0.92 0.015 260) 60%, oklch(0.82 0.04 265) 100%)",
+            "radial-gradient(circle at 32% 28%, oklch(0.22 0.04 268) 0%, oklch(0.115 0.025 268) 60%, oklch(0.07 0.018 268) 100%)",
         }}
       />
 
