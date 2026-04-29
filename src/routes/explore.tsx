@@ -107,7 +107,7 @@ function ExplorePage() {
       </header>
 
       {/* Projects — kept on a soft band so card content reads cleanly */}
-      <SectionBand variant="dark" pattern="grid-fine" divider roundTop roundBottom>
+      <SectionBand variant="dark" pattern="chevron" divider roundTop roundBottom>
         <ProjectsSection />
       </SectionBand>
 

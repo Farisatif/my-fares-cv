@@ -90,7 +90,7 @@ export function Hero() {
         className="pointer-events-none absolute -top-32 -right-32 h-[420px] w-[420px] rounded-full bg-primary/15 dark:bg-primary/20 blur-3xl"
       />
       {/* Faint grid for depth, masked to fade at edges */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 grid-bg opacity-25 dark:opacity-30" />
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 chevron-bg" />
 
       {/* ───── Half-background splash (the uploaded blue/silver painting) ─────
           Sits ABOVE the soft mesh/grid but BELOW the global arrow field.
