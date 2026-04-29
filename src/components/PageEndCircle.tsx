@@ -2,13 +2,18 @@ import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion
 import { useRef } from "react";
 
 /**
- * Section-top illuminating disc.
+ * Section-top illuminating disc — exclusive, layered "sun" composition.
  *
- * A clean circular shape anchored to the top-center of its parent section.
- * As the user scrolls into the section, it descends and grows to sit behind
- * the section heading — acting as a subtle spotlight that lights up the
- * title without any shadows.
+ * Architecture (back → front):
+ *   1. Soft conic halo — wide brand-tinted bloom that bleeds into the band
+ *   2. Outer atmosphere ring — slow rotating dashed ring, gives orbital depth
+ *   3. Core disc — solid brand-aware fill (inverts vs heading), with an inner
+ *      highlight gradient for dimensional sphere quality
+ *   4. Specular highlight — small offset bright spot on the upper-left,
+ *      reading as ambient light hitting a polished surface
+ *   5. Rim light — thin gradient stroke catching the disc's edge
  *
+ * Parallax: descends from above the section, scales to 1, then drifts past.
  * Mount inside a `relative overflow-hidden` parent.
  */
 export function PageEndCircle() {
@@ -19,18 +24,19 @@ export function PageEndCircle() {
     offset: ["start end", "end start"],
   });
 
-  // Descend from above the section, grow to a comfortable size behind the title.
-  const y = useTransform(scrollYProgress, [0, 0.5, 1], ["-40%", "0%", "20%"]);
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.6, 1, 1.05]);
-  const opacity = useTransform(scrollYProgress, [0, 0.18, 0.85, 1], [0, 1, 1, 0.9]);
+  // Descend, grow, then drift past — gentle, deliberate easing.
+  const y = useTransform(scrollYProgress, [0, 0.5, 1], ["-45%", "0%", "22%"]);
+  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.55, 1, 1.08]);
+  const opacity = useTransform(scrollYProgress, [0, 0.15, 0.85, 1], [0, 1, 1, 0.88]);
+  // Halo breathes against the core for a living glow.
+  const haloScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.9, 1.15, 1.25]);
+  const haloOpacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 0.85, 0.7, 0.4]);
+  // Ring rotates slowly with scroll — orbital effect tied to the user.
+  const ringRotate = useTransform(scrollYProgress, [0, 1], [0, 35]);
 
-  // Disc fill is the OPPOSITE of the heading color:
-  // - light theme heading is dark → disc is dark (oklch(0.085))
-  // - dark theme heading is light → disc is white
-  const discClass =
-    "rounded-full will-change-transform bg-[oklch(0.085_0.025_268)] dark:bg-white " +
-    "h-[60vw] w-[60vw] max-h-[420px] max-w-[420px] sm:h-[40vw] sm:w-[40vw]";
+  const sizing = "h-[58vw] w-[58vw] max-h-[420px] max-w-[420px] sm:h-[38vw] sm:w-[38vw]";
 
+  // Static fallback for reduced motion — still layered, just no parallax.
   if (reduced) {
     return (
       <div
@@ -38,7 +44,9 @@ export function PageEndCircle() {
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 z-0 flex justify-center"
       >
-        <div className={discClass} />
+        <div className={`relative ${sizing}`}>
+          <DiscLayers />
+        </div>
       </div>
     );
   }
@@ -51,7 +59,110 @@ export function PageEndCircle() {
     >
       <motion.div
         style={{ y, scale, opacity, transformOrigin: "50% 50%" }}
-        className={discClass}
+        className={`relative ${sizing}`}
+      >
+        {/* Soft conic halo — bleeds into the section band */}
+        <motion.div
+          style={{ scale: haloScale, opacity: haloOpacity }}
+          className="absolute inset-[-22%] rounded-full blur-3xl"
+        >
+          <div
+            className="h-full w-full rounded-full"
+            style={{
+              background:
+                "conic-gradient(from 140deg, color-mix(in oklab, var(--primary) 30%, transparent), color-mix(in oklab, var(--primary-glow) 22%, transparent), color-mix(in oklab, var(--primary) 28%, transparent), color-mix(in oklab, var(--primary-glow) 18%, transparent), color-mix(in oklab, var(--primary) 30%, transparent))",
+            }}
+          />
+        </motion.div>
+
+        {/* Outer atmosphere ring — slow scroll-rotation */}
+        <motion.div
+          style={{ rotate: ringRotate }}
+          className="absolute inset-[-6%] rounded-full"
+        >
+          <div
+            className="h-full w-full rounded-full opacity-40"
+            style={{
+              background: "transparent",
+              border:
+                "1px dashed color-mix(in oklab, var(--primary) 28%, transparent)",
+              maskImage:
+                "radial-gradient(circle, transparent 62%, black 65%, black 78%, transparent 82%)",
+              WebkitMaskImage:
+                "radial-gradient(circle, transparent 62%, black 65%, black 78%, transparent 82%)",
+            }}
+          />
+        </motion.div>
+
+        {/* Core disc + highlight + rim — wrapped in a single positioned layer */}
+        <DiscLayers />
+      </motion.div>
+    </div>
+  );
+}
+
+/**
+ * The layered disc composition (core, inner highlight, specular, rim).
+ * Extracted so the reduced-motion fallback can render the same visual.
+ */
+function DiscLayers() {
+  return (
+    <div className="absolute inset-0">
+      {/* Core disc — opposite of heading color (dark in light, light in dark) */}
+      <div
+        className="absolute inset-0 rounded-full will-change-transform"
+        style={{
+          background:
+            "radial-gradient(circle at 32% 28%, oklch(0.22 0.04 268) 0%, oklch(0.085 0.025 268) 70%)",
+        }}
+      />
+      {/* Dark-mode override: light disc with subtle indigo tint at the bottom */}
+      <div
+        className="hidden dark:block absolute inset-0 rounded-full will-change-transform"
+        style={{
+          background:
+            "radial-gradient(circle at 32% 28%, oklch(1 0 0) 0%, oklch(0.92 0.015 260) 60%, oklch(0.82 0.04 265) 100%)",
+        }}
+      />
+
+      {/* Rim light — thin gradient ring catching the upper edge */}
+      <div
+        className="absolute inset-0 rounded-full"
+        style={{
+          background:
+            "conic-gradient(from 220deg, transparent 0%, color-mix(in oklab, var(--primary) 45%, transparent) 18%, transparent 40%, transparent 60%, color-mix(in oklab, var(--primary-glow) 35%, transparent) 78%, transparent 100%)",
+          padding: "1px",
+          WebkitMask:
+            "linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)",
+          WebkitMaskComposite: "xor",
+          maskComposite: "exclude",
+          opacity: 0.7,
+        }}
+      />
+
+      {/* Specular highlight — small offset bright bloom on upper-left */}
+      <div
+        className="absolute rounded-full blur-2xl mix-blend-screen"
+        style={{
+          top: "12%",
+          left: "18%",
+          width: "32%",
+          height: "32%",
+          background:
+            "radial-gradient(circle, color-mix(in oklab, var(--primary-glow) 70%, white) 0%, transparent 70%)",
+          opacity: 0.55,
+        }}
+      />
+
+      {/* Inner subtle vignette — deepens the bottom edge for sphere illusion */}
+      <div
+        className="absolute inset-0 rounded-full pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(ellipse at 50% 110%, color-mix(in oklab, black 35%, transparent), transparent 55%)",
+          mixBlendMode: "multiply",
+          opacity: 0.45,
+        }}
       />
     </div>
   );
