@@ -132,10 +132,11 @@ export function KitsysArrowField({
       ctx.save();
       ctx.translate(x, y);
       ctx.rotate(angle);
+      // Use primary-ish colors for better visibility in both modes
       ctx.strokeStyle = dark
-        ? `rgba(255,255,255,${alpha})`
-        : `rgba(15,23,42,${alpha})`;
-      ctx.lineWidth = dark ? 1.5 : 1.75;
+        ? `rgba(180,190,255,${alpha})`  // Soft blue-white for dark mode
+        : `rgba(80,60,140,${alpha})`;    // Deep indigo for light mode
+      ctx.lineWidth = dark ? 1.6 : 1.8;
       ctx.lineCap = "round";
       ctx.lineJoin = "round";
       const s = 5; // chevron half-size

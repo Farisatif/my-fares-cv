@@ -1,8 +1,9 @@
 import { Reveal } from "./Reveal";
-import { ArrowUpRight, GitFork, Star, Github } from "lucide-react";
+import { ArrowUpRight, GitFork, Star, Github, CalendarDays } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import { useSiteData } from "./SiteDataProvider";
 import { useLang } from "./LanguageProvider";
+import { useRef, useState, type MouseEvent } from "react";
 
 
 // Professional color map for common languages — refined to match site identity
@@ -38,24 +39,16 @@ export function ProjectsSection() {
     <section id="projects" className="section-padding">
         <div className="container mx-auto px-6 max-w-7xl">
           <Reveal>
-            <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-4">
+            <p className="text-xs uppercase tracking-[0.25em] opacity-60 mb-4">
               / 04 — {t("Selected work", "أعمال مختارة")}
             </p>
             <h2 className="font-display h-display-lg pb-2 max-w-4xl">
               {t("Projects ", "مشاريع ")}
-              <span 
-                className="italic"
-                style={{
-                  background: "linear-gradient(135deg, var(--primary) 0%, color-mix(in oklab, var(--primary) 60%, var(--foreground)) 100%)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                  backgroundClip: "text",
-                }}
-              >
+              <span className="italic gradient-text-sky">
                 {t("in the wild.", "على أرض الواقع.")}
               </span>
             </h2>
-            <p className="mt-6 max-w-2xl text-base sm:text-lg text-muted-foreground leading-relaxed">
+            <p className="mt-5 text-base sm:text-lg opacity-65 max-w-2xl leading-relaxed">
               {t(
                 "A curated selection of repositories — production builds, experiments, and open-source contributions.",
                 "مجموعة مختارة من المستودعات — مشاريع إنتاجية، تجارب، ومساهمات مفتوحة المصدر.",
@@ -63,127 +56,187 @@ export function ProjectsSection() {
             </p>
           </Reveal>
 
-          <div className="mt-16 grid md:grid-cols-2 gap-5 sm:gap-6">
-            {data.projects.map((p, i) => {
-              const tags = lang === "ar" ? p.tags_ar : p.tags_en;
-              const desc = lang === "ar" ? p.ar.description : p.en.description;
-              const langColor = LANG_COLORS[p.language] || LANG_COLORS.Other;
-              const repoPath = p.url.replace(/^https?:\/\//, "").replace(/^github\.com\//, "");
-              return (
-                <motion.div
-                  key={p.name}
-                  initial={reduce ? { opacity: 0 } : { opacity: 0, y: 16 }}
-                  whileInView={reduce ? { opacity: 1 } : { opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-40px" }}
-                  transition={{ duration: 0.35, delay: Math.min(i * 0.04, 0.16), ease: [0.22, 1, 0.36, 1] }}
-                >
-                  <a
-                    href={`https://${p.url.replace(/^https?:\/\//, "")}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    data-cursor="view"
-                    data-cursor-label={t("Open", "افتح")}
-                    className="group relative flex h-full flex-col rounded-3xl border border-[var(--hairline)] bg-[var(--surface-1)] brand-shadow p-7 sm:p-9 overflow-hidden transition-[border-color,transform,box-shadow] duration-200 hover:border-[color-mix(in_oklab,var(--primary)_45%,var(--hairline))] hover-lift"
-                  >
-                    {/* Accent gradient corner — reveals on hover with refined opacity */}
-                    <div
-                      aria-hidden
-                      className="pointer-events-none absolute -top-24 -right-24 h-56 w-56 rounded-full opacity-0 group-hover:opacity-50 blur-3xl transition-opacity duration-300"
-                      style={{
-                        background: `radial-gradient(circle, ${langColor} 0%, transparent 70%)`,
-                      }}
-                    />
-                    {/* Colored accent line on top edge — more prominent */}
-                    <div
-                      aria-hidden
-                      className="pointer-events-none absolute inset-x-0 top-0 h-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                      style={{
-                        background: `linear-gradient(90deg, transparent, ${langColor}, transparent)`,
-                      }}
-                    />
-
-                    {/* Header row: index + open arrow */}
-                    <div className="flex items-start justify-between gap-4 mb-7">
-                      <div className="flex items-center gap-3">
-                        <span className="font-mono text-xs tracking-widest text-muted-foreground tabular-nums">
-                          {String(i + 1).padStart(2, "0")}
-                        </span>
-                        <span className="h-px w-8 bg-[var(--hairline)]" />
-                        <span className="inline-flex items-center gap-1.5 text-xs font-mono text-muted-foreground truncate max-w-[180px] sm:max-w-[240px]">
-                          <Github className="h-3 w-3 shrink-0" />
-                          <span className="truncate">{repoPath}</span>
-                        </span>
-                      </div>
-                      <div className="h-10 w-10 shrink-0 rounded-full bg-secondary flex items-center justify-center transition-[transform,background-color,color] duration-200 group-hover:rotate-45 group-hover:bg-foreground group-hover:text-background">
-                        <ArrowUpRight className="h-4 w-4" />
-                      </div>
-                    </div>
-
-                    {/* Title + description */}
-                    <div className="flex-1">
-                      <h3 
-                        className="font-display text-3xl sm:text-[2.5rem] leading-[1.05] tracking-[-0.03em] transition-all duration-200"
-                        style={{
-                          background: `linear-gradient(135deg, ${langColor} 0%, color-mix(in oklab, ${langColor} 70%, var(--foreground)) 100%)`,
-                          WebkitBackgroundClip: "text",
-                          WebkitTextFillColor: "transparent",
-                          backgroundClip: "text",
-                          color: "transparent",
-                        }}
-                      >
-                        {p.name}
-                      </h3>
-                      <p className="mt-4 text-[15px] sm:text-base text-muted-foreground leading-relaxed line-clamp-3">
-                        {desc}
-                      </p>
-                    </div>
-
-                    {/* Tags */}
-                    {tags.length > 0 && (
-                      <div className="flex flex-wrap gap-1.5 mt-7">
-                        {tags.slice(0, 5).map((tg) => (
-                          <span
-                            key={tg}
-                            className="text-[11px] font-medium px-2.5 py-1 rounded-full border border-[var(--hairline)] text-muted-foreground bg-[var(--surface-2)] transition-colors group-hover:text-foreground"
-                          >
-                            {tg}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-
-                    {/* Footer: meta */}
-                    <div className="mt-6 pt-5 border-t border-[var(--hairline)] flex items-center justify-between gap-4 text-xs sm:text-sm">
-                      <span className="flex items-center gap-2.5 font-medium px-3 py-1.5 rounded-full transition-all duration-200" 
-                        style={{ 
-                          background: `color-mix(in oklab, ${langColor} 15%, transparent)`,
-                          color: langColor,
-                          border: `1px solid color-mix(in oklab, ${langColor} 35%, transparent)`,
-                        }}>
-                        <span
-                          className="h-2 w-2 rounded-full ring-1 ring-offset-1 transition-shadow duration-200"
-                          style={{ 
-                            background: langColor, 
-                            boxShadow: `inset 0 0 0 1px ${langColor}40, 0 0 0 1px ${langColor}40`,
-                          }}
-                        />
-                        {p.language}
-                      </span>
-                      <div className="flex items-center gap-4 text-muted-foreground tabular-nums">
-                        <span className="flex items-center gap-1.5" title={t("Stars", "نجوم")}>
-                          <Star className="h-3.5 w-3.5" /> {formatNum(p.stars)}
-                        </span>
-                        <span className="flex items-center gap-1.5" title={t("Forks", "نسخ")}>
-                          <GitFork className="h-3.5 w-3.5" /> {formatNum(p.forks)}
-                        </span>
-                      </div>
-                    </div>
-                  </a>
-                </motion.div>
-              );
-            })}
+          <div className="mt-16 grid gap-6">
+            {data.projects.map((p, i) => (
+              <Reveal key={p.name} delay={i * 0.08}>
+                <ProjectCard
+                  project={p}
+                  index={i}
+                  total={data.projects.length}
+                  lang={lang}
+                  t={t}
+                />
+              </Reveal>
+            ))}
           </div>
         </div>
     </section>
+  );
+}
+
+interface Project {
+  name: string;
+  url: string;
+  language: string;
+  stars: number;
+  forks: number;
+  tags_en: string[];
+  tags_ar: string[];
+  en: { description: string };
+  ar: { description: string };
+}
+
+function ProjectCard({
+  project: p,
+  index,
+  total,
+  lang,
+  t,
+}: {
+  project: Project;
+  index: number;
+  total: number;
+  lang: "en" | "ar";
+  t: (en: string, ar: string) => string;
+}) {
+  const cardRef = useRef<HTMLAnchorElement>(null);
+  const [hovered, setHovered] = useState(false);
+
+  const onMove = (e: MouseEvent<HTMLAnchorElement>) => {
+    const el = cardRef.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    el.style.setProperty("--mx", `${e.clientX - r.left}px`);
+    el.style.setProperty("--my", `${e.clientY - r.top}px`);
+  };
+
+  const tags = lang === "ar" ? p.tags_ar : p.tags_en;
+  const desc = lang === "ar" ? p.ar.description : p.en.description;
+  const langColor = LANG_COLORS[p.language] || LANG_COLORS.Other;
+  const repoPath = p.url.replace(/^https?:\/\//, "").replace(/^github\.com\//, "");
+
+  return (
+    <a
+      ref={cardRef}
+      href={`https://${p.url.replace(/^https?:\/\//, "")}`}
+      target="_blank"
+      rel="noreferrer"
+      onMouseMove={onMove}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      data-cursor="view"
+      data-cursor-label={t("Open", "افتح")}
+      className="group block relative rounded-3xl p-8 sm:p-10 h-full overflow-hidden transition-all hover-lift border-l-4"
+      style={{
+        borderLeftColor: langColor,
+        backgroundColor: "color-mix(in oklab, currentColor 6%, transparent)",
+        borderWidth: 1,
+        borderStyle: "solid",
+        borderColor: hovered
+          ? "color-mix(in oklab, var(--primary) 45%, transparent)"
+          : "color-mix(in oklab, currentColor 14%, transparent)",
+        backdropFilter: "blur(12px)",
+        WebkitBackdropFilter: "blur(12px)",
+      }}
+    >
+      {/* Hover glow */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -bottom-32 -right-32 rtl:right-auto rtl:-left-32 h-64 w-64 rounded-full opacity-0 group-hover:opacity-60 blur-3xl transition-opacity duration-700"
+        style={{ background: `color-mix(in oklab, ${langColor} 55%, transparent)` }}
+      />
+
+      {/* Mouse-tracked spotlight */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+        style={{
+          background:
+            "radial-gradient(450px circle at var(--mx, 50%) var(--my, 50%), color-mix(in oklab, var(--primary) 18%, transparent), transparent 60%)",
+        }}
+      />
+
+      {/* Top-right rotating arrow */}
+      <div
+        className="absolute top-6 right-6 rtl:right-auto rtl:left-6 h-10 w-10 rounded-full flex items-center justify-center transition-transform group-hover:rotate-45"
+        style={{
+          backgroundColor: "color-mix(in oklab, currentColor 12%, transparent)",
+          color: "currentColor",
+        }}
+      >
+        <ArrowUpRight className="h-4 w-4" />
+      </div>
+
+      <div className="relative">
+        {/* Top row — project pill + language */}
+        <div className="flex flex-wrap gap-2 mb-6">
+          <span
+            className="text-xs px-3 py-1 rounded-full font-mono tabular-nums tracking-[0.2em] uppercase"
+            style={{
+              backgroundColor: "color-mix(in oklab, currentColor 10%, transparent)",
+              color: "color-mix(in oklab, currentColor 80%, transparent)",
+            }}
+          >
+            {t("Project", "مشروع")} {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
+          </span>
+          <span
+            className="inline-flex items-center gap-1.5 text-xs px-3 py-1 rounded-full"
+            style={{
+              backgroundColor: `color-mix(in oklab, ${langColor} 22%, transparent)`,
+              color: langColor,
+              border: `1px solid color-mix(in oklab, ${langColor} 40%, transparent)`,
+            }}
+          >
+            <span
+              className="h-2 w-2 rounded-full"
+              style={{ background: langColor }}
+            />
+            {p.language}
+          </span>
+        </div>
+
+        {/* Project name */}
+        <h3 className="font-display text-3xl sm:text-4xl tracking-tight">{p.name}</h3>
+
+        {/* Repo path */}
+        <div className="mt-3 flex items-center gap-2 text-sm opacity-60">
+          <Github className="h-3.5 w-3.5" />
+          <span className="truncate">{repoPath}</span>
+        </div>
+
+        <p className="mt-4 text-base opacity-70 leading-relaxed">{desc}</p>
+
+        {/* Tags */}
+        {tags.length > 0 && (
+          <div className="flex flex-wrap gap-1.5 mt-6">
+            {tags.slice(0, 5).map((tg) => (
+              <span
+                key={tg}
+                className="text-[11px] font-medium px-2.5 py-1 rounded-full transition-colors group-hover:opacity-100 opacity-70"
+                style={{
+                  backgroundColor: "color-mix(in oklab, currentColor 10%, transparent)",
+                  border: "1px solid color-mix(in oklab, currentColor 15%, transparent)",
+                }}
+              >
+                {tg}
+              </span>
+            ))}
+          </div>
+        )}
+
+        {/* Footer: stats */}
+        <div className="mt-8 flex items-center gap-5 text-sm opacity-60">
+          <span className="inline-flex items-center gap-1.5" title={t("Stars", "نجوم")}>
+            <Star className="h-3.5 w-3.5" />
+            {formatNum(p.stars)} {t("stars", "نجمة")}
+          </span>
+          <span aria-hidden className="opacity-50">•</span>
+          <span className="inline-flex items-center gap-1.5" title={t("Forks", "نسخ")}>
+            <GitFork className="h-3.5 w-3.5" />
+            {formatNum(p.forks)} {t("forks", "نسخة")}
+          </span>
+        </div>
+      </div>
+    </a>
   );
 }

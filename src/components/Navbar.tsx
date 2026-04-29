@@ -63,12 +63,12 @@ export function Navbar() {
 
   // Unified chip style — every icon is a solid filled half-pill (matches the
   // contact CTA's visual weight) so the rail reads as one cohesive ribbon.
-  // Uses the foreground token so it auto-inverts: black-on-light, white-on-dark.
-  const chipBg = "var(--foreground)";
-  const chipText = "var(--background)";
+  // Uses a darker shade for better contrast and professional appearance.
+  const chipBg = "oklch(0.18 0.02 265)"; // Dark indigo-black
+  const chipText = "oklch(0.95 0.01 265)"; // Off-white
   // Professional layered shadow — soft ambient + tight contact shadow for depth.
   const chipShadow =
-    "0 12px 28px -14px color-mix(in oklab, var(--foreground) 55%, transparent), 0 4px 10px -6px color-mix(in oklab, var(--foreground) 35%, transparent), inset 0 1px 0 0 color-mix(in oklab, #ffffff 14%, transparent)";
+    "0 12px 28px -14px color-mix(in oklab, oklch(0.1 0.02 265) 70%, transparent), 0 4px 10px -6px color-mix(in oklab, oklch(0.1 0.02 265) 50%, transparent), inset 0 1px 0 0 color-mix(in oklab, #ffffff 8%, transparent)";
   // Brand-blue shadow for the contact CTA so it carries identity weight.
   const mailShadow =
     "0 14px 32px -12px color-mix(in oklab, var(--primary) 65%, transparent), 0 4px 12px -6px color-mix(in oklab, var(--primary) 50%, transparent), inset 0 1px 0 0 color-mix(in oklab, #ffffff 18%, transparent)";

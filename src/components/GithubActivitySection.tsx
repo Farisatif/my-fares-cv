@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { Github, Star, GitFork, ExternalLink, Users, BookMarked, RefreshCw } from "lucide-react";
+import { Github, Star, GitFork, ExternalLink, Users, BookMarked, RefreshCw, Sparkles } from "lucide-react";
 import { Reveal } from "./Reveal";
 import { useSiteData } from "./SiteDataProvider";
 import { useLang } from "./LanguageProvider";
 import { getGithubBundle, type GithubBundle } from "@/utils/github.functions";
 import { Skeleton, DotPulse } from "@/components/ui/skeleton";
+import { KitsysArrowField } from "./KitsysArrowField";
 
 const CELL = 12; // px
 const GAP = 4; // px
@@ -194,6 +195,20 @@ export function GithubActivitySection() {
 
   return (
     <section id="github" className="relative section-padding overflow-hidden">
+      {/* Interactive arrow field background */}
+      <div className="absolute inset-0 -z-10 opacity-50 dark:opacity-40">
+        <KitsysArrowField mode="absolute" />
+      </div>
+      
+      {/* Gradient overlays for depth */}
+      <div 
+        aria-hidden 
+        className="pointer-events-none absolute inset-0 -z-[5]"
+        style={{
+          background: "radial-gradient(ellipse at 20% 0%, color-mix(in oklab, var(--primary) 15%, transparent) 0%, transparent 50%)"
+        }}
+      />
+
       <div className="container mx-auto px-6 max-w-7xl relative z-10">
         <Reveal>
           <div className="flex items-end justify-between flex-wrap gap-6 mb-10 sm:mb-14">
@@ -214,22 +229,37 @@ export function GithubActivitySection() {
               </div>
               <h2 className="font-display h-display-lg pb-2 max-w-3xl tracking-[-0.04em]">
                 {t("Real activity. ", "نشاط حقيقي. ")}
-                <span className="italic gradient-text-sky">
+                <span 
+                  className="italic"
+                  style={{
+                    background: "linear-gradient(135deg, var(--primary) 0%, color-mix(in oklab, var(--primary) 60%, var(--foreground)) 100%)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    backgroundClip: "text",
+                  }}
+                >
                   {t("Synced live.", "متزامن لحظياً.")}
                 </span>
               </h2>
+              <p className="mt-4 max-w-2xl text-base sm:text-lg text-muted-foreground leading-relaxed">
+                {t(
+                  "Live contributions and repository stats pulled directly from GitHub API.",
+                  "المساهمات وإحصائيات المستودعات مسحوبة مباشرة من واجهة جيت‌هاب.",
+                )}
+              </p>
             </div>
             <button
               type="button"
               onClick={refresh}
               disabled={refreshing}
-              className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs disabled:opacity-50 transition backdrop-blur-xl"
+              className="inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-sm font-medium disabled:opacity-50 transition-all hover:scale-[1.02] active:scale-[0.98]"
               style={{
-                borderColor: "color-mix(in oklab, currentColor 20%, transparent)",
-                backgroundColor: "color-mix(in oklab, currentColor 6%, transparent)",
+                borderColor: "color-mix(in oklab, var(--primary) 35%, transparent)",
+                backgroundColor: "color-mix(in oklab, var(--primary) 10%, transparent)",
+                color: "var(--primary)",
               }}
             >
-              {refreshing ? <DotPulse /> : <RefreshCw className="h-3.5 w-3.5" />}
+              {refreshing ? <DotPulse /> : <RefreshCw className="h-4 w-4" />}
               {t("Refresh", "تحديث")}
             </button>
           </div>
