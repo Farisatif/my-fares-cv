@@ -4,6 +4,7 @@ import { ArrowLeft, Sparkles } from "lucide-react";
 
 import { ProjectsSection } from "@/components/ProjectsSection";
 import { GithubActivitySection } from "@/components/GithubActivitySection";
+import { TechMarquee } from "@/components/TechMarquee";
 import { SectionBand } from "@/components/SectionBand";
 import { ScrollProgress } from "@/components/motion-primitives";
 import { useLang } from "@/components/LanguageProvider";
@@ -109,6 +110,11 @@ function ExplorePage() {
       {/* Projects — kept on a soft band so card content reads cleanly */}
       <SectionBand variant="dark" pattern="chevron" divider roundTop roundBottom>
         <ProjectsSection />
+      </SectionBand>
+
+      {/* Tech Marquee — animated tech stack showcase before GitHub */}
+      <SectionBand variant="surface" pattern="gradient" divider roundTop roundBottom>
+        <TechMarquee />
       </SectionBand>
 
       {/* GitHub activity — inverted band: light background in dark mode, dark in light mode */}

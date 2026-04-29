@@ -4,7 +4,7 @@ import {
   Settings2, X, Save, Lock, LogOut, KeyRound, Copy, Check,
   User, Code2, Briefcase, FolderKanban, GraduationCap, Trophy, Languages,
   MessageSquare, Shield, AlertTriangle, Sparkles, Menu, Database, WifiOff,
-  FileJson,
+  FileJson, Cpu,
 } from "lucide-react";
 import { DotPulse } from "@/components/ui/skeleton";
 import { motion, AnimatePresence } from "framer-motion";
@@ -29,6 +29,7 @@ import { SecurityForm } from "./sections/SecurityForm";
 import { HeroForm } from "./sections/HeroForm";
 import { NavigationForm } from "./sections/NavigationForm";
 import { JsonForm } from "./sections/JsonForm";
+import { TechMarqueeForm } from "./sections/TechMarqueeForm";
 
 const MAX_LOCAL = 5;
 const LOCAL_LOCK_MS = 60 * 1000;
@@ -43,6 +44,7 @@ const TABS = [
   { id: "education", label: "Education", icon: GraduationCap },
   { id: "achievements", label: "Achievements", icon: Trophy },
   { id: "languages", label: "Languages", icon: Languages },
+  { id: "techMarquee", label: "Tech Stack", icon: Cpu },
   { id: "comments", label: "Comments", icon: MessageSquare },
   { id: "json", label: "Raw JSON", icon: FileJson },
   { id: "security", label: "Security", icon: Shield },
@@ -257,6 +259,7 @@ export function SettingsDrawer() {
       case "education": return <EducationForm data={draft} onChange={setDraft} />;
       case "achievements": return <AchievementsForm data={draft} onChange={setDraft} />;
       case "languages": return <LanguagesForm data={draft} onChange={setDraft} />;
+      case "techMarquee": return <TechMarqueeForm data={draft} onChange={setDraft} />;
       case "comments": return <CommentsAdmin password={authedPw} />;
       case "json": return <JsonForm data={draft} onChange={setDraft} />;
       case "security": return <SecurityForm password={authedPw} />;
