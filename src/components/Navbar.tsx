@@ -61,9 +61,17 @@ export function Navbar() {
     show: boolean;
   };
 
-  // Brand-identity translucent surface — adapts via foreground token:
-  //   light theme → translucent black, dark theme → translucent white.
-  const chipBg = "color-mix(in oklab, var(--foreground) 10%, transparent)";
+  // Unified chip style — every icon is a solid filled half-pill (matches the
+  // contact CTA's visual weight) so the rail reads as one cohesive ribbon.
+  // Uses the foreground token so it auto-inverts: black-on-light, white-on-dark.
+  const chipBg = "var(--foreground)";
+  const chipText = "var(--background)";
+  // Professional layered shadow — soft ambient + tight contact shadow for depth.
+  const chipShadow =
+    "0 12px 28px -14px color-mix(in oklab, var(--foreground) 55%, transparent), 0 4px 10px -6px color-mix(in oklab, var(--foreground) 35%, transparent), inset 0 1px 0 0 color-mix(in oklab, #ffffff 14%, transparent)";
+  // Brand-blue shadow for the contact CTA so it carries identity weight.
+  const mailShadow =
+    "0 14px 32px -12px color-mix(in oklab, var(--primary) 65%, transparent), 0 4px 12px -6px color-mix(in oklab, var(--primary) 50%, transparent), inset 0 1px 0 0 color-mix(in oklab, #ffffff 18%, transparent)";
 
   const items: NavItem[] = [
     {
