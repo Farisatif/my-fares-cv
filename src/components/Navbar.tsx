@@ -320,7 +320,10 @@ function RailIcon({
         />
       )}
 
-      <span className="relative z-10 flex items-center justify-center">
+      <span
+        className="relative z-10 flex items-center justify-center"
+        style={active ? { color: "#ffffff" } : undefined}
+      >
         <Icon className="h-[17px] w-[17px]" strokeWidth={2.1} />
       </span>
 
