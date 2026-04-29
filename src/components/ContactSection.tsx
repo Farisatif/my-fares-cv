@@ -4,7 +4,7 @@ import { Mail, MessageCircle, Github, Linkedin, MapPin } from "lucide-react";
 import { useSiteData } from "./SiteDataProvider";
 import { useLang } from "./LanguageProvider";
 
-import { ChevronPattern } from "./Patterns";
+
 import { PageEndCircle } from "./PageEndCircle";
 import { SettingsDrawer } from "./cms/SettingsDrawer";
 
