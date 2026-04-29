@@ -59,11 +59,11 @@ export function Navbar() {
     hash?: string;
     active?: boolean;
     show: boolean;
-    /** Brand-tinted background tone (semantic CSS color expression). */
-    tone: string;
-    /** Active-state foreground color. */
-    activeColor?: string;
   };
+
+  // Brand-identity translucent surface — adapts via foreground token:
+  //   light theme → translucent black, dark theme → translucent white.
+  const chipBg = "color-mix(in oklab, var(--foreground) 10%, transparent)";
 
   const items: NavItem[] = [
     {
@@ -73,7 +73,6 @@ export function Navbar() {
       to: "/",
       active: onHome,
       show: true,
-      tone: "color-mix(in oklab, var(--primary) 12%, var(--surface-1) 88%)",
     },
     {
       key: "explore",
@@ -82,7 +81,6 @@ export function Navbar() {
       to: "/explore",
       active: onExplore,
       show: true,
-      tone: "color-mix(in oklab, oklch(0.7 0.18 200) 14%, var(--surface-1) 86%)",
     },
     {
       key: "comments",
@@ -91,7 +89,6 @@ export function Navbar() {
       to: "/comments",
       active: onComments,
       show: showComments,
-      tone: "color-mix(in oklab, oklch(0.72 0.16 295) 14%, var(--surface-1) 86%)",
     },
   ].filter((i) => i.show);
 
