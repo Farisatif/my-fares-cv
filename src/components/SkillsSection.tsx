@@ -77,12 +77,11 @@ export function SkillsSection() {
                   data.content?.skills?.titlePrefix_en ?? "Drag the things ",
                   data.content?.skills?.titlePrefix_ar ?? "اسحب الأشياء ",
                 )}
-                <span className="italic text-[oklch(0.42_0.2_255)] relative">
+                <span className="italic gradient-text-sky inline-block pb-1">
                   {t(
                     data.content?.skills?.titleAccent_en ?? "I build with.",
                     data.content?.skills?.titleAccent_ar ?? "التي أبني بها.",
                   )}
-                  <span className="absolute left-0 right-0 -bottom-1 h-[3px] rounded-full bg-gradient-to-r from-transparent via-[oklch(0.55_0.22_255)] to-transparent opacity-60" />
                 </span>
               </h2>
               <p className="mt-3 text-sm sm:text-base text-muted-foreground max-w-md mx-auto leading-relaxed">

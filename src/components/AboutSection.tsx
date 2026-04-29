@@ -68,7 +68,7 @@ function PhysicsHeading({
       className="font-display h-display-lg pb-2"
     >
       {renderChars(prefix, 0)}
-      <span className="italic gradient-text-primary">
+      <span className="italic gradient-text-sky inline-block pb-1">
         {renderChars(accent, 0.18, "italic")}
       </span>
     </h2>
