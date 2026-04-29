@@ -288,7 +288,7 @@ function RailIcon({
         }}
       />
 
-      {/* Active brand wash — sliding shared layout */}
+      {/* Active brand wash — sliding shared layout, blue tint on the chip */}
       {active && (
         <motion.span
           layoutId="rail-edge-active"
@@ -296,9 +296,9 @@ function RailIcon({
           className={`absolute inset-0 ${halfPillRadius}`}
           style={{
             background:
-              "linear-gradient(140deg, color-mix(in oklab, var(--primary) 32%, transparent), color-mix(in oklab, var(--primary-glow) 22%, transparent))",
+              "linear-gradient(140deg, oklch(0.50 0.18 260) 0%, oklch(0.38 0.15 265) 100%)",
             boxShadow:
-              "inset 0 0 0 1px color-mix(in oklab, var(--primary) 40%, transparent)",
+              "inset 0 0 0 1px color-mix(in oklab, var(--primary-glow) 55%, transparent)",
           }}
           transition={pillSpring}
         />
