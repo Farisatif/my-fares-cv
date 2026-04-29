@@ -72,7 +72,7 @@ export function Navbar() {
     >
       <LayoutGroup id="navbar-rail">
         <nav
-          className={`pointer-events-auto flex flex-col items-center gap-1 rounded-full p-1.5 backdrop-blur-2xl border transition-all duration-300 ${
+          className={`pointer-events-auto flex flex-col items-center gap-0.5 rounded-full p-1 backdrop-blur-2xl border transition-all duration-300 ${
             scrolled
               ? "bg-[var(--surface-1)]/45 border-[var(--hairline)] brand-shadow"
               : "bg-[var(--surface-1)]/35 border-[var(--hairline)] brand-shadow-sm"
