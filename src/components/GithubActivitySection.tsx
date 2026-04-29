@@ -53,7 +53,7 @@ function Heatmap({
   return (
     <div className="relative" dir="ltr" style={{ paddingLeft: LEFT_PAD, paddingTop: TOP_PAD }}>
       <div
-        className="absolute top-0 text-[10px] text-muted-foreground"
+        className="absolute top-0 text-[10px] opacity-65"
         style={{ left: LEFT_PAD, width: gridWidth, height: TOP_PAD }}
       >
         {monthMarkers.map((mk) => (
@@ -63,7 +63,7 @@ function Heatmap({
         ))}
       </div>
       <div
-        className="absolute left-0 text-[10px] text-muted-foreground"
+        className="absolute left-0 text-[10px] opacity-65"
         style={{ top: TOP_PAD, width: LEFT_PAD - 4, height: gridHeight }}
       >
         {dayLabels.map((d) => (
