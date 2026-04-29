@@ -244,6 +244,8 @@ function RailIcon({
   tooltipSide,
   halfPillRadius,
   chipBg,
+  chipText,
+  chipShadow,
   isRTL,
   pillSpring,
 }: {
@@ -255,6 +257,8 @@ function RailIcon({
   tooltipSide: string;
   halfPillRadius: string;
   chipBg: string;
+  chipText: string;
+  chipShadow: string;
   isRTL: boolean;
   pillSpring: { type: "spring"; stiffness: number; damping: number; mass: number };
 }) {
@@ -265,14 +269,12 @@ function RailIcon({
       preload="intent"
       aria-label={label}
       title={label}
-      className={`group/icon relative flex items-center justify-center h-10 w-11 sm:h-11 sm:w-12 ${halfPillRadius} text-foreground/80 hover:text-foreground transition-[color,transform] duration-300 focus-ring active:scale-95 overflow-hidden`}
+      className={`group/icon relative flex items-center justify-center h-10 w-11 sm:h-11 sm:w-12 ${halfPillRadius} hover:scale-x-[1.04] transition-transform duration-300 focus-ring active:scale-95 overflow-hidden`}
       style={{
         transformOrigin: isRTL ? "left center" : "right center",
         background: chipBg,
-        backdropFilter: "blur(18px) saturate(160%)",
-        WebkitBackdropFilter: "blur(18px) saturate(160%)",
-        boxShadow:
-          "inset 0 1px 0 0 color-mix(in oklab, var(--foreground) 5%, transparent), 0 6px 16px -10px color-mix(in oklab, var(--foreground) 22%, transparent)",
+        color: chipText,
+        boxShadow: chipShadow,
       }}
     >
       {/* Hover sheen — soft inner highlight on the inner side */}
