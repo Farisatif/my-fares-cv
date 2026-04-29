@@ -261,14 +261,39 @@ function CodeCommentCard({
   const [copied, setCopied] = useState(false);
   const [typed, setTyped] = useState(reduce ? text.length : 0);
 
-  // Word-aware typewriter — feels like a thought being written, not keystrokes.
+  // Pre-compute the final wrapped layout ONCE from the full text. The
+  // container height is locked to this layout from frame 1 — only the
+  // characters revealed inside each final line change as we type, so the
+  // surrounding page never reflows on mobile.
+  const isRTL = language === "ar";
+  const finalLines = useRef<string[]>([]);
+  if (finalLines.current.length === 0) {
+    const lines = wrapByWords(text, isRTL ? 38 : 64);
+    while (lines.length < 4) lines.push("");
+    finalLines.current = lines;
+  }
+  const lineStarts = useRef<number[]>([]);
+  if (lineStarts.current.length === 0) {
+    let acc = 0;
+    const starts: number[] = [];
+    for (const ln of finalLines.current) {
+      starts.push(acc);
+      // +1 accounts for the whitespace consumed between wrapped lines.
+      acc += ln.length + 1;
+    }
+    lineStarts.current = starts;
+  }
+
+  // Word-aware typewriter — slower, deliberate reveal. Floor longer on
+  // mobile so the eye has time to follow.
   useEffect(() => {
     if (!inView || reduce) return;
     const total = text.length;
+    const isMobile =
+      typeof window !== "undefined" && window.matchMedia("(max-width: 640px)").matches;
     const start = performance.now();
-    // Slower, more deliberate reveal — feels like the thought is being
-    // written out word-by-word instead of dashed off in a few seconds.
-    const duration = Math.min(13000, 3000 + total * 40);
+    const baseFloor = isMobile ? 6500 : 4500;
+    const duration = Math.min(15000, baseFloor + total * (isMobile ? 55 : 40));
     let raf = 0;
     const tick = (now: number) => {
       const p = Math.min(1, (now - start) / duration);
@@ -292,12 +317,9 @@ function CodeCommentCard({
     }
   };
 
-  // Split into visual lines for the IDE look (preserve a sensible width).
-  const visible = text.slice(0, typed);
-  const isRTL = language === "ar";
-  const lines = wrapByWords(visible, isRTL ? 38 : 64);
-  // Reserve at least 4 lines so the card doesn't pop in height while typing.
-  while (lines.length < 4) lines.push("");
+  // Use the locked layout (do NOT recompute from `visible` — that would
+  // shrink the line count on mobile and pop the page).
+  const lines = finalLines.current;
 
   return (
     <motion.div
