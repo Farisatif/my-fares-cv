@@ -173,8 +173,8 @@ function ExperienceCard({
           <span
             className="text-xs px-3 py-1 rounded-full font-mono tabular-nums tracking-[0.2em] uppercase"
             style={{
-              backgroundColor: "color-mix(in oklab, var(--background) 12%, transparent)",
-              color: "color-mix(in oklab, var(--background) 85%, transparent)",
+              backgroundColor: "color-mix(in oklab, currentColor 10%, transparent)",
+              color: "color-mix(in oklab, currentColor 80%, transparent)",
             }}
           >
             {labels.chapter} {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
@@ -183,7 +183,7 @@ function ExperienceCard({
             className="inline-flex items-center gap-1.5 text-xs px-3 py-1 rounded-full"
             style={{
               backgroundColor: "color-mix(in oklab, var(--primary) 22%, transparent)",
-              color: "color-mix(in oklab, var(--primary-glow) 80%, var(--background))",
+              color: "color-mix(in oklab, var(--primary) 80%, currentColor)",
               border: "1px solid color-mix(in oklab, var(--primary) 40%, transparent)",
             }}
           >
