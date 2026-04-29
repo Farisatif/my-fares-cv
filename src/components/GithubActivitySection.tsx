@@ -362,16 +362,20 @@ export function GithubActivitySection() {
                 href={r.html_url}
                 target="_blank"
                 rel="noreferrer"
-                className="group rounded-2xl border border-border bg-background/80 backdrop-blur-md hover:bg-secondary/60 p-4 sm:p-5 transition flex flex-col gap-3"
+                className="group rounded-2xl border backdrop-blur-xl p-4 sm:p-5 transition-all hover:-translate-y-0.5 flex flex-col gap-3"
+                style={{
+                  borderColor: "color-mix(in oklab, currentColor 14%, transparent)",
+                  backgroundColor: "color-mix(in oklab, currentColor 5%, transparent)",
+                }}
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="font-display text-lg tracking-tight truncate">{r.name}</div>
-                  <ExternalLink className="h-3.5 w-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition shrink-0 mt-1" />
+                  <ExternalLink className="h-3.5 w-3.5 opacity-0 group-hover:opacity-100 transition shrink-0 mt-1" />
                 </div>
-                <div className="text-xs text-muted-foreground line-clamp-2 min-h-[2.4em]">
+                <div className="text-xs opacity-65 line-clamp-2 min-h-[2.4em]">
                   {r.description || t("No description", "بدون وصف")}
                 </div>
-                <div className="flex items-center gap-3 text-[11px] text-muted-foreground mt-auto">
+                <div className="flex items-center gap-3 text-[11px] opacity-65 mt-auto">
                   {r.language && (
                     <span className="inline-flex items-center gap-1.5">
                       <span className="h-2 w-2 rounded-full" style={{ background: langColor(r.language) }} />
