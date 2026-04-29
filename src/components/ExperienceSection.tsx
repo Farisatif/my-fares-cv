@@ -26,8 +26,29 @@ export function ExperienceSection() {
   return (
     <section
       id="work"
-      className="section-padding relative overflow-hidden bg-foreground text-background"
+      className="section-padding relative overflow-hidden"
     >
+      <ChevronPattern>
+        <div className="container mx-auto px-6 max-w-7xl relative">
+          <Reveal>
+            <p className="text-xs uppercase tracking-[0.25em] opacity-60 mb-4">
+              / 03 — {t(
+                data.content?.experience?.eyebrow_en ?? "Experience",
+                data.content?.experience?.eyebrow_ar ?? "الخبرة",
+              )}
+            </p>
+            <h2 className="font-display h-display-lg pb-2 max-w-4xl">
+              {t(
+                data.content?.experience?.titlePrefix_en ?? "Where I've ",
+                data.content?.experience?.titlePrefix_ar ?? "أين قضيت ",
+              )}
+              <span className="italic gradient-text-sky">
+                {t(
+                  data.content?.experience?.titleAccent_en ?? "put in the hours.",
+                  data.content?.experience?.titleAccent_ar ?? "ساعات العمل.",
+                )}
+              </span>
+            </h2>
       <ChevronPattern>
         <div className="container mx-auto px-6 max-w-7xl relative">
           <Reveal>
