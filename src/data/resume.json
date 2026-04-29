@@ -324,6 +324,27 @@
     "contactLabelAr": "تواصل"
   },
 
+  "techMarquee": {
+    "items": [
+      { "icon": "code", "text_en": "React", "text_ar": "رياكت" },
+      { "icon": "braces", "text_en": "TypeScript", "text_ar": "تايب سكريبت" },
+      { "icon": "server", "text_en": "Node.js", "text_ar": "نود جي إس" },
+      { "icon": "database", "text_en": "PostgreSQL", "text_ar": "بوستغرس" },
+      { "icon": "globe", "text_en": "Next.js", "text_ar": "نكست جي إس" },
+      { "icon": "smartphone", "text_en": "Flutter", "text_ar": "فلاتر" },
+      { "icon": "layers", "text_en": "Docker", "text_ar": "دوكر" },
+      { "icon": "cloud", "text_en": "AWS", "text_ar": "أمازون" },
+      { "icon": "git", "text_en": "Git", "text_ar": "جيت" },
+      { "icon": "terminal", "text_en": "Linux", "text_ar": "لينكس" },
+      { "icon": "palette", "text_en": "Figma", "text_ar": "فيجما" },
+      { "icon": "zap", "text_en": "Vite", "text_ar": "فايت" },
+      { "icon": "cpu", "text_en": "Python", "text_ar": "بايثون" },
+      { "icon": "boxes", "text_en": "Kubernetes", "text_ar": "كوبيرنيتس" },
+      { "icon": "shield", "text_en": "Supabase", "text_ar": "سوبابيز" },
+      { "icon": "rocket", "text_en": "Vercel", "text_ar": "فيرسل" }
+    ]
+  },
+
   "content": {
     "hero": {
       "chip_en": "Available for new opportunities",
