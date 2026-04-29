@@ -222,9 +222,9 @@
 
   html {
     scroll-behavior: smooth;
-    /* Left-fixed sidebar navbar; offset hash jumps so they don't tuck under it. */
+    /* Bottom-fixed navbar floats; offset hash jumps so they don't tuck under it. */
     scroll-padding-top: 1rem;
-    scroll-padding-left: 5rem;
+    scroll-padding-bottom: 6rem;
     text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;
   }

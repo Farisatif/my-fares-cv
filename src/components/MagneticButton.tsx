@@ -34,7 +34,7 @@ export function MagneticButton({
   const handleLeave = () => setPos({ x: 0, y: 0 });
 
   const base =
-    "inline-flex items-center gap-2 rounded-full px-6 sm:px-7 py-3 sm:py-3.5 text-sm sm:text-base font-medium transition-[background-color,color,box-shadow,transform] duration-150 will-change-transform min-h-[44px] min-w-[44px] justify-center sm:justify-start";
+    "inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-sm font-medium transition-[background-color,color,box-shadow,transform] duration-150 will-change-transform";
   const styles =
     variant === "primary"
       ? "bg-foreground text-background hover:bg-foreground/90 hover:shadow-lg hover:scale-[1.02] active:scale-[0.95] shadow-[0_10px_30px_-12px_color-mix(in_oklab,var(--foreground)_35%,transparent)]"

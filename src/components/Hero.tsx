@@ -259,38 +259,34 @@ export function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.7 }}
-            className="lg:col-span-7 max-w-xl rounded-2xl bg-gradient-to-br from-background/80 to-background/40 dark:from-background/60 dark:to-background/30 backdrop-blur-xl border border-border/50 dark:border-border/30 px-6 py-6 sm:px-7 sm:py-7 shadow-lg dark:shadow-xl hover:border-border/70 transition-all duration-300"
+            className="lg:col-span-7 max-w-xl rounded-2xl bg-background/55 dark:bg-background/40 backdrop-blur-md border border-border/40 px-5 py-4 sm:px-6 sm:py-5"
           >
-            <p className="text-base sm:text-lg text-foreground leading-relaxed font-light">
+            <p className="text-lg sm:text-base text-foreground leading-relaxed">
               {t(
                 data.content?.hero?.greeting_en ?? "Hi — I'm ",
                 data.content?.hero?.greeting_ar ?? "مرحباً — أنا ",
               )}
-              <span className="text-foreground font-semibold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">{p.name}</span>
+              <span className="text-foreground font-semibold">{p.name}</span>
               {t(", ", "، ")}
               {loc.bio}
             </p>
-            <div className="mt-8 flex flex-wrap gap-3 sm:gap-4">
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Link to="/" hash="contact" className="inline-block">
-                  <MagneticButton>
-                    <Mail className="h-4 w-4" />
-                    {t(
-                      data.content?.hero?.ctaPrimary_en ?? "Get in touch",
-                      data.content?.hero?.ctaPrimary_ar ?? "تواصل معي",
-                    )}
-                  </MagneticButton>
-                </Link>
-              </motion.div>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <MagneticButton href={`https://${p.github}`} variant="ghost">
-                  <Github className="h-4 w-4" />
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link to="/" hash="contact" className="inline-block">
+                <MagneticButton>
+                  <Mail className="h-4 w-4" />
                   {t(
-                    data.content?.hero?.ctaSecondary_en ?? "GitHub",
-                    data.content?.hero?.ctaSecondary_ar ?? "جيت‌هاب",
+                    data.content?.hero?.ctaPrimary_en ?? "Get in touch",
+                    data.content?.hero?.ctaPrimary_ar ?? "تواصل معي",
                   )}
                 </MagneticButton>
-              </motion.div>
+              </Link>
+              <MagneticButton href={`https://${p.github}`} variant="ghost">
+                <Github className="h-4 w-4" />
+                {t(
+                  data.content?.hero?.ctaSecondary_en ?? "GitHub",
+                  data.content?.hero?.ctaSecondary_ar ?? "جيت‌هاب",
+                )}
+              </MagneticButton>
             </div>
           </motion.div>
 
@@ -301,24 +297,19 @@ export function Hero() {
             className="lg:col-span-5 relative flex lg:justify-end"
             style={{ perspective: 1000 }}
           >
-            <motion.div
-              whileHover={{ scale: 1.08 }}
-              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            <div
+              ref={avatarRef}
+              data-cursor="view"
+              data-cursor-label={p.name}
+              className="relative h-40 w-40 sm:h-52 sm:w-52 rounded-full overflow-hidden shadow-[0_20px_60px_-20px_color-mix(in_oklab,var(--primary)_55%,transparent)] bg-background isolate z-10"
             >
-              <div
-                ref={avatarRef}
-                data-cursor="view"
-                data-cursor-label={p.name}
-                className="relative h-40 w-40 sm:h-52 sm:w-52 rounded-full overflow-hidden shadow-[0_20px_60px_-20px_color-mix(in_oklab,var(--primary)_55%,transparent)] dark:shadow-[0_20px_60px_-20px_rgba(0,0,0,0.4)] bg-background isolate z-10 ring-2 ring-primary/20 hover:ring-primary/40 transition-all duration-300"
-              >
-                <img
-                  src={faresImg}
-                  alt={p.name}
-                  className="h-full w-full object-cover opacity-100"
-                  draggable={false}
-                />
-              </div>
-            </motion.div>
+              <img
+                src={faresImg}
+                alt={p.name}
+                className="h-full w-full object-cover opacity-100"
+                draggable={false}
+              />
+            </div>
             <motion.div
               initial={{ opacity: 0, y: 8, scale: 0.9 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
