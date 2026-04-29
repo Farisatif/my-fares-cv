@@ -5,7 +5,6 @@ import { Reveal } from "./Reveal";
 import { useSiteData } from "./SiteDataProvider";
 import { useLang } from "./LanguageProvider";
 import { getGithubBundle, type GithubBundle } from "@/utils/github.functions";
-import { GlowDots } from "./GlowDots";
 import { Skeleton, DotPulse } from "@/components/ui/skeleton";
 
 const CELL = 12; // px
