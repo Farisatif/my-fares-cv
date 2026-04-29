@@ -160,8 +160,8 @@ function ExperienceCard({
       <div
         className="absolute top-6 right-6 rtl:right-auto rtl:left-6 h-10 w-10 rounded-full flex items-center justify-center transition-transform group-hover:rotate-45"
         style={{
-          backgroundColor: "color-mix(in oklab, var(--background) 14%, transparent)",
-          color: "var(--background)",
+          backgroundColor: "color-mix(in oklab, currentColor 12%, transparent)",
+          color: "currentColor",
         }}
       >
         <ArrowUpRight className="h-4 w-4" />
