@@ -50,7 +50,7 @@ function Index() {
       {/* Curated rhythm — five-tone band system creates magazine-style
           progression: light → surface → dark → soft → dark. Each transition
           is intentional and the contrast walks the eye down the page. */}
-      <SectionBand variant="light" pattern="grid-fine" divider roundBottom>
+      <SectionBand variant="light" pattern="gradient" divider roundBottom>
         <AboutSection />
       </SectionBand>
 
@@ -61,11 +61,11 @@ function Index() {
         <LanguagesSection />
       </SectionBand>
 
-      <SectionBand variant="surface" pattern="grid-dots" divider roundTop roundBottom>
+      <SectionBand variant="surface" pattern="gradient" divider roundTop roundBottom>
         <SkillsSection />
       </SectionBand>
 
-      <SectionBand variant="dark" pattern="grid-fine" divider roundTop roundBottom>
+      <SectionBand variant="light" pattern="gradient" divider roundTop roundBottom>
         <ExperienceSection />
       </SectionBand>
 
@@ -75,7 +75,7 @@ function Index() {
       </SectionBand>
 
       {/* Bridge to /explore — projects + GitHub activity now live there */}
-      <SectionBand variant="soft" pattern="aurora" divider roundTop roundBottom>
+      <SectionBand variant="dark" pattern="none" divider roundTop roundBottom>
         <section className="relative py-20 sm:py-28">
           <div className="container mx-auto px-6 max-w-5xl text-center">
             <p className="text-[10px] sm:text-xs uppercase tracking-[0.35em] text-muted-foreground">
