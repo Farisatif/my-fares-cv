@@ -123,23 +123,27 @@ export function Navbar() {
               tooltipSide={tooltipSide}
               halfPillRadius={halfPillRadius}
               chipBg={chipBg}
+              chipText={chipText}
+              chipShadow={chipShadow}
               isRTL={isRTL}
               pillSpring={pillSpring}
             />
           ))}
 
-          {/* Contact CTA — solid foreground filled half-pill */}
+          {/* Contact CTA — anchored brand-blue identity color, never inverts */}
           <Link
             to="/"
             hash="contact"
             preload="intent"
             aria-label={contactLabel}
             title={contactLabel}
-            className={`group/icon relative flex items-center justify-center h-10 w-11 sm:h-11 sm:w-12 ${halfPillRadius} bg-foreground text-background hover:scale-x-[1.04] active:scale-95 transition-transform duration-200 focus-ring`}
+            className={`group/icon relative flex items-center justify-center h-10 w-11 sm:h-11 sm:w-12 ${halfPillRadius} hover:scale-x-[1.04] active:scale-95 transition-transform duration-200 focus-ring`}
             style={{
               transformOrigin: isRTL ? "left center" : "right center",
-              boxShadow:
-                "0 8px 22px -10px color-mix(in oklab, var(--foreground) 55%, transparent)",
+              background:
+                "linear-gradient(140deg, oklch(0.42 0.16 260) 0%, oklch(0.30 0.13 265) 100%)",
+              color: "#ffffff",
+              boxShadow: mailShadow,
             }}
           >
             <Mail className="h-[18px] w-[18px]" strokeWidth={2.1} />
@@ -152,14 +156,12 @@ export function Navbar() {
             onClick={toggleLang}
             aria-label={t("Toggle language", "تبديل اللغة")}
             title={t("Toggle language", "تبديل اللغة")}
-            className={`group/icon relative flex items-center justify-center h-10 w-11 sm:h-11 sm:w-12 ${halfPillRadius} text-foreground hover:scale-x-[1.04] active:scale-95 transition-transform duration-200 focus-ring overflow-hidden`}
+            className={`group/icon relative flex items-center justify-center h-10 w-11 sm:h-11 sm:w-12 ${halfPillRadius} hover:scale-x-[1.04] active:scale-95 transition-transform duration-200 focus-ring overflow-hidden`}
             style={{
               transformOrigin: isRTL ? "left center" : "right center",
               background: chipBg,
-              backdropFilter: "blur(18px) saturate(160%)",
-              WebkitBackdropFilter: "blur(18px) saturate(160%)",
-              boxShadow:
-                "inset 0 1px 0 0 color-mix(in oklab, var(--foreground) 5%, transparent), 0 6px 16px -10px color-mix(in oklab, var(--foreground) 22%, transparent)",
+              color: chipText,
+              boxShadow: chipShadow,
             }}
           >
             <AnimatePresence mode="wait" initial={false}>
@@ -192,14 +194,12 @@ export function Navbar() {
             }}
             aria-label={t("Toggle theme", "تبديل المظهر")}
             title={t("Toggle theme", "تبديل المظهر")}
-            className={`group/icon relative flex items-center justify-center h-10 w-11 sm:h-11 sm:w-12 ${halfPillRadius} text-foreground hover:scale-x-[1.04] active:scale-95 transition-transform duration-200 focus-ring overflow-hidden`}
+            className={`group/icon relative flex items-center justify-center h-10 w-11 sm:h-11 sm:w-12 ${halfPillRadius} hover:scale-x-[1.04] active:scale-95 transition-transform duration-200 focus-ring overflow-hidden`}
             style={{
               transformOrigin: isRTL ? "left center" : "right center",
               background: chipBg,
-              backdropFilter: "blur(18px) saturate(160%)",
-              WebkitBackdropFilter: "blur(18px) saturate(160%)",
-              boxShadow:
-                "inset 0 1px 0 0 color-mix(in oklab, var(--foreground) 5%, transparent), 0 6px 16px -10px color-mix(in oklab, var(--foreground) 22%, transparent)",
+              color: chipText,
+              boxShadow: chipShadow,
             }}
           >
             <AnimatePresence mode="wait" initial={false}>
