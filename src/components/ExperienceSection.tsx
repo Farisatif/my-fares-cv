@@ -127,13 +127,14 @@ function ExperienceCard({
         isCurrent ? "border-l-primary/80" : "border-l-muted/40"
       }`}
       style={{
-        // Inverted surface — dark card on dark section (mirrors Projects' light card on light section)
-        backgroundColor: "color-mix(in oklab, var(--background) 8%, transparent)",
+        // Surface uses currentColor so the card stays legible whether the
+        // surrounding band is light or dark (auto-inverted across themes).
+        backgroundColor: "color-mix(in oklab, currentColor 6%, transparent)",
         borderWidth: 1,
         borderStyle: "solid",
         borderColor: hovered
           ? "color-mix(in oklab, var(--primary) 45%, transparent)"
-          : "color-mix(in oklab, var(--background) 18%, transparent)",
+          : "color-mix(in oklab, currentColor 14%, transparent)",
         backdropFilter: "blur(12px)",
         WebkitBackdropFilter: "blur(12px)",
       }}
