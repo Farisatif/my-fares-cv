@@ -49,27 +49,6 @@ export function ExperienceSection() {
                 )}
               </span>
             </h2>
-      <ChevronPattern>
-        <div className="container mx-auto px-6 max-w-7xl relative">
-          <Reveal>
-            <p className="text-xs uppercase tracking-[0.25em] opacity-60 mb-4">
-              / 03 — {t(
-                data.content?.experience?.eyebrow_en ?? "Experience",
-                data.content?.experience?.eyebrow_ar ?? "الخبرة",
-              )}
-            </p>
-            <h2 className="font-display h-display-lg pb-2 max-w-4xl">
-              {t(
-                data.content?.experience?.titlePrefix_en ?? "Where I've ",
-                data.content?.experience?.titlePrefix_ar ?? "أين قضيت ",
-              )}
-              <span className="italic gradient-text-primary">
-                {t(
-                  data.content?.experience?.titleAccent_en ?? "put in the hours.",
-                  data.content?.experience?.titleAccent_ar ?? "ساعات العمل.",
-                )}
-              </span>
-            </h2>
             <p className="mt-5 text-base sm:text-lg opacity-65 max-w-2xl leading-relaxed">
               {t(
                 "A timeline of roles where I've shipped real software, collaborated with thoughtful teams, and grown as an engineer.",
