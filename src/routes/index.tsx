@@ -104,7 +104,7 @@ function Index() {
         </section>
       </SectionBand>
 
-      <SectionBand variant="dark" pattern="grid-fine" divider roundTop>
+      <SectionBand variant="light" pattern="gradient" divider roundTop>
         <ContactSection />
       </SectionBand>
     </div>
