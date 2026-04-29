@@ -7,9 +7,15 @@ import { useLang } from "./LanguageProvider";
 import { useSiteData } from "./SiteDataProvider";
 
 /**
- * Floating vertical icon rail.
- * Anchored to the right edge in LTR, left edge in RTL. Glass surface,
- * icons-only, with a sliding active pill (LayoutGroup, animates vertically).
+ * Floating vertical icon rail — refined, slim, and theme-aware.
+ * Anchored to the right edge in LTR, left edge in RTL.
+ *
+ * Visuals:
+ *  - Glass capsule (backdrop blur + saturate) with subtle inner highlight
+ *  - Animated active pill that slides between items (vertical LayoutGroup)
+ *  - Icons-only with delicate tooltip on the inner side
+ *  - Premium contact CTA at the bottom with brand gradient
+ *  - Slim footprint to never obscure mobile content
  */
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -32,7 +38,7 @@ export function Navbar() {
   const onExplore = loc.pathname === "/explore";
   const onHome = loc.pathname === "/";
 
-  const pillSpring = { type: "spring" as const, stiffness: 260, damping: 28, mass: 0.8 };
+  const pillSpring = { type: "spring" as const, stiffness: 320, damping: 30, mass: 0.7 };
 
   type NavItem = {
     key: string;
@@ -55,12 +61,11 @@ export function Navbar() {
       active: onComments,
       show: showComments,
     },
-    { key: "contact", label: contactLabel, icon: Mail, to: "/", hash: "contact", show: true },
   ].filter((i) => i.show);
 
   // Side anchor: right for LTR, left for RTL.
-  const sideClass = lang === "ar" ? "left-3 sm:left-4" : "right-3 sm:right-4";
-  const tooltipSide = lang === "ar" ? "left-full ml-2" : "right-full mr-2";
+  const sideClass = lang === "ar" ? "left-2.5 sm:left-4" : "right-2.5 sm:right-4";
+  const tooltipSide = lang === "ar" ? "left-full ml-2.5" : "right-full mr-2.5";
 
   return (
     <motion.aside
@@ -72,26 +77,30 @@ export function Navbar() {
     >
       <LayoutGroup id="navbar-rail">
         <nav
-          className={`pointer-events-auto flex flex-col items-center gap-0.5 rounded-full p-1 backdrop-blur-2xl border transition-all duration-300 ${
+          className={`pointer-events-auto relative flex flex-col items-center gap-1 rounded-full p-1.5 backdrop-blur-2xl border transition-all duration-500 ${
             scrolled
-              ? "bg-[var(--surface-1)]/45 border-[var(--hairline)] brand-shadow"
-              : "bg-[var(--surface-1)]/35 border-[var(--hairline)] brand-shadow-sm"
+              ? "bg-[var(--surface-1)]/55 border-[var(--hairline)]"
+              : "bg-[var(--surface-1)]/40 border-[var(--hairline)]"
           }`}
-          style={{ WebkitBackdropFilter: "blur(24px) saturate(180%)" }}
+          style={{
+            WebkitBackdropFilter: "blur(28px) saturate(180%)",
+            boxShadow:
+              "0 1px 0 0 color-mix(in oklab, var(--foreground) 6%, transparent) inset, 0 18px 50px -22px color-mix(in oklab, var(--primary) 35%, transparent), 0 6px 18px -10px color-mix(in oklab, var(--foreground) 14%, transparent)",
+          }}
         >
+          {/* Subtle inner glow at the top */}
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-x-2 top-0 h-1/2 rounded-full opacity-40"
+            style={{
+              background:
+                "linear-gradient(to bottom, color-mix(in oklab, var(--foreground) 8%, transparent), transparent)",
+            }}
+          />
+
           {items.map((item) => {
             const Icon = item.icon;
-            const isContact = item.key === "contact";
             const isActive = item.active === true;
-
-            const inner = (
-              <span className="relative z-10 flex items-center justify-center w-full h-full">
-                <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" strokeWidth={2} />
-              </span>
-            );
-
-            const baseBtn =
-              "group/icon relative flex items-center justify-center h-7 w-7 sm:h-8 sm:w-8 rounded-full transition-all duration-300 focus-ring active:scale-[0.92]";
 
             return (
               <Link
@@ -101,28 +110,31 @@ export function Navbar() {
                 preload="intent"
                 aria-label={item.label}
                 title={item.label}
-                className={`${baseBtn} ${
-                  isContact
-                    ? "bg-foreground text-background hover:bg-foreground/90"
-                    : isActive
-                      ? "text-foreground"
-                      : "text-muted-foreground hover:text-foreground"
+                className={`group/icon relative flex items-center justify-center h-7 w-7 sm:h-8 sm:w-8 rounded-full transition-colors duration-300 focus-ring active:scale-[0.92] ${
+                  isActive
+                    ? "text-foreground"
+                    : "text-muted-foreground hover:text-foreground"
                 }`}
               >
-                {isActive && !isContact && (
+                {isActive && (
                   <motion.span
                     layoutId="nav-rail-pill"
-                    className="absolute inset-0 rounded-full bg-secondary"
+                    className="absolute inset-0 rounded-full"
+                    style={{
+                      background:
+                        "linear-gradient(140deg, color-mix(in oklab, var(--primary) 18%, transparent), color-mix(in oklab, var(--primary-glow) 14%, transparent))",
+                      boxShadow:
+                        "inset 0 0 0 1px color-mix(in oklab, var(--primary) 35%, transparent), 0 6px 14px -6px color-mix(in oklab, var(--primary) 45%, transparent)",
+                    }}
                     transition={pillSpring}
                   />
                 )}
-                {inner}
+                <span className="relative z-10 flex items-center justify-center">
+                  <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" strokeWidth={2.1} />
+                </span>
                 {/* Tooltip — appears on hover on the inner side */}
                 <span
-                  className={`pointer-events-none absolute ${tooltipSide} top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-full text-[10px] font-medium uppercase tracking-[0.15em] whitespace-nowrap opacity-0 -translate-x-1 group-hover/icon:opacity-100 group-hover/icon:translate-x-0 transition-all duration-200 backdrop-blur-xl bg-[var(--surface-1)]/80 border border-[var(--hairline)] text-foreground brand-shadow-sm`}
-                  style={{
-                    transform: lang === "ar" ? "translate(0,-50%)" : undefined,
-                  }}
+                  className={`pointer-events-none absolute ${tooltipSide} top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-full text-[10px] font-medium uppercase tracking-[0.18em] whitespace-nowrap opacity-0 group-hover/icon:opacity-100 transition-opacity duration-200 backdrop-blur-xl bg-[var(--surface-1)]/85 border border-[var(--hairline)] text-foreground brand-shadow-sm`}
                 >
                   {item.label}
                 </span>
@@ -130,11 +142,41 @@ export function Navbar() {
             );
           })}
 
-          {/* Divider */}
-          <span className="my-1 h-px w-5 bg-border" />
+          {/* Hairline divider */}
+          <span
+            className="my-0.5 h-px w-4 rounded-full"
+            style={{ background: "color-mix(in oklab, currentColor 18%, transparent)" }}
+          />
+
+          {/* Contact CTA — premium filled pill */}
+          <Link
+            to="/"
+            hash="contact"
+            preload="intent"
+            aria-label={contactLabel}
+            title={contactLabel}
+            className="group/icon relative flex items-center justify-center h-7 w-7 sm:h-8 sm:w-8 rounded-full bg-foreground text-background hover:scale-[1.05] active:scale-95 transition-transform duration-200 focus-ring"
+            style={{
+              boxShadow:
+                "0 6px 16px -6px color-mix(in oklab, var(--foreground) 50%, transparent)",
+            }}
+          >
+            <Mail className="h-3.5 w-3.5 sm:h-4 sm:w-4" strokeWidth={2.1} />
+            <span
+              className={`pointer-events-none absolute ${tooltipSide} top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-full text-[10px] font-medium uppercase tracking-[0.18em] whitespace-nowrap opacity-0 group-hover/icon:opacity-100 transition-opacity duration-200 backdrop-blur-xl bg-[var(--surface-1)]/85 border border-[var(--hairline)] text-foreground brand-shadow-sm`}
+            >
+              {contactLabel}
+            </span>
+          </Link>
+
+          {/* Hairline divider */}
+          <span
+            className="my-0.5 h-px w-4 rounded-full"
+            style={{ background: "color-mix(in oklab, currentColor 18%, transparent)" }}
+          />
 
           {/* Theme + language */}
-          <div className="flex flex-col items-center gap-1 py-0.5">
+          <div className="flex flex-col items-center gap-1 pb-0.5">
             <ThemeLangToggle />
           </div>
         </nav>
