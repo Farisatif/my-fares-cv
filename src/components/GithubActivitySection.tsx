@@ -272,11 +272,17 @@ export function GithubActivitySection() {
 
         {/* Contribution heatmap */}
         <Reveal delay={0.15}>
-          <div className="mt-6 rounded-3xl border border-border bg-card p-5 sm:p-7">
+          <div
+            className="mt-6 rounded-3xl border p-5 sm:p-7 backdrop-blur-xl"
+            style={{
+              borderColor: "color-mix(in oklab, currentColor 14%, transparent)",
+              backgroundColor: "color-mix(in oklab, currentColor 5%, transparent)",
+            }}
+          >
             <div className="flex items-center justify-between mb-4">
               <div>
                 <div className="text-sm font-medium">{t("Contributions", "المساهمات")}</div>
-                <div className="text-[11px] text-muted-foreground">
+                <div className="text-[11px] opacity-65">
                   {grid
                     ? t(
                         `${grid.total.toLocaleString()} contributions in the last year`,
@@ -288,7 +294,7 @@ export function GithubActivitySection() {
                       )}
                 </div>
               </div>
-              <div className="hidden sm:flex items-center gap-1.5 text-[10px] text-muted-foreground">
+              <div className="hidden sm:flex items-center gap-1.5 text-[10px] opacity-65">
                 <span>{t("Less", "أقل")}</span>
                 {[0, 1, 2, 3, 4].map((l) => (
                   <span
@@ -300,13 +306,31 @@ export function GithubActivitySection() {
                 <span>{t("More", "أكثر")}</span>
               </div>
             </div>
-            <div className="overflow-x-auto no-scrollbar">
+            {/* Heatmap horizontal scroll container.
+                CRITICAL: force dir="ltr" so Arabic users get the same
+                left-origin scroll as English (otherwise the grid is
+                anchored to the right and unreachable). Edge fade masks
+                hint at horizontal scrollability on both sides. */}
+            <div
+              dir="ltr"
+              className="overflow-x-auto no-scrollbar relative"
+              style={{
+                WebkitOverflowScrolling: "touch",
+                maskImage:
+                  "linear-gradient(to right, transparent 0, black 24px, black calc(100% - 24px), transparent 100%)",
+                WebkitMaskImage:
+                  "linear-gradient(to right, transparent 0, black 24px, black calc(100% - 24px), transparent 100%)",
+              }}
+            >
               {loading && !grid ? (
                 <HeatmapSkeleton />
               ) : (
                 <Heatmap grid={grid} t={t} />
               )}
-              <div className="sm:hidden flex items-center gap-1.5 text-[10px] text-muted-foreground mt-3 justify-end">
+            </div>
+            <div className="sm:hidden flex items-center justify-between gap-2 text-[10px] opacity-65 mt-3">
+              <span className="opacity-70">{t("← swipe →", "← اسحب →")}</span>
+              <div className="flex items-center gap-1.5">
                 <span>{t("Less", "أقل")}</span>
                 {[0, 1, 2, 3, 4].map((l) => (
                   <span
