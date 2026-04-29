@@ -1,21 +1,28 @@
 import { useEffect, useState } from "react";
-import { motion, LayoutGroup } from "framer-motion";
+import { motion, LayoutGroup, AnimatePresence } from "framer-motion";
 import { Link, useLocation } from "@tanstack/react-router";
-import { Home, Compass, MessageSquare, Mail } from "lucide-react";
+import { Home, Compass, MessageSquare, Mail, Sun, Moon, Languages } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { ThemeLangToggle } from "./ThemeLangToggle";
+import { useTheme } from "./ThemeProvider";
 import { useLang } from "./LanguageProvider";
 import { useSiteData } from "./SiteDataProvider";
 
 /**
- * Floating vertical icon column — exclusive, container-less rail.
- * No surrounding capsule. Each icon stands alone, with its own micro
- * glass disc revealed on hover or active state.
+ * Edge-anchored vertical icon column.
+ *
+ * Each icon is a half-pill flush to the screen edge:
+ *  - rounded on the INNER side only (toward the page)
+ *  - flat on the OUTER side (kissing the viewport edge)
+ *  - its own brand-tinted background so each glyph reads as a distinct chip
+ *
+ * Order (top → bottom, single straight line):
+ *   Home · Explore · Comments · Contact · Language · Theme
  */
 export function Navbar() {
   const [, setScrolled] = useState(false);
   const loc = useLocation();
-  const { lang, t } = useLang();
+  const { lang, t, toggle: toggleLang } = useLang();
+  const { theme, toggle: toggleTheme } = useTheme();
   const { data } = useSiteData();
   const nav = data.navigation;
   const showComments = nav?.showComments !== false;
@@ -34,6 +41,15 @@ export function Navbar() {
   const onHome = loc.pathname === "/";
 
   const pillSpring = { type: "spring" as const, stiffness: 320, damping: 30, mass: 0.7 };
+  const isRTL = lang === "ar";
+
+  // Side anchoring: flush to the viewport edge (no horizontal offset).
+  const sideClass = isRTL ? "left-0" : "right-0";
+  const tooltipSide = isRTL ? "left-full ml-2" : "right-full mr-2";
+  // Inner-side rounded corners only — outer edge stays flat against the screen.
+  const halfPillRadius = isRTL
+    ? "rounded-r-2xl rounded-l-none"
+    : "rounded-l-2xl rounded-r-none";
 
   type NavItem = {
     key: string;
@@ -43,11 +59,31 @@ export function Navbar() {
     hash?: string;
     active?: boolean;
     show: boolean;
+    /** Brand-tinted background tone (semantic CSS color expression). */
+    tone: string;
+    /** Active-state foreground color. */
+    activeColor?: string;
   };
 
   const items: NavItem[] = [
-    { key: "home", label: t("Home", "الرئيسية"), icon: Home, to: "/", active: onHome, show: true },
-    { key: "explore", label: t("Explore", "استكشف"), icon: Compass, to: "/explore", active: onExplore, show: true },
+    {
+      key: "home",
+      label: t("Home", "الرئيسية"),
+      icon: Home,
+      to: "/",
+      active: onHome,
+      show: true,
+      tone: "color-mix(in oklab, var(--primary) 12%, var(--surface-1) 88%)",
+    },
+    {
+      key: "explore",
+      label: t("Explore", "استكشف"),
+      icon: Compass,
+      to: "/explore",
+      active: onExplore,
+      show: true,
+      tone: "color-mix(in oklab, oklch(0.7 0.18 200) 14%, var(--surface-1) 86%)",
+    },
     {
       key: "comments",
       label: t("Comments", "التعليقات"),
@@ -55,13 +91,9 @@ export function Navbar() {
       to: "/comments",
       active: onComments,
       show: showComments,
+      tone: "color-mix(in oklab, oklch(0.72 0.16 295) 14%, var(--surface-1) 86%)",
     },
   ].filter((i) => i.show);
-
-  const isRTL = lang === "ar";
-  const sideClass = isRTL ? "left-3 sm:left-5" : "right-3 sm:right-5";
-  const tooltipSide = isRTL ? "left-full ml-3" : "right-full mr-3";
-  const indicatorSide = isRTL ? "right-0 -mr-1.5" : "left-0 -ml-1.5";
 
   return (
     <motion.aside
@@ -72,7 +104,9 @@ export function Navbar() {
       aria-label={t("Primary navigation", "التنقل الرئيسي")}
     >
       <LayoutGroup id="navbar-rail-edge">
-        <nav className="pointer-events-auto relative flex flex-col items-center gap-3 sm:gap-3.5">
+        {/* Tight straight column — icons stack with a hairline gap so they
+            read as one continuous edge ribbon yet remain distinct chips. */}
+        <nav className="pointer-events-auto relative flex flex-col items-stretch gap-1.5">
           {items.map((item) => (
             <RailIcon
               key={item.key}
@@ -82,48 +116,119 @@ export function Navbar() {
               hash={item.hash}
               active={item.active === true}
               tooltipSide={tooltipSide}
-              indicatorSide={indicatorSide}
+              halfPillRadius={halfPillRadius}
+              tone={item.tone}
+              isRTL={isRTL}
               pillSpring={pillSpring}
             />
           ))}
 
-          <SeparatorDot />
-
-          {/* Premium contact CTA — solid foreground glyph */}
+          {/* Contact CTA — solid foreground filled half-pill */}
           <Link
             to="/"
             hash="contact"
             preload="intent"
             aria-label={contactLabel}
             title={contactLabel}
-            className="group/icon relative flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-foreground text-background hover:scale-[1.06] active:scale-95 transition-transform duration-200 focus-ring"
+            className={`group/icon relative flex items-center justify-center h-10 w-11 sm:h-11 sm:w-12 ${halfPillRadius} bg-foreground text-background hover:scale-x-[1.04] active:scale-95 transition-transform duration-200 focus-ring`}
             style={{
+              transformOrigin: isRTL ? "left center" : "right center",
               boxShadow:
-                "0 8px 22px -8px color-mix(in oklab, var(--foreground) 55%, transparent), 0 0 0 1px color-mix(in oklab, var(--foreground) 18%, transparent)",
+                "0 8px 22px -10px color-mix(in oklab, var(--foreground) 55%, transparent)",
             }}
           >
-            <Mail className="h-4 w-4 sm:h-[17px] sm:w-[17px]" strokeWidth={2.1} />
+            <Mail className="h-[18px] w-[18px]" strokeWidth={2.1} />
             <Tooltip side={tooltipSide}>{contactLabel}</Tooltip>
           </Link>
 
-          <SeparatorDot />
+          {/* Language toggle — its own edge chip */}
+          <button
+            type="button"
+            onClick={toggleLang}
+            aria-label={t("Toggle language", "تبديل اللغة")}
+            title={t("Toggle language", "تبديل اللغة")}
+            className={`group/icon relative flex items-center justify-center h-10 w-11 sm:h-11 sm:w-12 ${halfPillRadius} text-foreground hover:scale-x-[1.04] active:scale-95 transition-transform duration-200 focus-ring overflow-hidden`}
+            style={{
+              transformOrigin: isRTL ? "left center" : "right center",
+              background:
+                "color-mix(in oklab, oklch(0.78 0.14 145) 18%, var(--surface-1) 82%)",
+              backdropFilter: "blur(18px) saturate(160%)",
+              WebkitBackdropFilter: "blur(18px) saturate(160%)",
+              boxShadow:
+                "inset 0 1px 0 0 color-mix(in oklab, var(--foreground) 5%, transparent), 0 6px 16px -10px color-mix(in oklab, var(--foreground) 22%, transparent)",
+            }}
+          >
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.span
+                key={lang}
+                initial={{ y: 8, opacity: 0, scale: 0.85 }}
+                animate={{ y: 0, opacity: 1, scale: 1 }}
+                exit={{ y: -8, opacity: 0, scale: 0.85 }}
+                transition={{ type: "spring", stiffness: 380, damping: 26 }}
+                className="flex items-center gap-1 font-display text-[11px] tracking-wider"
+              >
+                <Languages className="h-3.5 w-3.5 opacity-70" strokeWidth={2.1} />
+                {lang === "ar" ? "ع" : "EN"}
+              </motion.span>
+            </AnimatePresence>
+            <Tooltip side={tooltipSide}>
+              {t("Language", "اللغة")}
+            </Tooltip>
+          </button>
 
-          <div className="flex flex-col items-center gap-2 pt-0.5">
-            <ThemeLangToggle />
-          </div>
+          {/* Theme toggle — directly below language for one straight line */}
+          <button
+            type="button"
+            onClick={(e) => {
+              const rect = e.currentTarget.getBoundingClientRect();
+              toggleTheme({
+                x: rect.left + rect.width / 2,
+                y: rect.top + rect.height / 2,
+              });
+            }}
+            aria-label={t("Toggle theme", "تبديل المظهر")}
+            title={t("Toggle theme", "تبديل المظهر")}
+            className={`group/icon relative flex items-center justify-center h-10 w-11 sm:h-11 sm:w-12 ${halfPillRadius} text-foreground hover:scale-x-[1.04] active:scale-95 transition-transform duration-200 focus-ring overflow-hidden`}
+            style={{
+              transformOrigin: isRTL ? "left center" : "right center",
+              background:
+                "color-mix(in oklab, oklch(0.74 0.18 75) 18%, var(--surface-1) 82%)",
+              backdropFilter: "blur(18px) saturate(160%)",
+              WebkitBackdropFilter: "blur(18px) saturate(160%)",
+              boxShadow:
+                "inset 0 1px 0 0 color-mix(in oklab, var(--foreground) 5%, transparent), 0 6px 16px -10px color-mix(in oklab, var(--foreground) 22%, transparent)",
+            }}
+          >
+            <AnimatePresence mode="wait" initial={false}>
+              {theme === "light" ? (
+                <motion.span
+                  key="moon"
+                  initial={{ rotate: -90, opacity: 0, scale: 0.5 }}
+                  animate={{ rotate: 0, opacity: 1, scale: 1 }}
+                  exit={{ rotate: 90, opacity: 0, scale: 0.5 }}
+                  transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+                  className="absolute inset-0 flex items-center justify-center"
+                >
+                  <Moon className="h-[17px] w-[17px]" strokeWidth={2.1} />
+                </motion.span>
+              ) : (
+                <motion.span
+                  key="sun"
+                  initial={{ rotate: 90, opacity: 0, scale: 0.5 }}
+                  animate={{ rotate: 0, opacity: 1, scale: 1 }}
+                  exit={{ rotate: -90, opacity: 0, scale: 0.5 }}
+                  transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+                  className="absolute inset-0 flex items-center justify-center"
+                >
+                  <Sun className="h-[17px] w-[17px]" strokeWidth={2.1} />
+                </motion.span>
+              )}
+            </AnimatePresence>
+            <Tooltip side={tooltipSide}>{t("Theme", "المظهر")}</Tooltip>
+          </button>
         </nav>
       </LayoutGroup>
     </motion.aside>
-  );
-}
-
-function SeparatorDot() {
-  return (
-    <span
-      aria-hidden
-      className="h-1 w-1 rounded-full opacity-40"
-      style={{ background: "currentColor" }}
-    />
   );
 }
 
@@ -134,7 +239,9 @@ function RailIcon({
   hash,
   active,
   tooltipSide,
-  indicatorSide,
+  halfPillRadius,
+  tone,
+  isRTL,
   pillSpring,
 }: {
   icon: LucideIcon;
@@ -143,7 +250,9 @@ function RailIcon({
   hash?: string;
   active: boolean;
   tooltipSide: string;
-  indicatorSide: string;
+  halfPillRadius: string;
+  tone: string;
+  isRTL: boolean;
   pillSpring: { type: "spring"; stiffness: number; damping: number; mass: number };
 }) {
   return (
@@ -153,49 +262,51 @@ function RailIcon({
       preload="intent"
       aria-label={label}
       title={label}
-      className={`group/icon relative flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 rounded-full transition-colors duration-300 focus-ring active:scale-[0.92] ${
-        active ? "text-foreground" : "text-foreground/55 hover:text-foreground"
-      }`}
+      className={`group/icon relative flex items-center justify-center h-10 w-11 sm:h-11 sm:w-12 ${halfPillRadius} text-foreground/80 hover:text-foreground transition-[color,transform] duration-300 focus-ring active:scale-95 overflow-hidden`}
+      style={{
+        transformOrigin: isRTL ? "left center" : "right center",
+        background: tone,
+        backdropFilter: "blur(18px) saturate(160%)",
+        WebkitBackdropFilter: "blur(18px) saturate(160%)",
+        boxShadow:
+          "inset 0 1px 0 0 color-mix(in oklab, var(--foreground) 5%, transparent), 0 6px 16px -10px color-mix(in oklab, var(--foreground) 22%, transparent)",
+      }}
     >
-      {/* Hover glass disc — only when not active */}
-      {!active && (
-        <span
-          aria-hidden
-          className="absolute inset-0 rounded-full opacity-0 group-hover/icon:opacity-100 transition-opacity duration-300"
-          style={{
-            background: "color-mix(in oklab, var(--surface-1) 55%, transparent)",
-            backdropFilter: "blur(18px) saturate(160%)",
-            WebkitBackdropFilter: "blur(18px) saturate(160%)",
-            border: "1px solid var(--hairline)",
-            boxShadow:
-              "0 6px 18px -10px color-mix(in oklab, var(--foreground) 22%, transparent)",
-          }}
-        />
-      )}
+      {/* Hover sheen — soft inner highlight on the inner side */}
+      <span
+        aria-hidden
+        className="absolute inset-0 opacity-0 group-hover/icon:opacity-100 transition-opacity duration-300"
+        style={{
+          background: isRTL
+            ? "linear-gradient(to left, transparent 50%, color-mix(in oklab, var(--foreground) 8%, transparent))"
+            : "linear-gradient(to right, transparent 50%, color-mix(in oklab, var(--foreground) 8%, transparent))",
+        }}
+      />
 
-      {/* Active gradient halo */}
+      {/* Active brand wash — sliding shared layout */}
       {active && (
         <motion.span
-          layoutId="rail-edge-pill"
-          className="absolute inset-0 rounded-full"
+          layoutId="rail-edge-active"
+          aria-hidden
+          className={`absolute inset-0 ${halfPillRadius}`}
           style={{
             background:
-              "linear-gradient(140deg, color-mix(in oklab, var(--primary) 22%, transparent), color-mix(in oklab, var(--primary-glow) 16%, transparent))",
-            backdropFilter: "blur(20px) saturate(180%)",
-            WebkitBackdropFilter: "blur(20px) saturate(180%)",
+              "linear-gradient(140deg, color-mix(in oklab, var(--primary) 32%, transparent), color-mix(in oklab, var(--primary-glow) 22%, transparent))",
             boxShadow:
-              "inset 0 0 0 1px color-mix(in oklab, var(--primary) 38%, transparent), 0 8px 22px -8px color-mix(in oklab, var(--primary) 50%, transparent)",
+              "inset 0 0 0 1px color-mix(in oklab, var(--primary) 40%, transparent)",
           }}
           transition={pillSpring}
         />
       )}
 
-      {/* Active edge indicator — small brand dot on the inner side */}
+      {/* Active edge accent — a colored bar pinned to the OUTER edge */}
       {active && (
         <motion.span
-          layoutId="rail-edge-indicator"
+          layoutId="rail-edge-bar"
           aria-hidden
-          className={`absolute ${indicatorSide} top-1/2 -translate-y-1/2 h-1.5 w-1.5 rounded-full`}
+          className={`absolute top-1/2 -translate-y-1/2 h-6 w-[3px] rounded-full ${
+            isRTL ? "left-0" : "right-0"
+          }`}
           style={{
             background: "var(--primary)",
             boxShadow: "0 0 10px var(--primary)",
@@ -205,7 +316,7 @@ function RailIcon({
       )}
 
       <span className="relative z-10 flex items-center justify-center">
-        <Icon className="h-4 w-4 sm:h-[17px] sm:w-[17px]" strokeWidth={2.1} />
+        <Icon className="h-[17px] w-[17px]" strokeWidth={2.1} />
       </span>
 
       <Tooltip side={tooltipSide}>{label}</Tooltip>
@@ -216,7 +327,7 @@ function RailIcon({
 function Tooltip({ children, side }: { children: React.ReactNode; side: string }) {
   return (
     <span
-      className={`pointer-events-none absolute ${side} top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-full text-[10px] font-medium uppercase tracking-[0.18em] whitespace-nowrap opacity-0 group-hover/icon:opacity-100 transition-opacity duration-200 backdrop-blur-xl bg-[var(--surface-1)]/90 border border-[var(--hairline)] text-foreground brand-shadow-sm`}
+      className={`pointer-events-none absolute ${side} top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-full text-[10px] font-medium uppercase tracking-[0.18em] whitespace-nowrap opacity-0 group-hover/icon:opacity-100 transition-opacity duration-200 backdrop-blur-xl bg-[var(--surface-1)]/90 border border-[var(--hairline)] text-foreground brand-shadow-sm z-20`}
     >
       {children}
     </span>
