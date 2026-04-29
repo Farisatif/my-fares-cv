@@ -429,17 +429,23 @@ function CodeCommentCard({
             </span>
           </div>
 
-          {/* Lines */}
+          {/* Lines — each one reserves the FULL final width via an
+              invisible placeholder. We overlay the visible substring on
+              top so revealing characters never reflows the container. */}
           {lines.map((line, i) => {
-            let lastWithTextIdx = -1;
-            for (let j = lines.length - 1; j >= 0; j--) {
-              if (lines[j].length > 0) {
-                lastWithTextIdx = j;
-                break;
-              }
-            }
-            const isLastWithText = i === lastWithTextIdx;
-            const showCaret = !reduce && typed < text.length && isLastWithText;
+            const startChar = lineStarts.current[i] ?? 0;
+            const visibleInLine =
+              line.length === 0
+                ? ""
+                : line.slice(0, Math.max(0, Math.min(line.length, typed - startChar)));
+            // The current "write head" line is the last line that has any
+            // visible characters but isn't fully revealed yet.
+            const isWriting =
+              !reduce &&
+              typed < text.length &&
+              line.length > 0 &&
+              typed >= startChar &&
+              typed < startChar + line.length;
             return (
               <div
                 key={i}
@@ -452,27 +458,35 @@ function CodeCommentCard({
                 >
                   {i + 2}
                 </span>
-                <span className="flex-1 text-foreground/85">
+                <span className="flex-1 text-foreground/85 relative">
                   <span className="text-muted-foreground/50 select-none">
                     *{line ? " " : ""}
                   </span>
-                  {renderHighlighted(line)}
-                  {showCaret && (
-                    <motion.span
-                      aria-hidden
-                      className="inline-block w-[2px] h-[1em] align-[-2px] ml-0.5"
-                      style={{
-                        background:
-                          "color-mix(in oklab, var(--primary) 90%, transparent)",
-                      }}
-                      animate={{ opacity: [1, 0, 1] }}
-                      transition={{
-                        duration: 0.9,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                      }}
-                    />
-                  )}
+                  {/* Invisible placeholder — locks the line width/height
+                      to the final wrapped layout. */}
+                  <span aria-hidden className="opacity-0 select-none">
+                    {line || "\u00A0"}
+                  </span>
+                  {/* Visible reveal overlay */}
+                  <span className="absolute inset-0 pl-[1.6em]" dir={isRTL ? "rtl" : "ltr"}>
+                    {renderHighlighted(visibleInLine)}
+                    {isWriting && (
+                      <motion.span
+                        aria-hidden
+                        className="inline-block w-[2px] h-[1em] align-[-2px] ml-0.5"
+                        style={{
+                          background:
+                            "color-mix(in oklab, var(--primary) 90%, transparent)",
+                        }}
+                        animate={{ opacity: [1, 0, 1] }}
+                        transition={{
+                          duration: 0.9,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                        }}
+                      />
+                    )}
+                  </span>
                 </span>
               </div>
             );
