@@ -72,7 +72,7 @@ export function Navbar() {
     >
       <LayoutGroup id="navbar-rail">
         <nav
-          className={`pointer-events-auto flex flex-col items-center gap-1 rounded-full p-1.5 backdrop-blur-2xl border transition-all duration-300 ${
+          className={`pointer-events-auto flex flex-col items-center gap-0.5 rounded-full p-1 backdrop-blur-2xl border transition-all duration-300 ${
             scrolled
               ? "bg-[var(--surface-1)]/45 border-[var(--hairline)] brand-shadow"
               : "bg-[var(--surface-1)]/35 border-[var(--hairline)] brand-shadow-sm"
@@ -86,12 +86,12 @@ export function Navbar() {
 
             const inner = (
               <span className="relative z-10 flex items-center justify-center w-full h-full">
-                <Icon className="h-4 w-4 sm:h-[18px] sm:w-[18px]" strokeWidth={2} />
+                <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" strokeWidth={2} />
               </span>
             );
 
             const baseBtn =
-              "group/icon relative flex items-center justify-center h-9 w-9 sm:h-10 sm:w-10 rounded-full transition-all duration-300 focus-ring active:scale-[0.92]";
+              "group/icon relative flex items-center justify-center h-7 w-7 sm:h-8 sm:w-8 rounded-full transition-all duration-300 focus-ring active:scale-[0.92]";
 
             return (
               <Link
