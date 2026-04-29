@@ -199,7 +199,7 @@ function ExperienceCard({
         <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-base">
           <span
             className="font-medium"
-            style={{ color: "color-mix(in oklab, var(--primary-glow) 75%, var(--background))" }}
+            style={{ color: "color-mix(in oklab, var(--primary) 80%, currentColor)" }}
           >
             {role}
           </span>
