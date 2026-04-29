@@ -5,7 +5,6 @@ import { Reveal } from "./Reveal";
 import { useSiteData } from "./SiteDataProvider";
 import { useLang } from "./LanguageProvider";
 import { getGithubBundle, type GithubBundle } from "@/utils/github.functions";
-import { GlowDots } from "./GlowDots";
 import { Skeleton, DotPulse } from "@/components/ui/skeleton";
 
 const CELL = 12; // px
@@ -54,7 +53,7 @@ function Heatmap({
   return (
     <div className="relative" dir="ltr" style={{ paddingLeft: LEFT_PAD, paddingTop: TOP_PAD }}>
       <div
-        className="absolute top-0 text-[10px] text-muted-foreground"
+        className="absolute top-0 text-[10px] opacity-65"
         style={{ left: LEFT_PAD, width: gridWidth, height: TOP_PAD }}
       >
         {monthMarkers.map((mk) => (
@@ -64,7 +63,7 @@ function Heatmap({
         ))}
       </div>
       <div
-        className="absolute left-0 text-[10px] text-muted-foreground"
+        className="absolute left-0 text-[10px] opacity-65"
         style={{ top: TOP_PAD, width: LEFT_PAD - 4, height: gridHeight }}
       >
         {dayLabels.map((d) => (
@@ -195,28 +194,16 @@ export function GithubActivitySection() {
 
   return (
     <section id="github" className="relative section-padding overflow-hidden">
-      {/* Interactive glowing dots backdrop — reacts to cursor/touch
-          across the entire section. pointer-events:none so it never blocks
-          card interactions. Auto-themes via currentColor. */}
-      <div className="pointer-events-none absolute inset-0 -z-0 opacity-[0.55]">
-        <GlowDots
-          asBackground
-          height="100%"
-          dotColor="currentColor"
-          glowColor="oklch(0.62 0.24 268)"
-          spacing={32}
-        />
-      </div>
       <div className="container mx-auto px-6 max-w-7xl relative z-10">
         <Reveal>
           <div className="flex items-end justify-between flex-wrap gap-6 mb-10 sm:mb-14">
             <div>
-              <div className="flex items-center gap-3 mb-3">
-                <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground">
+              <div className="flex items-center gap-3 mb-4">
+                <p className="text-[11px] sm:text-xs uppercase tracking-[0.3em] opacity-60">
                   / 06 — {t("Live from GitHub", "مباشر من جيت‌هاب")}
                 </p>
                 {bundle?.ok && (
-                  <span className="inline-flex items-center gap-1.5 rounded-full border border-[#2ea043]/40 bg-[#2ea043]/10 px-2 py-0.5 text-[10px] font-medium uppercase tracking-[0.18em] text-[#2ea043]">
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-[#2ea043]/40 bg-[#2ea043]/10 px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-[0.18em] text-[#2ea043]">
                     <span className="relative flex h-1.5 w-1.5">
                       <span className="absolute inset-0 animate-ping rounded-full bg-[#2ea043] opacity-75" />
                       <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#2ea043]" />
@@ -225,9 +212,9 @@ export function GithubActivitySection() {
                   </span>
                 )}
               </div>
-              <h2 className="font-display h-display-md pb-2 max-w-2xl">
+              <h2 className="font-display h-display-lg pb-2 max-w-3xl tracking-[-0.04em]">
                 {t("Real activity. ", "نشاط حقيقي. ")}
-                <span className="italic text-[oklch(0.42_0.2_255)]">
+                <span className="italic gradient-text-sky">
                   {t("Synced live.", "متزامن لحظياً.")}
                 </span>
               </h2>
@@ -236,7 +223,11 @@ export function GithubActivitySection() {
               type="button"
               onClick={refresh}
               disabled={refreshing}
-              className="inline-flex items-center gap-2 rounded-full border border-border bg-background hover:bg-secondary px-4 py-2 text-xs disabled:opacity-50 transition"
+              className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs disabled:opacity-50 transition backdrop-blur-xl"
+              style={{
+                borderColor: "color-mix(in oklab, currentColor 20%, transparent)",
+                backgroundColor: "color-mix(in oklab, currentColor 6%, transparent)",
+              }}
             >
               {refreshing ? <DotPulse /> : <RefreshCw className="h-3.5 w-3.5" />}
               {t("Refresh", "تحديث")}
@@ -246,7 +237,13 @@ export function GithubActivitySection() {
 
         {/* Profile + stats */}
         <Reveal delay={0.1}>
-          <div className="rounded-3xl border border-[var(--hairline)] bg-[var(--surface-1)] backdrop-blur-md p-5 sm:p-8 flex flex-col md:flex-row md:items-center gap-6 brand-shadow">
+          <div
+            className="rounded-3xl border backdrop-blur-xl p-5 sm:p-8 flex flex-col md:flex-row md:items-center gap-6 brand-shadow"
+            style={{
+              borderColor: "color-mix(in oklab, currentColor 14%, transparent)",
+              backgroundColor: "color-mix(in oklab, currentColor 6%, transparent)",
+            }}
+          >
             <div className="flex items-center gap-4 min-w-0">
               <img
                 src={profile?.avatar_url || (data.personal as { avatar?: string }).avatar || `https://github.com/${username}.png`}
@@ -281,11 +278,17 @@ export function GithubActivitySection() {
 
         {/* Contribution heatmap */}
         <Reveal delay={0.15}>
-          <div className="mt-6 rounded-3xl border border-border bg-card p-5 sm:p-7">
+          <div
+            className="mt-6 rounded-3xl border p-5 sm:p-7 backdrop-blur-xl"
+            style={{
+              borderColor: "color-mix(in oklab, currentColor 14%, transparent)",
+              backgroundColor: "color-mix(in oklab, currentColor 5%, transparent)",
+            }}
+          >
             <div className="flex items-center justify-between mb-4">
               <div>
                 <div className="text-sm font-medium">{t("Contributions", "المساهمات")}</div>
-                <div className="text-[11px] text-muted-foreground">
+                <div className="text-[11px] opacity-65">
                   {grid
                     ? t(
                         `${grid.total.toLocaleString()} contributions in the last year`,
@@ -297,7 +300,7 @@ export function GithubActivitySection() {
                       )}
                 </div>
               </div>
-              <div className="hidden sm:flex items-center gap-1.5 text-[10px] text-muted-foreground">
+              <div className="hidden sm:flex items-center gap-1.5 text-[10px] opacity-65">
                 <span>{t("Less", "أقل")}</span>
                 {[0, 1, 2, 3, 4].map((l) => (
                   <span
@@ -309,13 +312,31 @@ export function GithubActivitySection() {
                 <span>{t("More", "أكثر")}</span>
               </div>
             </div>
-            <div className="overflow-x-auto no-scrollbar">
+            {/* Heatmap horizontal scroll container.
+                CRITICAL: force dir="ltr" so Arabic users get the same
+                left-origin scroll as English (otherwise the grid is
+                anchored to the right and unreachable). Edge fade masks
+                hint at horizontal scrollability on both sides. */}
+            <div
+              dir="ltr"
+              className="overflow-x-auto no-scrollbar relative"
+              style={{
+                WebkitOverflowScrolling: "touch",
+                maskImage:
+                  "linear-gradient(to right, transparent 0, black 24px, black calc(100% - 24px), transparent 100%)",
+                WebkitMaskImage:
+                  "linear-gradient(to right, transparent 0, black 24px, black calc(100% - 24px), transparent 100%)",
+              }}
+            >
               {loading && !grid ? (
                 <HeatmapSkeleton />
               ) : (
                 <Heatmap grid={grid} t={t} />
               )}
-              <div className="sm:hidden flex items-center gap-1.5 text-[10px] text-muted-foreground mt-3 justify-end">
+            </div>
+            <div className="sm:hidden flex items-center justify-between gap-2 text-[10px] opacity-65 mt-3">
+              <span className="opacity-70">{t("← swipe →", "← اسحب →")}</span>
+              <div className="flex items-center gap-1.5">
                 <span>{t("Less", "أقل")}</span>
                 {[0, 1, 2, 3, 4].map((l) => (
                   <span
@@ -341,16 +362,20 @@ export function GithubActivitySection() {
                 href={r.html_url}
                 target="_blank"
                 rel="noreferrer"
-                className="group rounded-2xl border border-border bg-background/80 backdrop-blur-md hover:bg-secondary/60 p-4 sm:p-5 transition flex flex-col gap-3"
+                className="group rounded-2xl border backdrop-blur-xl p-4 sm:p-5 transition-all hover:-translate-y-0.5 flex flex-col gap-3"
+                style={{
+                  borderColor: "color-mix(in oklab, currentColor 14%, transparent)",
+                  backgroundColor: "color-mix(in oklab, currentColor 5%, transparent)",
+                }}
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="font-display text-lg tracking-tight truncate">{r.name}</div>
-                  <ExternalLink className="h-3.5 w-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition shrink-0 mt-1" />
+                  <ExternalLink className="h-3.5 w-3.5 opacity-0 group-hover:opacity-100 transition shrink-0 mt-1" />
                 </div>
-                <div className="text-xs text-muted-foreground line-clamp-2 min-h-[2.4em]">
+                <div className="text-xs opacity-65 line-clamp-2 min-h-[2.4em]">
                   {r.description || t("No description", "بدون وصف")}
                 </div>
-                <div className="flex items-center gap-3 text-[11px] text-muted-foreground mt-auto">
+                <div className="flex items-center gap-3 text-[11px] opacity-65 mt-auto">
                   {r.language && (
                     <span className="inline-flex items-center gap-1.5">
                       <span className="h-2 w-2 rounded-full" style={{ background: langColor(r.language) }} />

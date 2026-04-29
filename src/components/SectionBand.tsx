@@ -18,7 +18,7 @@ interface Props {
   className?: string;
   id?: string;
   /** Show subtle grid pattern background */
-  pattern?: "grid" | "grid-fine" | "grid-dots" | "mesh" | "aurora" | "none";
+  pattern?: "grid" | "grid-fine" | "grid-dots" | "mesh" | "aurora" | "gradient" | "none";
   /** Show top hairline divider */
   divider?: boolean;
   /** Round the bottom corners — creates a soft "card stack" rhythm between sections. */
@@ -41,6 +41,7 @@ const patternClasses: Record<NonNullable<Props["pattern"]>, string> = {
   "grid-dots": "grid-bg-dots",
   mesh: "mesh-bg",
   aurora: "aurora-bg",
+  gradient: "gradient-bg",
   none: "",
 };
 

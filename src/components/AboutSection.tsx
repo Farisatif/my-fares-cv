@@ -261,14 +261,39 @@ function CodeCommentCard({
   const [copied, setCopied] = useState(false);
   const [typed, setTyped] = useState(reduce ? text.length : 0);
 
-  // Word-aware typewriter — feels like a thought being written, not keystrokes.
+  // Pre-compute the final wrapped layout ONCE from the full text. The
+  // container height is locked to this layout from frame 1 — only the
+  // characters revealed inside each final line change as we type, so the
+  // surrounding page never reflows on mobile.
+  const isRTL = language === "ar";
+  const finalLines = useRef<string[]>([]);
+  if (finalLines.current.length === 0) {
+    const lines = wrapByWords(text, isRTL ? 38 : 64);
+    while (lines.length < 4) lines.push("");
+    finalLines.current = lines;
+  }
+  const lineStarts = useRef<number[]>([]);
+  if (lineStarts.current.length === 0) {
+    let acc = 0;
+    const starts: number[] = [];
+    for (const ln of finalLines.current) {
+      starts.push(acc);
+      // +1 accounts for the whitespace consumed between wrapped lines.
+      acc += ln.length + 1;
+    }
+    lineStarts.current = starts;
+  }
+
+  // Word-aware typewriter — slower, deliberate reveal. Floor longer on
+  // mobile so the eye has time to follow.
   useEffect(() => {
     if (!inView || reduce) return;
     const total = text.length;
+    const isMobile =
+      typeof window !== "undefined" && window.matchMedia("(max-width: 640px)").matches;
     const start = performance.now();
-    // Slower, more deliberate reveal — feels like the thought is being
-    // written out word-by-word instead of dashed off in a few seconds.
-    const duration = Math.min(13000, 3000 + total * 40);
+    const baseFloor = isMobile ? 6500 : 4500;
+    const duration = Math.min(15000, baseFloor + total * (isMobile ? 55 : 40));
     let raf = 0;
     const tick = (now: number) => {
       const p = Math.min(1, (now - start) / duration);
@@ -292,12 +317,9 @@ function CodeCommentCard({
     }
   };
 
-  // Split into visual lines for the IDE look (preserve a sensible width).
-  const visible = text.slice(0, typed);
-  const isRTL = language === "ar";
-  const lines = wrapByWords(visible, isRTL ? 38 : 64);
-  // Reserve at least 4 lines so the card doesn't pop in height while typing.
-  while (lines.length < 4) lines.push("");
+  // Use the locked layout (do NOT recompute from `visible` — that would
+  // shrink the line count on mobile and pop the page).
+  const lines = finalLines.current;
 
   return (
     <motion.div
@@ -407,17 +429,23 @@ function CodeCommentCard({
             </span>
           </div>
 
-          {/* Lines */}
+          {/* Lines — each one reserves the FULL final width via an
+              invisible placeholder. We overlay the visible substring on
+              top so revealing characters never reflows the container. */}
           {lines.map((line, i) => {
-            let lastWithTextIdx = -1;
-            for (let j = lines.length - 1; j >= 0; j--) {
-              if (lines[j].length > 0) {
-                lastWithTextIdx = j;
-                break;
-              }
-            }
-            const isLastWithText = i === lastWithTextIdx;
-            const showCaret = !reduce && typed < text.length && isLastWithText;
+            const startChar = lineStarts.current[i] ?? 0;
+            const visibleInLine =
+              line.length === 0
+                ? ""
+                : line.slice(0, Math.max(0, Math.min(line.length, typed - startChar)));
+            // The current "write head" line is the last line that has any
+            // visible characters but isn't fully revealed yet.
+            const isWriting =
+              !reduce &&
+              typed < text.length &&
+              line.length > 0 &&
+              typed >= startChar &&
+              typed < startChar + line.length;
             return (
               <div
                 key={i}
@@ -434,8 +462,8 @@ function CodeCommentCard({
                   <span className="text-muted-foreground/50 select-none">
                     *{line ? " " : ""}
                   </span>
-                  {renderHighlighted(line)}
-                  {showCaret && (
+                  {renderHighlighted(visibleInLine)}
+                  {isWriting && (
                     <motion.span
                       aria-hidden
                       className="inline-block w-[2px] h-[1em] align-[-2px] ml-0.5"
@@ -450,6 +478,18 @@ function CodeCommentCard({
                         ease: "easeInOut",
                       }}
                     />
+                  )}
+                  {/* Invisible remainder — reserves the rest of the line so
+                      width/height never changes as characters reveal. */}
+                  {line.length > visibleInLine.length && (
+                    <span aria-hidden className="opacity-0 select-none">
+                      {line.slice(visibleInLine.length) || "\u00A0"}
+                    </span>
+                  )}
+                  {line.length === 0 && (
+                    <span aria-hidden className="opacity-0 select-none">
+                      {"\u00A0"}
+                    </span>
                   )}
                 </span>
               </div>

@@ -4,7 +4,7 @@ import { Mail, MessageCircle, Github, Linkedin, MapPin } from "lucide-react";
 import { useSiteData } from "./SiteDataProvider";
 import { useLang } from "./LanguageProvider";
 
-import { ChevronPattern } from "./Patterns";
+
 import { PageEndCircle } from "./PageEndCircle";
 import { SettingsDrawer } from "./cms/SettingsDrawer";
 
@@ -15,11 +15,6 @@ export function ContactSection() {
   const loc = lang === "ar" ? p.ar : p.en;
   return (
     <section id="contact" className="pt-20 sm:pt-32 pb-4 sm:pb-6 relative overflow-hidden">
-      <div className="pointer-events-none absolute inset-0 -z-0">
-        <ChevronPattern className="absolute inset-0">
-          <div className="h-full w-full" />
-        </ChevronPattern>
-      </div>
       <div className="pointer-events-none absolute -top-40 left-1/4 h-[500px] w-[500px] rounded-full opacity-30 blur-3xl animate-blob"
         style={{ background: "color-mix(in oklab, var(--primary) 70%, transparent)" }} />
       <div className="pointer-events-none absolute bottom-0 right-0 h-[400px] w-[400px] rounded-full opacity-25 blur-3xl animate-blob"
@@ -30,19 +25,19 @@ export function ContactSection() {
 
       <div className="container mx-auto px-6 max-w-5xl relative text-center">
         <Reveal>
-          <p className="relative z-10 text-xs uppercase tracking-[0.25em] opacity-55 mb-6">
+          <p className="relative z-10 text-[11px] sm:text-xs uppercase tracking-[0.32em] opacity-55 mb-6">
             / 06 — {t(
               data.content?.contact?.eyebrow_en ?? "Let's talk",
               data.content?.contact?.eyebrow_ar ?? "لنتحدث",
             )}
           </p>
-          <h2 className="relative z-10 font-display h-display-xl pb-2 mix-blend-difference">
+          <h2 className="relative z-10 font-display h-display-xl pb-2 tracking-[-0.045em]">
             {t(
               data.content?.contact?.titlePrefix_en ?? "Got an idea?",
               data.content?.contact?.titlePrefix_ar ?? "لديك فكرة؟",
             )}
             <br />
-            <span className="italic inline-block pb-1" style={{ color: "color-mix(in oklab, var(--primary) 70%, currentColor)" }}>
+            <span className="italic gradient-text-sky inline-block pb-1">
               {t(
                 data.content?.contact?.titleAccent_en ?? "Let's build it.",
                 data.content?.contact?.titleAccent_ar ?? "لنبنها معاً.",

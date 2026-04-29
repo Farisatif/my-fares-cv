@@ -26,7 +26,7 @@ export function ExperienceSection() {
   return (
     <section
       id="work"
-      className="section-padding relative overflow-hidden bg-foreground text-background"
+      className="section-padding relative overflow-hidden"
     >
       <ChevronPattern>
         <div className="container mx-auto px-6 max-w-7xl relative">
@@ -42,7 +42,7 @@ export function ExperienceSection() {
                 data.content?.experience?.titlePrefix_en ?? "Where I've ",
                 data.content?.experience?.titlePrefix_ar ?? "أين قضيت ",
               )}
-              <span className="italic gradient-text-primary">
+              <span className="italic gradient-text-sky">
                 {t(
                   data.content?.experience?.titleAccent_en ?? "put in the hours.",
                   data.content?.experience?.titleAccent_ar ?? "ساعات العمل.",
@@ -127,13 +127,14 @@ function ExperienceCard({
         isCurrent ? "border-l-primary/80" : "border-l-muted/40"
       }`}
       style={{
-        // Inverted surface — dark card on dark section (mirrors Projects' light card on light section)
-        backgroundColor: "color-mix(in oklab, var(--background) 8%, transparent)",
+        // Surface uses currentColor so the card stays legible whether the
+        // surrounding band is light or dark (auto-inverted across themes).
+        backgroundColor: "color-mix(in oklab, currentColor 6%, transparent)",
         borderWidth: 1,
         borderStyle: "solid",
         borderColor: hovered
           ? "color-mix(in oklab, var(--primary) 45%, transparent)"
-          : "color-mix(in oklab, var(--background) 18%, transparent)",
+          : "color-mix(in oklab, currentColor 14%, transparent)",
         backdropFilter: "blur(12px)",
         WebkitBackdropFilter: "blur(12px)",
       }}
@@ -159,8 +160,8 @@ function ExperienceCard({
       <div
         className="absolute top-6 right-6 rtl:right-auto rtl:left-6 h-10 w-10 rounded-full flex items-center justify-center transition-transform group-hover:rotate-45"
         style={{
-          backgroundColor: "color-mix(in oklab, var(--background) 14%, transparent)",
-          color: "var(--background)",
+          backgroundColor: "color-mix(in oklab, currentColor 12%, transparent)",
+          color: "currentColor",
         }}
       >
         <ArrowUpRight className="h-4 w-4" />
@@ -172,8 +173,8 @@ function ExperienceCard({
           <span
             className="text-xs px-3 py-1 rounded-full font-mono tabular-nums tracking-[0.2em] uppercase"
             style={{
-              backgroundColor: "color-mix(in oklab, var(--background) 12%, transparent)",
-              color: "color-mix(in oklab, var(--background) 85%, transparent)",
+              backgroundColor: "color-mix(in oklab, currentColor 10%, transparent)",
+              color: "color-mix(in oklab, currentColor 80%, transparent)",
             }}
           >
             {labels.chapter} {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
@@ -182,7 +183,7 @@ function ExperienceCard({
             className="inline-flex items-center gap-1.5 text-xs px-3 py-1 rounded-full"
             style={{
               backgroundColor: "color-mix(in oklab, var(--primary) 22%, transparent)",
-              color: "color-mix(in oklab, var(--primary-glow) 80%, var(--background))",
+              color: "color-mix(in oklab, var(--primary) 80%, currentColor)",
               border: "1px solid color-mix(in oklab, var(--primary) 40%, transparent)",
             }}
           >
@@ -198,7 +199,7 @@ function ExperienceCard({
         <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 text-base">
           <span
             className="font-medium"
-            style={{ color: "color-mix(in oklab, var(--primary-glow) 75%, var(--background))" }}
+            style={{ color: "color-mix(in oklab, var(--primary) 80%, currentColor)" }}
           >
             {role}
           </span>
