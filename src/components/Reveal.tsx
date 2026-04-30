@@ -15,32 +15,33 @@ export function Reveal({
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
   const reduce = useReducedMotion();
+  // Cap caller-supplied delays — long staggers were a major source of the
+  // "feels slow" perception. Anything above 0.18s is clamped down.
+  const d = Math.min(delay, 0.18);
   return (
     <motion.div
       ref={ref}
       initial={
         reduce
           ? { opacity: 0 }
-          : { opacity: 0, y, scale: 0.985, filter: "blur(8px)" }
+          : { opacity: 0, y: Math.min(y, 18) }
       }
       animate={
         inView
           ? reduce
             ? { opacity: 1 }
-            : { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }
+            : { opacity: 1, y: 0 }
           : {}
       }
       transition={
         reduce
-          ? { duration: 0.4, delay }
+          ? { duration: 0.2, delay: d }
           : {
-              opacity: { duration: 0.7, delay, ease: [0.22, 1, 0.36, 1] },
-              y: { duration: 0.85, delay, ease: [0.22, 1, 0.36, 1] },
-              scale: { duration: 0.95, delay, ease: [0.22, 1, 0.36, 1] },
-              filter: { duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] },
+              opacity: { duration: 0.36, delay: d, ease: [0.22, 1, 0.36, 1] },
+              y: { duration: 0.42, delay: d, ease: [0.22, 1, 0.36, 1] },
             }
       }
-      style={{ willChange: "transform, opacity, filter" }}
+      style={{ willChange: "transform, opacity" }}
       className={className}
     >
       {children}
