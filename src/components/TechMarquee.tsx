@@ -119,7 +119,9 @@ export function TechMarquee() {
                   x: {
                     repeat: Infinity,
                     repeatType: "loop",
-                    duration: 30,
+                    // Slower, calmer drift — was 30s, now 75s for a much
+                    // gentler horizontal flow that doesn't pull attention.
+                    duration: 75,
                     ease: "linear",
                   },
                 }
@@ -171,7 +173,10 @@ export function TechMarquee() {
                   x: {
                     repeat: Infinity,
                     repeatType: "loop",
-                    duration: 35,
+                    // Reverse track also slowed down (was 35s, now 90s) and
+                    // intentionally a bit slower than the top row so the
+                    // two layers don't lock into a distracting pattern.
+                    duration: 90,
                     ease: "linear",
                   },
                 }

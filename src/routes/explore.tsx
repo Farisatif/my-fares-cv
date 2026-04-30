@@ -149,8 +149,12 @@ function ExplorePage() {
         />
       </SectionBand>
 
-      {/* GitHub activity — inverted band: light background in dark mode, dark in light mode */}
-      <SectionBand variant="dark" pattern="none" divider roundTop>
+      {/* GitHub activity — variant flipped (was "dark", now "light") so the
+          theming inverts: in light mode it now reads light-on-dark, and in
+          dark mode it reads dark-on-light, matching the rest of the page
+          rhythm and giving the "Real activity. Synced live." headline a
+          calmer, more readable backdrop. */}
+      <SectionBand variant="light" pattern="gradient" divider roundTop>
         <LazyOnVisible
           load={GithubActivitySection as never}
           placeholder={<SectionPlaceholder minH={640} />}

@@ -211,14 +211,24 @@ export function GithubActivitySection() {
 
       <div className="container mx-auto px-6 max-w-7xl relative z-10">
         <Reveal>
-          <div className="flex items-end justify-between flex-wrap gap-6 mb-10 sm:mb-14">
-            <div>
-              <div className="flex items-center gap-3 mb-4">
-                <p className="text-[11px] sm:text-xs uppercase tracking-[0.3em] opacity-60">
-                  / 06 — {t("Live from GitHub", "مباشر من جيت‌هاب")}
-                </p>
+          <div className="flex items-end justify-between flex-wrap gap-8 mb-12 sm:mb-16">
+            <div className="max-w-3xl">
+              {/* Eyebrow row — softer chip styling that adapts to the band's
+                  current foreground via `currentColor` instead of hard-coded
+                  opacity, so it reads cleanly on both light and dark bands. */}
+              <div className="flex flex-wrap items-center gap-2.5 mb-5">
+                <span
+                  className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-[10px] sm:text-[11px] font-medium uppercase tracking-[0.28em]"
+                  style={{
+                    backgroundColor: "color-mix(in oklab, currentColor 8%, transparent)",
+                    border: "1px solid color-mix(in oklab, currentColor 14%, transparent)",
+                  }}
+                >
+                  <span aria-hidden className="opacity-60">/ 06</span>
+                  <span className="opacity-80">{t("Live from GitHub", "مباشر من جيت‌هاب")}</span>
+                </span>
                 {bundle?.ok && (
-                  <span className="inline-flex items-center gap-1.5 rounded-full border border-[#2ea043]/40 bg-[#2ea043]/10 px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-[0.18em] text-[#2ea043]">
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-[#2ea043]/40 bg-[#2ea043]/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#2ea043]">
                     <span className="relative flex h-1.5 w-1.5">
                       <span className="absolute inset-0 animate-ping rounded-full bg-[#2ea043] opacity-75" />
                       <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#2ea043]" />
@@ -227,12 +237,17 @@ export function GithubActivitySection() {
                   </span>
                 )}
               </div>
-              <h2 className="font-display h-display-lg pb-2 max-w-3xl tracking-[-0.04em]">
-                {t("Real activity. ", "نشاط حقيقي. ")}
-                <span 
+
+              {/* Headline — single tracking value, balanced wrap, and a richer
+                  gradient on the italic accent for a more premium feel. */}
+              <h2 className="font-display h-display-lg pb-2 tracking-[-0.045em] leading-[0.96] [text-wrap:balance]">
+                {t("Real activity.", "نشاط حقيقي.")}
+                <br />
+                <span
                   className="italic"
                   style={{
-                    background: "linear-gradient(135deg, var(--primary) 0%, color-mix(in oklab, var(--primary) 60%, var(--foreground)) 100%)",
+                    background:
+                      "linear-gradient(120deg, var(--primary) 0%, color-mix(in oklab, var(--primary) 70%, var(--primary-glow, var(--primary))) 55%, color-mix(in oklab, var(--primary) 45%, var(--foreground)) 100%)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                     backgroundClip: "text",
@@ -241,25 +256,35 @@ export function GithubActivitySection() {
                   {t("Synced live.", "متزامن لحظياً.")}
                 </span>
               </h2>
-              <p className="mt-4 max-w-2xl text-base sm:text-lg text-muted-foreground leading-relaxed">
+
+              <p className="mt-5 max-w-xl text-base sm:text-lg leading-relaxed opacity-75">
                 {t(
-                  "Live contributions and repository stats pulled directly from GitHub API.",
-                  "المساهمات وإحصائيات المستودعات مسحوبة مباشرة من واجهة جيت‌هاب.",
+                  "Live contributions and repository stats pulled directly from the GitHub API — refreshed automatically.",
+                  "المساهمات وإحصائيات المستودعات مسحوبة مباشرة من واجهة GitHub — تتحدث تلقائياً.",
                 )}
               </p>
             </div>
+
+            {/* Refresh button — subtle elevation, primary tint, and a thin
+                hairline ring that reads on either band variant. */}
             <button
               type="button"
               onClick={refresh}
               disabled={refreshing}
-              className="inline-flex items-center gap-2 rounded-full border px-5 py-2.5 text-sm font-medium disabled:opacity-50 transition-all hover:scale-[1.02] active:scale-[0.98]"
+              className="group inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium disabled:opacity-50 transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.97] focus-ring"
               style={{
-                borderColor: "color-mix(in oklab, var(--primary) 35%, transparent)",
-                backgroundColor: "color-mix(in oklab, var(--primary) 10%, transparent)",
+                border: "1px solid color-mix(in oklab, var(--primary) 32%, transparent)",
+                backgroundColor: "color-mix(in oklab, var(--primary) 9%, transparent)",
                 color: "var(--primary)",
+                boxShadow:
+                  "0 1px 0 color-mix(in oklab, var(--primary) 25%, transparent) inset, 0 10px 30px -18px color-mix(in oklab, var(--primary) 55%, transparent)",
               }}
             >
-              {refreshing ? <DotPulse /> : <RefreshCw className="h-4 w-4" />}
+              {refreshing ? (
+                <DotPulse />
+              ) : (
+                <RefreshCw className="h-4 w-4 transition-transform duration-500 group-hover:rotate-180" />
+              )}
               {t("Refresh", "تحديث")}
             </button>
           </div>
