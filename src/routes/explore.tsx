@@ -28,22 +28,16 @@ const SectionPlaceholder = ({ minH = 480 }: { minH?: number }) => (
   <div aria-hidden style={{ minHeight: minH }} className="w-full" />
 );
 
+import { buildMeta } from "@/lib/seo";
+
 export const Route = createFileRoute("/explore")({
   head: () => ({
-    meta: [
-      { title: "Explore — Projects & GitHub Activity · Fares Ahmed" },
-      {
-        name: "description",
-        content:
-          "Beyond the CV — open source projects, GitHub activity, and the experimental work of Fares Ahmed.",
-      },
-      { property: "og:title", content: "Explore — Fares Ahmed" },
-      {
-        property: "og:description",
-        content:
-          "Open source projects and live GitHub contributions from a bilingual full-stack engineer.",
-      },
-    ],
+    meta: buildMeta({
+      title: "Explore — Projects & GitHub Activity · Fares Ahmed",
+      description:
+        "Beyond the CV — open source projects, live GitHub activity, and the experimental work of Fares Ahmed.",
+      path: "/explore",
+    }),
   }),
   component: ExplorePage,
 });

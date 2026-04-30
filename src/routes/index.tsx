@@ -32,22 +32,17 @@ const SectionPlaceholder = ({ minH = 480 }: { minH?: number }) => (
   <div aria-hidden style={{ minHeight: minH }} className="w-full" />
 );
 
+import { buildMeta } from "@/lib/seo";
+
 export const Route = createFileRoute("/")({
   head: () => ({
-    meta: [
-      { title: "Fares Ahmed — Software Engineer & Builder" },
-      {
-        name: "description",
-        content:
-          "Fares Ahmed is a bilingual full-stack engineer from Sana'a, Yemen — building scalable systems, mobile experiences, and elegant UIs.",
-      },
-      { property: "og:title", content: "Fares Ahmed — Software Engineer" },
-      {
-        property: "og:description",
-        content:
-          "Full-stack engineer building scalable systems and elegant user experiences across web, mobile, and systems.",
-      },
-    ],
+    meta: buildMeta({
+      title: "Fares Ahmed — Software Engineer & Builder",
+      description:
+        "Fares Ahmed — bilingual full-stack engineer from Sana'a, Yemen. Browse skills, experience, and live GitHub activity in this interactive portfolio.",
+      path: "/",
+      ogType: "profile",
+    }),
   }),
   component: Index,
 });

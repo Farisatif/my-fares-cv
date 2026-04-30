@@ -821,3 +821,121 @@
     }
   }
 }
+
+/* ============================================================
+   Accessibility: skip-to-content link.
+   Visually hidden until focused, then becomes a high-contrast
+   button at the top-left so keyboard users can jump past the
+   nav and decorative chrome straight to <main>.
+   ============================================================ */
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 300;
+  padding: 0.5rem 0.875rem;
+  border-radius: 0.5rem;
+  background: hsl(var(--foreground));
+  color: hsl(var(--background));
+  font-size: 0.8125rem;
+  font-weight: 500;
+  transform: translateY(-200%);
+  transition: transform 160ms cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: 0 6px 24px -8px rgb(0 0 0 / 0.4);
+}
+.skip-link:focus,
+.skip-link:focus-visible {
+  transform: translateY(0);
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+:root[dir="rtl"] .skip-link {
+  left: auto;
+  right: 0.75rem;
+}
+
+/* ============================================================
+   Print styles: turns the page into a clean, single-column CV
+   when the user hits Ctrl/Cmd+P. Hides chrome, animations and
+   decorative gradients; expands sections; flattens colours.
+   ============================================================ */
+@media print {
+  /* Force light palette for paper. */
+  :root,
+  :root.dark {
+    color-scheme: light !important;
+    background: #fff !important;
+    color: #111 !important;
+  }
+  html, body {
+    background: #fff !important;
+    color: #111 !important;
+  }
+  /* Hide site chrome & decoration. */
+  nav,
+  header[role="banner"],
+  footer,
+  [data-print="hide"],
+  .chevron-canvas,
+  .skip-link,
+  [aria-label="Back to top"],
+  [aria-label*="Open"],
+  [aria-label*="open"] {
+    display: none !important;
+  }
+  /* Collapse fixed/animated layers. */
+  [class*="fixed"],
+  [class*="absolute"] {
+    position: static !important;
+  }
+  /* Stop all motion. */
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    filter: none !important;
+    backdrop-filter: none !important;
+    box-shadow: none !important;
+  }
+  /* Expand all main content. */
+  main, main * {
+    visibility: visible !important;
+  }
+  main {
+    display: block !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  section {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    padding: 0.6rem 0 !important;
+    margin: 0 !important;
+  }
+  h1, h2, h3 {
+    color: #000 !important;
+    page-break-after: avoid;
+  }
+  a {
+    color: #000 !important;
+    text-decoration: underline;
+  }
+  /* Show URLs after links so the paper version is still useful. */
+  a[href^="http"]:after {
+    content: " (" attr(href) ")";
+    font-size: 0.7em;
+    color: #555;
+    word-break: break-all;
+  }
+  /* Tighten typography for paper. */
+  body {
+    font-size: 11pt !important;
+    line-height: 1.45 !important;
+  }
+  @page {
+    margin: 16mm 14mm;
+  }
+}

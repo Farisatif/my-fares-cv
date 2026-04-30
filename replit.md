@@ -62,3 +62,20 @@ TanStack Router already splits each route into its own chunk. On top of that, he
 - **Explore (`src/routes/explore.tsx`)**: `ProjectsSection`, `TechMarquee`, `GithubActivitySection` (recharts ~575 lines) are lazy + `LazyOnVisible`.
 - **Component-level**: `PhysicsPills` (matter-js, ~1148 lines) inside `SkillsSection`, `PageEndCircle` (matter-js) inside `ContactSection`, and `SettingsDrawer` (admin CMS, only opens on user action) inside `Footer` are all `React.lazy`-loaded with appropriate gating.
 - **Image hints**: Hero portrait (`Hero.tsx`) and explore-splash (`explore.tsx`) use `loading="eager"` + `fetchPriority="high"` + `decoding="async"` since they're LCP candidates. `GithubActivitySection` avatar already uses `loading="lazy"`.
+
+## SEO & Metadata
+- `src/lib/seo.ts` — central helpers `buildMeta()` and `buildPersonJsonLd()`. Every route head should call `buildMeta({ title, description, path })` instead of hand-rolling tags so OG / Twitter / canonical stay consistent.
+- `__root.tsx` injects a `Person` JSON-LD `<script>` (built from `resume.json`) plus `theme-color`, `color-scheme`, manifest link, and the global title/description defaults.
+- `public/robots.txt`, `public/sitemap.xml`, `public/site.webmanifest` are static files served from the Vite/Nitro public directory. Update the sitemap when new routes are added.
+
+## Accessibility
+- `__root.tsx` renders a `.skip-link` "Skip to content" anchor as the first body element; targets `<main id="main-content">` which wraps `<AnimatedOutlet />`. CSS for the link lives at the bottom of `src/styles.css`.
+
+## Print / CV mode
+- Bottom of `src/styles.css` has an `@media print` block that strips chrome (nav, footer, decorations), kills animations/transforms, forces a white palette, prints link URLs after each anchor, and tightens typography. Hitting Ctrl/Cmd+P produces a recruiter-friendly single-column CV.
+
+## Command Palette
+- `src/components/CommandPalette.tsx` — global ⌘K / Ctrl+K overlay. Provides bilingual search across pages, home-section anchors, theme toggle, language toggle, and external links (GitHub, LinkedIn). Mounted once in `RootComponent`.
+
+## Custom 404
+- `src/components/NotFoundPage.tsx` — branded 404 with gradient blobs, Framer Motion entrance, three navigation CTAs and a Ctrl+K hint. Wired through `notFoundComponent: NotFoundPage` in `__root.tsx`.

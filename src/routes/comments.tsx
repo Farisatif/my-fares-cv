@@ -6,21 +6,16 @@ import { Reveal } from "@/components/Reveal";
 import { useEffect, useRef } from "react";
 import { useLang } from "@/components/LanguageProvider";
 
+import { buildMeta } from "@/lib/seo";
+
 export const Route = createFileRoute("/comments")({
   head: () => ({
-    meta: [
-      { title: "Guestbook — Fares Ahmed" },
-      {
-        name: "description",
-        content:
-          "Leave a comment for Fares Ahmed. A real-time guestbook for visitors to share notes, feedback, and questions.",
-      },
-      { property: "og:title", content: "Guestbook — Fares Ahmed" },
-      {
-        property: "og:description",
-        content: "Real-time guestbook — drop a note, a kind word, or a question.",
-      },
-    ],
+    meta: buildMeta({
+      title: "Guestbook — Fares Ahmed",
+      description:
+        "Leave a comment for Fares Ahmed. A real-time guestbook for visitors to share notes, feedback, and questions.",
+      path: "/comments",
+    }),
   }),
   component: CommentsPage,
 });

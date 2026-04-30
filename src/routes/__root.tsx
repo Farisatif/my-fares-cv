@@ -1,4 +1,4 @@
-import { Outlet, Link, createRootRoute, HeadContent, Scripts, useLocation, useRouter } from "@tanstack/react-router";
+import { Outlet, createRootRoute, HeadContent, Scripts, useLocation, useRouter } from "@tanstack/react-router";
 import { AnimatePresence, motion } from "framer-motion";
 
 import appCss from "../styles.css?url";
@@ -12,47 +12,23 @@ import { KitsysArrowField } from "@/components/KitsysArrowField";
 import { Navbar } from "@/components/Navbar";
 import { BackToTop } from "@/components/BackToTop";
 import { Footer } from "@/components/Footer";
-
-
-function NotFoundComponent() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
-        </p>
-        <div className="mt-6">
-          <Link
-            to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-          >
-            Go home
-          </Link>
-        </div>
-      </div>
-    </div>
-  );
-}
+import { CommandPalette } from "@/components/CommandPalette";
+import { NotFoundPage } from "@/components/NotFoundPage";
+import { buildMeta, buildPersonJsonLd } from "@/lib/seo";
 
 export const Route = createRootRoute({
   head: () => ({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "fares-cv" },
-      { name: "description", content: "Dynamic CV Studio is an interactive, customizable resume builder with physics-based animations." },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "fares-cv" },
-      { property: "og:description", content: "Dynamic CV Studio is an interactive, customizable resume builder with physics-based animations." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
-      { name: "twitter:title", content: "fares-cv" },
-      { name: "twitter:description", content: "Dynamic CV Studio is an interactive, customizable resume builder with physics-based animations." },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/dc3988b1-056f-4fc7-ae06-e8536262535c" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/dc3988b1-056f-4fc7-ae06-e8536262535c" },
+      { name: "theme-color", content: "#0a0a0a" },
+      { name: "color-scheme", content: "light dark" },
+      ...buildMeta({
+        title: "Fares Ahmed — Software Engineer & Builder",
+        description:
+          "Bilingual full-stack engineer from Sana'a, Yemen — building scalable systems, mobile experiences, and elegant UIs. Browse projects, skills, and live GitHub activity.",
+        path: "/",
+      }),
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -61,15 +37,20 @@ export const Route = createRootRoute({
         rel: "stylesheet",
         href: "https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&family=Inter:wght@300;400;500;600;700&display=swap",
       },
+      { rel: "stylesheet", href: appCss },
+      { rel: "manifest", href: "/site.webmanifest" },
+      { rel: "icon", href: "/favicon.ico" },
+    ],
+    scripts: [
       {
-        rel: "stylesheet",
-        href: appCss,
+        type: "application/ld+json",
+        children: JSON.stringify(buildPersonJsonLd()),
       },
     ],
   }),
   shellComponent: RootShell,
   component: RootComponent,
-  notFoundComponent: NotFoundComponent,
+  notFoundComponent: NotFoundPage,
 });
 
 function RootShell({ children }: { children: React.ReactNode }) {
@@ -79,6 +60,9 @@ function RootShell({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
+        <a href="#main-content" className="skip-link">
+          Skip to content
+        </a>
         {children}
         <Scripts />
       </body>
@@ -94,11 +78,14 @@ function RootComponent() {
           <PageBoot />
           <HeroArrowBackdrop />
           <TopProgressBar />
-          <AnimatedOutlet />
+          <main id="main-content">
+            <AnimatedOutlet />
+          </main>
           <Footer />
           <AnchorPulse />
           <BackToTop />
           <Navbar />
+          <CommandPalette />
           <Toaster position="bottom-right" />
         </SiteDataProvider>
       </LanguageProvider>
