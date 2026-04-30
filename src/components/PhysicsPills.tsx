@@ -276,57 +276,75 @@ export const PhysicsPills = forwardRef<PhysicsPillsHandle, Props>(function Physi
     spawnAllRef.current = spawnAll;
 
     const computeDynamicFloorOffset = (h: number): number => {
-      // Strategy: locate the closest enclosing <section>, then walk forward
-      // through its DOM siblings until we find the next page-level <section>
-      // (or a wrapper that contains one). Measure how many pixels of that
-      // next section currently overlap our wrap's bottom edge — that's the
-      // intrusion we must keep clear of.
+      // Strategy: find the next *visual* block that follows our section and
+      // measure how many pixels of it currently overlap our wrap's bottom.
+      // That overlap is what the user perceives as a section that "covers"
+      // any pills sitting near the bottom — so we must keep the invisible
+      // floor lifted at least that high, plus a small safety pad.
+      //
+      // Critically, we use the next *outer* element (the SectionBand wrapper
+      // div, identified by `data-band`), not its inner `<section>`. The
+      // wrapper is what actually overlaps via negative top margin and what
+      // paints the band background that hides any pill behind it. Measuring
+      // the inner `<section>` would under-estimate the intrusion by the
+      // wrapper's own padding and let pills slip into the cover zone.
       const wrapRect = wrap.getBoundingClientRect();
       const ownSection = wrap.closest("section") as HTMLElement | null;
       if (!ownSection) return floorOffset;
 
-      // Find the very next sibling that is itself a <section> or contains one.
-      let nextSection: HTMLElement | null = null;
-      let cursor: Element | null = ownSection.nextElementSibling;
-      while (cursor) {
-        if (cursor.tagName === "SECTION") {
-          nextSection = cursor as HTMLElement;
-          break;
+      // Collect every reasonable "next visual block" candidate so we can
+      // intersect against the closest one — this is correct even if the
+      // page structure changes (extra wrappers, new bands, reordering).
+      const candidates: HTMLElement[] = [];
+      const collectFollowingSiblings = (start: Element | null) => {
+        let cursor = start;
+        while (cursor) {
+          if (cursor instanceof HTMLElement) candidates.push(cursor);
+          cursor = cursor.nextElementSibling;
         }
-        const inner = cursor.querySelector("section");
-        if (inner) {
-          nextSection = inner as HTMLElement;
-          break;
-        }
-        cursor = cursor.nextElementSibling;
+      };
+      collectFollowingSiblings(ownSection.nextElementSibling);
+      // The section is usually wrapped in a SectionBand div — also walk the
+      // parent's siblings (the band div's neighbours) since the next visual
+      // band is most often there.
+      if (ownSection.parentElement) {
+        collectFollowingSiblings(ownSection.parentElement.nextElementSibling);
       }
-      // Also handle the SectionBand wrapper case: ownSection's PARENT may be
-      // a band <div>, and the next page section sits as the parent's next
-      // sibling. Walk up one level if we didn't find anything yet.
-      if (!nextSection && ownSection.parentElement) {
-        let parentCursor: Element | null = ownSection.parentElement.nextElementSibling;
-        while (parentCursor) {
-          if (parentCursor.tagName === "SECTION") {
-            nextSection = parentCursor as HTMLElement;
-            break;
-          }
-          const inner = parentCursor.querySelector("section");
-          if (inner) {
-            nextSection = inner as HTMLElement;
-            break;
-          }
-          parentCursor = parentCursor.nextElementSibling;
+      // And one more level up just in case there's an extra wrapper layer.
+      if (ownSection.parentElement?.parentElement) {
+        collectFollowingSiblings(
+          ownSection.parentElement.parentElement.nextElementSibling,
+        );
+      }
+
+      // Pick the candidate whose top edge is closest to (but not above) our
+      // wrap's bottom — i.e. the first thing the user sees beneath us.
+      let intrusion = 0;
+      let bestTop = Infinity;
+      for (const el of candidates) {
+        // Prefer the band wrapper itself; if this candidate has a child
+        // marked with `data-band`, that's the true visual block.
+        const bandChild = el.matches?.("[data-band]")
+          ? el
+          : (el.querySelector?.("[data-band]") as HTMLElement | null);
+        const target = bandChild ?? el;
+        const r = target.getBoundingClientRect();
+        // Skip elements with zero height (e.g. <Outlet/> placeholders).
+        if (r.height <= 0) continue;
+        if (r.top < bestTop) {
+          bestTop = r.top;
+          intrusion = Math.max(0, wrapRect.bottom - r.top);
         }
       }
 
-      let intrusion = 0;
-      if (nextSection) {
-        const nextRect = nextSection.getBoundingClientRect();
-        intrusion = Math.max(0, wrapRect.bottom - nextRect.top);
-      }
-      // Clamp so the floor never lifts above the heading area (keep at least
-      // ~40% of the section as drop space) and never goes below the wrap.
-      return Math.min(Math.max(floorOffset, intrusion), Math.max(0, h * 0.6));
+      // Safety pad: keep pills a few pixels clear of the next band so they
+      // never visually touch the seam, even at sub-pixel scroll positions.
+      const SAFETY = 18;
+      const lifted = intrusion + (intrusion > 0 ? SAFETY : 0);
+      // Clamp so the floor never lifts above the heading area (keep at
+      // least ~40% of the section as drop space) and never goes below the
+      // wrap's own bottom.
+      return Math.min(Math.max(floorOffset, lifted), Math.max(0, h * 0.6));
     };
 
     // Ceiling has two states (see ceilingSealedRef declared above):
