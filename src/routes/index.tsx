@@ -24,9 +24,6 @@ const ExperienceSection = lazy(() =>
 const AchievementsSection = lazy(() =>
   import("@/components/AchievementsSection").then((m) => ({ default: m.AchievementsSection })),
 );
-const ContactSection = lazy(() =>
-  import("@/components/ContactSection").then((m) => ({ default: m.ContactSection })),
-);
 const LanguagesSection = lazy(() =>
   import("@/components/LanguagesSection").then((m) => ({ default: m.LanguagesSection })),
 );
@@ -138,12 +135,9 @@ function Index() {
         </section>
       </SectionBand>
 
-      <SectionBand variant="light" pattern="gradient" divider roundTop>
-        <LazyOnVisible
-          load={ContactSection as never}
-          placeholder={<SectionPlaceholder minH={560} />}
-        />
-      </SectionBand>
+      {/* Note: a dedicated ContactSection used to live here, but it duplicated
+          the global Footer (same email/GitHub/LinkedIn + CTA headline).
+          The Footer renders on every page via __root.tsx. */}
     </div>
   );
 }
