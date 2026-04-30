@@ -1,24 +1,30 @@
 # Fares Ahmed CV / Portfolio (TanStack Start)
 
 ## Overview
-A personal portfolio / CV web application built with TanStack Start (React + SSR), TypeScript, Tailwind CSS v4, shadcn/ui (new-york), Framer Motion, and a Supabase backend. The original project was scaffolded by Lovable using `@lovable.dev/vite-tanstack-config`.
+A personal portfolio / CV web application built with TanStack Start (React + SSR), TypeScript, Tailwind CSS v4, shadcn/ui (new-york), Framer Motion, and a PostgreSQL backend. Originally scaffolded by Lovable using `@lovable.dev/vite-tanstack-config`; migrated to run on Replit.
 
 ## Tech Stack
 - **Runtime**: Node.js 22
 - **Framework**: TanStack Start (React 19) with TanStack Router & React Query
 - **Build tool**: Vite 7
 - **Styling**: Tailwind CSS v4, shadcn/ui, tw-animate-css
-- **Backend**: Supabase (project `zhqstdrgmtayullvuekn`)
+- **Database**: Replit-managed PostgreSQL accessed via Drizzle ORM (`drizzle-orm`, `pg`)
 - **Animation**: Framer Motion, Matter.js
 - **Forms / validation**: react-hook-form + zod
 
 ## Project Structure
 - `src/routes/` — file-based routes (`__root.tsx`, `index.tsx`, `comments.tsx`, `explore.tsx`)
-- `src/components/` — UI components (shadcn/ui in `components/ui`, app components, providers)
-- `src/integrations/supabase/` — Supabase client
+- `src/components/` — UI components (shadcn/ui in `components/ui`, app components, providers, CMS drawer)
 - `src/utils/*.functions.ts` — TanStack Start server functions (`createServerFn`)
+  - `comments.functions.ts` — public read/post for the guestbook
+  - `site-settings.functions.ts` — public read for the CMS-edited resume JSON
+  - `settings.functions.ts` — admin-protected CMS operations (bcrypt password gate)
+  - `github.functions.ts` — server-side GitHub REST proxy with in-memory cache
+- `shared/schema.ts` — Drizzle schema (`comments`, `site_settings`, `admin_settings`)
+- `server/db.ts` — Drizzle client + `pg` connection pool
+- `server/storage.ts` — `IStorage` interface + `DbStorage` implementation
+- `drizzle.config.ts` — Drizzle Kit config (uses `DATABASE_URL`)
 - `src/lib/`, `src/hooks/`, `src/data/`, `src/assets/` — utilities, hooks, data, static assets
-- `supabase/migrations/` — SQL migrations for the Supabase project
 - `vite.config.ts` — uses `@lovable.dev/vite-tanstack-config` (cloudflare disabled, host `0.0.0.0`, port `5000`)
 - `server-prod.mjs` — production Node server entry (serves built SSR output + static assets via `srvx`)
 
@@ -28,11 +34,23 @@ A personal portfolio / CV web application built with TanStack Start (React + SSR
 - **Production**: `npm run build` produces `dist/client` (static assets) and `dist/server/server.js` (SSR fetch handler). `server-prod.mjs` wraps the handler with `srvx/node` and serves both static files and SSR.
 - **Deployment**: Configured for Replit Autoscale — build `npm run build`, run `node server-prod.mjs`.
 
-## Environment Variables
-Stored in `.env` (already populated for the existing Supabase project):
-- `VITE_SUPABASE_URL`, `VITE_SUPABASE_PUBLISHABLE_KEY`, `VITE_SUPABASE_PROJECT_ID`
-- `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`
+## Database
+- Provisioned by Replit; `DATABASE_URL` (and `PG*` vars) are set automatically.
+- Apply schema changes with `npm run db:push` (Drizzle Kit; no manual migration files).
+- Tables:
+  - `comments` — guestbook entries (`status` flag for moderation, default `pending`).
+  - `site_settings` — singleton row holding the CMS-edited resume JSON in `data jsonb`.
+  - `admin_settings` — singleton row holding bcrypt-hashed admin password + recovery code (server-only).
 
-## Notes
-- The original config targets Cloudflare Workers (`wrangler.jsonc`); the Replit setup disables the Cloudflare Vite plugin and serves with Node instead.
-- Tailwind CSS v4 is loaded via `@tailwindcss/vite` (already wired by the Lovable preset).
+## Live Updates
+The original Supabase project used `postgres_changes` subscriptions for live comments and settings updates. After the migration those are replaced with simple polling (every 10–15s via `setInterval`), which is sufficient for this low-volume use case and avoids needing a websocket layer.
+
+## Environment Variables / Secrets
+- `DATABASE_URL`, `PGHOST`, `PGPORT`, `PGUSER`, `PGPASSWORD`, `PGDATABASE` — managed by Replit, do not edit.
+- `SETTINGS_ADMIN_PASSWORD` — optional Replit Secret. On first request to any admin endpoint, the `admin_settings` row is auto-seeded from this value (bcrypt-hashed) and a recovery code is logged once to the server console.
+
+## Migration Notes (Supabase → Replit Postgres)
+- Removed `@supabase/supabase-js` and the entire `src/integrations/supabase/` directory.
+- Removed `supabase/migrations/` (schema is now in `shared/schema.ts`).
+- Removed Cloudflare-specific bits (`@cloudflare/vite-plugin`, `wrangler.jsonc`, `vercel.json`).
+- Browser code no longer talks directly to the database; all reads/writes go through TanStack Start server functions.

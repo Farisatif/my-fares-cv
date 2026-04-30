@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { listApprovedComments, postComment } from "@/utils/comments.functions";
 import { Send, MessageSquareText } from "lucide-react";
 import { toast } from "sonner";
 import { Reveal } from "./Reveal";
@@ -28,36 +28,33 @@ export function Comments() {
   const newIdRef = useRef<string | null>(null);
   const listRef = useRef<HTMLDivElement>(null);
 
-  const load = async () => {
-    setLoading(true);
-    const { data, error } = await supabase
-      .from("comments")
-      .select("id, author_name, message, created_at")
-      .order("created_at", { ascending: false })
-      .limit(50);
-    if (!error && data) setItems(data as Comment[]);
-    setLoading(false);
+  const load = async (showSpinner = true) => {
+    if (showSpinner) setLoading(true);
+    try {
+      const data = await listApprovedComments();
+      setItems((prev) => {
+        const prevIds = new Set(prev.map((c) => c.id));
+        for (const c of data) {
+          if (!prevIds.has(c.id)) {
+            newIdRef.current = c.id;
+            break;
+          }
+        }
+        return data as Comment[];
+      });
+    } catch {
+      // ignore — keep the previous items visible
+    } finally {
+      if (showSpinner) setLoading(false);
+    }
   };
 
   useEffect(() => {
     load();
-    const channel = supabase
-      .channel("comments-stream")
-      .on(
-        "postgres_changes",
-        { event: "UPDATE", schema: "public", table: "comments" },
-        (payload) => {
-          const c = payload.new as Comment & { status?: string };
-          if (c.status !== "approved") return;
-          // Only add if not already present
-          newIdRef.current = c.id;
-          setItems((prev) => (prev.some((x) => x.id === c.id) ? prev : [c, ...prev]));
-        },
-      )
-      .subscribe();
-    return () => {
-      supabase.removeChannel(channel);
-    };
+    if (typeof window === "undefined") return;
+    // Poll for new approved comments every 10s (replaces the realtime stream).
+    const id = window.setInterval(() => load(false), 10000);
+    return () => window.clearInterval(id);
   }, []);
 
   // Mouse-tracked spotlight via CSS variables, smoothed with rAF.
@@ -175,21 +172,25 @@ export function Comments() {
     e.preventDefault();
     if (!name.trim() || !message.trim()) return;
     setSubmitting(true);
-    const { error } = await supabase.from("comments").insert({
-      author_name: name.trim().slice(0, 80),
-      message: message.trim().slice(0, 1000),
-    });
-    setSubmitting(false);
-    if (error) {
-      toast.error(t("Could not post your comment", "تعذر نشر تعليقك"), { description: error.message });
-      return;
+    try {
+      await postComment({
+        data: {
+          authorName: name.trim().slice(0, 80),
+          message: message.trim().slice(0, 1000),
+        },
+      });
+      toast.success(
+        t("Submitted for review", "تم الإرسال للمراجعة"),
+        { description: t("Your comment will appear once approved.", "سيظهر تعليقك بعد الموافقة عليه.") },
+      );
+      setMessage("");
+      setIsTyping(false);
+    } catch (err) {
+      const description = err instanceof Error ? err.message : String(err);
+      toast.error(t("Could not post your comment", "تعذر نشر تعليقك"), { description });
+    } finally {
+      setSubmitting(false);
     }
-    toast.success(
-      t("Submitted for review", "تم الإرسال للمراجعة"),
-      { description: t("Your comment will appear once approved.", "سيظهر تعليقك بعد الموافقة عليه.") },
-    );
-    setMessage("");
-    setIsTyping(false);
   };
 
   return (

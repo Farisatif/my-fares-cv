@@ -1,7 +1,7 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
 import resume from "@/data/resume.json";
 import { PageSkeleton, EmptyDataState } from "./PageSkeleton";
+import { getSiteSettings } from "@/utils/site-settings.functions";
 
 export type SiteData = typeof resume;
 
@@ -10,58 +10,45 @@ const Ctx = createContext<{ data: SiteData; refresh: () => void }>({
   refresh: () => {},
 });
 
+const POLL_INTERVAL_MS = 15000;
+
 export function SiteDataProvider({ children }: { children: ReactNode }) {
   const [data, setData] = useState<SiteData | null>(null);
   const [loading, setLoading] = useState(true);
   const [errored, setErrored] = useState(false);
 
-  const load = async () => {
+  const load = useCallback(async () => {
     try {
-      const { data: row, error } = await supabase
-        .from("site_settings")
-        .select("data")
-        .eq("id", "singleton")
-        .maybeSingle();
-      if (error) throw error;
-      if (row?.data && typeof row.data === "object" && Object.keys(row.data as object).length > 0) {
-        setData(row.data as SiteData);
+      const row = await getSiteSettings();
+      if (row && typeof row === "object" && Object.keys(row).length > 0) {
+        setData(row as SiteData);
         setErrored(false);
       } else {
-        setData(null);
+        // Singleton row missing/empty — fall back to bundled default resume.
+        setData(resume as SiteData);
         setErrored(false);
       }
     } catch {
-      setData(null);
+      // On error, still render the bundled default so the site stays usable.
+      setData(resume as SiteData);
       setErrored(true);
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     load();
-    const ch = supabase
-      .channel("site-settings-stream")
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "site_settings" },
-        () => load(),
-      )
-      .subscribe();
-    return () => {
-      supabase.removeChannel(ch);
-    };
-  }, []);
+    if (typeof window === "undefined") return;
+    const id = window.setInterval(load, POLL_INTERVAL_MS);
+    return () => window.clearInterval(id);
+  }, [load]);
 
   if (loading) return <PageSkeleton />;
   if (!data) {
     return (
       <EmptyDataState
-        message={
-          errored
-            ? "Could not reach the cloud database. Please try again."
-            : undefined
-        }
+        message={errored ? "Could not reach the database. Please try again." : undefined}
       />
     );
   }

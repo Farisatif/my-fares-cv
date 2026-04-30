@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import bcrypt from "bcryptjs";
-import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { storage } from "@server/storage";
 
 // In-memory rate limit store (per-instance). Keyed by client IP.
 type Attempt = { count: number; firstAt: number; lockedUntil: number };
@@ -58,25 +58,20 @@ function normalizeCode(input: string): string {
 }
 
 async function readAdminRow() {
-  const { data, error } = await supabaseAdmin
-    .from("admin_settings")
-    .select("password_hash, recovery_code_hash")
-    .eq("id", "singleton")
-    .maybeSingle();
-  if (error) throw new Error(error.message);
-  if (data) return data;
+  const existing = await storage.getAdminSettings();
+  if (existing) return existing;
   // Auto-initialize on first use using the configured admin password secret.
   const seedPw = process.env.SETTINGS_ADMIN_PASSWORD;
   if (!seedPw) throw new Error("Admin settings not initialized");
   const { raw } = generateRecoveryCode();
-  const password_hash = await bcrypt.hash(seedPw, 10);
-  const recovery_code_hash = await bcrypt.hash(raw, 10);
-  const { error: upErr } = await supabaseAdmin
-    .from("admin_settings")
-    .upsert({ id: "singleton", password_hash, recovery_code_hash, updated_at: new Date().toISOString() });
-  if (upErr) throw new Error(upErr.message);
-  console.warn("[admin_settings] Initialized singleton row from SETTINGS_ADMIN_PASSWORD. Recovery code:", (raw.match(/.{1,4}/g) || []).join("-"));
-  return { password_hash, recovery_code_hash };
+  const passwordHash = await bcrypt.hash(seedPw, 10);
+  const recoveryCodeHash = await bcrypt.hash(raw, 10);
+  await storage.upsertAdminSettings(passwordHash, recoveryCodeHash);
+  console.warn(
+    "[admin_settings] Initialized singleton row from SETTINGS_ADMIN_PASSWORD. Recovery code:",
+    (raw.match(/.{1,4}/g) || []).join("-"),
+  );
+  return { passwordHash, recoveryCodeHash };
 }
 
 type PasswordCheck = { ok: true } | { ok: false; error: string; retryAfter?: number };
@@ -91,21 +86,16 @@ async function checkPassword(password: string): Promise<PasswordCheck> {
   }
   try {
     const row = await readAdminRow();
-    let ok = await bcrypt.compare(password, row.password_hash);
-    // Self-heal: if the supplied password matches the configured Cloud secret
+    let ok = await bcrypt.compare(password, row.passwordHash);
+    // Self-heal: if the supplied password matches the configured secret
     // exactly but the stored hash was rotated/stale, re-seed the hash from the
     // secret so the admin can always log in with the configured password.
     if (!ok) {
       const seedPw = process.env.SETTINGS_ADMIN_PASSWORD;
       if (seedPw && password === seedPw) {
         const newHash = await bcrypt.hash(seedPw, 10);
-        const { error: upErr } = await supabaseAdmin
-          .from("admin_settings")
-          .update({ password_hash: newHash, updated_at: new Date().toISOString() })
-          .eq("id", "singleton");
-        if (!upErr) {
-          ok = true;
-        }
+        await storage.updateAdminPassword(newHash);
+        ok = true;
       }
     }
     if (!ok) {
@@ -134,10 +124,7 @@ export const saveSiteSettings = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const auth = await checkPassword(data.password);
     if (!auth.ok) return auth;
-    const { error } = await supabaseAdmin
-      .from("site_settings")
-      .upsert({ id: "singleton", data: data.data as never, updated_at: new Date().toISOString() });
-    if (error) throw new Error(error.message);
+    await storage.upsertSiteSettings(data.data);
     return { ok: true as const };
   });
 
@@ -163,8 +150,7 @@ export const deleteComment = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const auth = await checkPassword(data.password);
     if (!auth.ok) return auth;
-    const { error } = await supabaseAdmin.from("comments").delete().eq("id", data.id);
-    if (error) throw new Error(error.message);
+    await storage.deleteComment(data.id);
     return { ok: true as const };
   });
 
@@ -177,14 +163,28 @@ export const listAllComments = createServerFn({ method: "POST" })
   })
   .handler(async ({ data }) => {
     const auth = await checkPassword(data.password);
-    if (!auth.ok) return { ...auth, comments: [] as Array<{ id: string; author_name: string; message: string; created_at: string; status: string }> };
-    const { data: rows, error } = await supabaseAdmin
-      .from("comments")
-      .select("id, author_name, message, created_at, status")
-      .order("created_at", { ascending: false })
-      .limit(500);
-    if (error) throw new Error(error.message);
-    return { ok: true as const, comments: (rows || []) as Array<{ id: string; author_name: string; message: string; created_at: string; status: string }> };
+    if (!auth.ok)
+      return {
+        ...auth,
+        comments: [] as Array<{
+          id: string;
+          author_name: string;
+          message: string;
+          created_at: string;
+          status: string;
+        }>,
+      };
+    const rows = await storage.listAllComments(500);
+    return {
+      ok: true as const,
+      comments: rows.map((c) => ({
+        id: c.id,
+        author_name: c.authorName,
+        message: c.message,
+        created_at: c.createdAt.toISOString(),
+        status: c.status,
+      })),
+    };
   });
 
 // Approve or reject a comment.
@@ -200,11 +200,7 @@ export const setCommentStatus = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const auth = await checkPassword(data.password);
     if (!auth.ok) return auth;
-    const { error } = await supabaseAdmin
-      .from("comments")
-      .update({ status: data.status })
-      .eq("id", data.id);
-    if (error) throw new Error(error.message);
+    await storage.setCommentStatus(data.id, data.status);
     return { ok: true as const };
   });
 
@@ -229,7 +225,7 @@ export const resetAdminPassword = createServerFn({ method: "POST" })
       return { ok: false as const, error: `Too many attempts. Try again in ${rate.retryAfter}s.` };
     }
     const row = await readAdminRow();
-    const codeOk = await bcrypt.compare(normalizeCode(data.recoveryCode), row.recovery_code_hash);
+    const codeOk = await bcrypt.compare(normalizeCode(data.recoveryCode), row.recoveryCodeHash);
     if (!codeOk) {
       recordFail(key);
       return { ok: false as const, error: "Invalid recovery code" };
@@ -237,15 +233,7 @@ export const resetAdminPassword = createServerFn({ method: "POST" })
     const newPwHash = await bcrypt.hash(data.newPassword, 10);
     const newCode = generateRecoveryCode();
     const newCodeHash = await bcrypt.hash(newCode.raw, 10);
-    const { error } = await supabaseAdmin
-      .from("admin_settings")
-      .update({
-        password_hash: newPwHash,
-        recovery_code_hash: newCodeHash,
-        updated_at: new Date().toISOString(),
-      })
-      .eq("id", "singleton");
-    if (error) throw new Error(error.message);
+    await storage.updateAdminPasswordAndRecovery(newPwHash, newCodeHash);
     return { ok: true as const, newRecoveryCode: newCode.formatted };
   });
 
@@ -262,14 +250,7 @@ export const rotateRecoveryCode = createServerFn({ method: "POST" })
     if (!auth.ok) return auth;
     const newCode = generateRecoveryCode();
     const newCodeHash = await bcrypt.hash(newCode.raw, 10);
-    const { error } = await supabaseAdmin
-      .from("admin_settings")
-      .update({
-        recovery_code_hash: newCodeHash,
-        updated_at: new Date().toISOString(),
-      })
-      .eq("id", "singleton");
-    if (error) throw new Error(error.message);
+    await storage.updateAdminRecoveryCode(newCodeHash);
     return { ok: true as const, newRecoveryCode: newCode.formatted };
   });
 
@@ -288,37 +269,21 @@ export const changeAdminPassword = createServerFn({ method: "POST" })
     const auth = await checkPassword(data.password);
     if (!auth.ok) return auth;
     const newPwHash = await bcrypt.hash(data.newPassword, 10);
-    const { error } = await supabaseAdmin
-      .from("admin_settings")
-      .update({ password_hash: newPwHash, updated_at: new Date().toISOString() })
-      .eq("id", "singleton");
-    if (error) throw new Error(error.message);
+    await storage.updateAdminPassword(newPwHash);
     return { ok: true as const };
   });
 
-// Lightweight DB connectivity check for the admin panel. Performs a tiny
-// SELECT against admin_settings via the service role client and reports
-// success/failure plus latency. No auth required — the result reveals nothing
-// sensitive (just that the backend is reachable).
+// Lightweight DB connectivity check for the admin panel.
 export const pingDatabase = createServerFn({ method: "GET" }).handler(async () => {
   const startedAt = Date.now();
   try {
-    const { error } = await supabaseAdmin
-      .from("admin_settings")
-      .select("id")
-      .eq("id", "singleton")
-      .maybeSingle();
-    const latencyMs = Date.now() - startedAt;
-    if (error) {
-      return { ok: false as const, error: error.message, latencyMs };
-    }
-    return { ok: true as const, latencyMs };
+    await storage.ping();
+    return { ok: true as const, latencyMs: Date.now() - startedAt };
   } catch (e) {
-    const latencyMs = Date.now() - startedAt;
     return {
       ok: false as const,
       error: e instanceof Error ? e.message : String(e),
-      latencyMs,
+      latencyMs: Date.now() - startedAt,
     };
   }
 });
