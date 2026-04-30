@@ -1,9 +1,15 @@
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { Sparkles } from "lucide-react";
 import { Reveal } from "./Reveal";
-import { PhysicsPills } from "./PhysicsPills";
 import { useSiteData } from "./SiteDataProvider";
 import { useLang } from "./LanguageProvider";
+
+// Matter.js + the physics canvas is ~heavy. Defer the chunk until the
+// section is about to scroll into view, and keep it out of SSR entirely
+// (it touches `window` on mount).
+const PhysicsPills = lazy(() =>
+  import("./PhysicsPills").then((m) => ({ default: m.PhysicsPills })),
+);
 
 export function SkillsSection() {
   const { data } = useSiteData();
@@ -16,6 +22,36 @@ export function SkillsSection() {
   }));
 
   const [height, setHeight] = useState(900);
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  const [physicsReady, setPhysicsReady] = useState(false);
+
+  // Defer mounting the physics canvas until this section is near the
+  // viewport. SSR/initial paint is not blocked on Matter.js.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (physicsReady) return;
+    if (!("IntersectionObserver" in window)) {
+      setPhysicsReady(true);
+      return;
+    }
+    const el = sentinelRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            setPhysicsReady(true);
+            io.disconnect();
+            break;
+          }
+        }
+      },
+      { rootMargin: "300px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [physicsReady]);
+
   useEffect(() => {
     const onResize = () => {
       // Taller field — pills get more room to fall and bounce. Scales with
@@ -47,10 +83,18 @@ export function SkillsSection() {
       {/* Physics canvas — full-bleed. The heading sits ON TOP of this same
           area (transparent, no background) and the pills travel BEHIND it. */}
       <Reveal delay={0.05}>
-        <div className="relative w-full mt-0">
+        <div ref={sentinelRef} className="relative w-full mt-0">
           {/* Pills layer — explicitly behind the heading. */}
           <div className="relative z-0">
-            <PhysicsPills pills={pills} height={height} floorOffset={0} />
+            {physicsReady ? (
+              <Suspense
+                fallback={<div style={{ height }} aria-hidden className="w-full" />}
+              >
+                <PhysicsPills pills={pills} height={height} floorOffset={0} />
+              </Suspense>
+            ) : (
+              <div style={{ height }} aria-hidden className="w-full" />
+            )}
           </div>
 
           {/* Heading overlay — transparent, non-interactive so pills can be

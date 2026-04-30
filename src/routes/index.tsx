@@ -2,18 +2,38 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
+import { lazy } from "react";
 import { Hero } from "@/components/Hero";
 import { Marquee } from "@/components/Marquee";
 import { AboutSection } from "@/components/AboutSection";
-import { SkillsSection } from "@/components/SkillsSection";
-import { ExperienceSection } from "@/components/ExperienceSection";
-import { AchievementsSection } from "@/components/AchievementsSection";
-import { ContactSection } from "@/components/ContactSection";
-import { LanguagesSection } from "@/components/LanguagesSection";
 import { SectionBand } from "@/components/SectionBand";
+import { LazyOnVisible } from "@/components/LazyOnVisible";
 import { useSiteData } from "@/components/SiteDataProvider";
 import { useLang } from "@/components/LanguageProvider";
 import { ScrollProgress } from "@/components/motion-primitives";
+
+// Below-the-fold sections — split into independent chunks and only loaded
+// once the user scrolls them near the viewport. Hero + About stay in the
+// initial route bundle so first paint stays fast.
+const SkillsSection = lazy(() =>
+  import("@/components/SkillsSection").then((m) => ({ default: m.SkillsSection })),
+);
+const ExperienceSection = lazy(() =>
+  import("@/components/ExperienceSection").then((m) => ({ default: m.ExperienceSection })),
+);
+const AchievementsSection = lazy(() =>
+  import("@/components/AchievementsSection").then((m) => ({ default: m.AchievementsSection })),
+);
+const ContactSection = lazy(() =>
+  import("@/components/ContactSection").then((m) => ({ default: m.ContactSection })),
+);
+const LanguagesSection = lazy(() =>
+  import("@/components/LanguagesSection").then((m) => ({ default: m.LanguagesSection })),
+);
+
+const SectionPlaceholder = ({ minH = 480 }: { minH?: number }) => (
+  <div aria-hidden style={{ minHeight: minH }} className="w-full" />
+);
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -58,20 +78,32 @@ function Index() {
           reads as a "negative" of the surrounding sections (dark in light
           mode, light in dark mode). */}
       <SectionBand variant="dark" pattern="none" divider roundTop roundBottom>
-        <LanguagesSection />
+        <LazyOnVisible
+          load={LanguagesSection as never}
+          placeholder={<SectionPlaceholder minH={420} />}
+        />
       </SectionBand>
 
       <SectionBand variant="surface" pattern="gradient" divider roundTop roundBottom>
-        <SkillsSection />
+        <LazyOnVisible
+          load={SkillsSection as never}
+          placeholder={<SectionPlaceholder minH={780} />}
+        />
       </SectionBand>
 
       <SectionBand variant="light" pattern="gradient" divider roundTop roundBottom>
-        <ExperienceSection />
+        <LazyOnVisible
+          load={ExperienceSection as never}
+          placeholder={<SectionPlaceholder minH={620} />}
+        />
       </SectionBand>
 
       {/* Signature inverted band — pure black in light, pure white in dark. */}
       <SectionBand variant="dark" pattern="none" divider roundTop roundBottom>
-        <AchievementsSection />
+        <LazyOnVisible
+          load={AchievementsSection as never}
+          placeholder={<SectionPlaceholder minH={520} />}
+        />
       </SectionBand>
 
       {/* Bridge to /explore — projects + GitHub activity now live there.
@@ -107,7 +139,10 @@ function Index() {
       </SectionBand>
 
       <SectionBand variant="light" pattern="gradient" divider roundTop>
-        <ContactSection />
+        <LazyOnVisible
+          load={ContactSection as never}
+          placeholder={<SectionPlaceholder minH={560} />}
+        />
       </SectionBand>
     </div>
   );

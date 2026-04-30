@@ -54,3 +54,11 @@ The original Supabase project used `postgres_changes` subscriptions for live com
 - Removed `supabase/migrations/` (schema is now in `shared/schema.ts`).
 - Removed Cloudflare-specific bits (`@cloudflare/vite-plugin`, `wrangler.jsonc`, `vercel.json`).
 - Browser code no longer talks directly to the database; all reads/writes go through TanStack Start server functions.
+
+## Performance — Lazy Loading & Code Splitting
+TanStack Router already splits each route into its own chunk. On top of that, heavy components are split into independent chunks and only downloaded when needed:
+- `src/components/LazyOnVisible.tsx` — generic helper that pairs `React.lazy` with an `IntersectionObserver` sentinel (default `rootMargin: 300px`) so a component is only mounted when the user scrolls near it. Wraps in `<Suspense fallback={null}>` and reserves height via a placeholder to prevent layout shift.
+- **Home (`src/routes/index.tsx`)**: `Hero`, `Marquee`, `AboutSection` stay in the route bundle (above the fold). `LanguagesSection`, `SkillsSection`, `ExperienceSection`, `AchievementsSection`, `ContactSection` are all `React.lazy` + `LazyOnVisible`.
+- **Explore (`src/routes/explore.tsx`)**: `ProjectsSection`, `TechMarquee`, `GithubActivitySection` (recharts ~575 lines) are lazy + `LazyOnVisible`.
+- **Component-level**: `PhysicsPills` (matter-js, ~1148 lines) inside `SkillsSection`, `PageEndCircle` (matter-js) inside `ContactSection`, and `SettingsDrawer` (admin CMS, only opens on user action) inside `Footer` are all `React.lazy`-loaded with appropriate gating.
+- **Image hints**: Hero portrait (`Hero.tsx`) and explore-splash (`explore.tsx`) use `loading="eager"` + `fetchPriority="high"` + `decoding="async"` since they're LCP candidates. `GithubActivitySection` avatar already uses `loading="lazy"`.

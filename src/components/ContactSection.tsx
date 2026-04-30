@@ -1,11 +1,14 @@
+import { lazy, Suspense } from "react";
 import { Reveal } from "./Reveal";
 import { MagneticButton } from "./MagneticButton";
 import { Mail, MessageCircle, Github, Linkedin, MapPin } from "lucide-react";
 import { useSiteData } from "./SiteDataProvider";
 import { useLang } from "./LanguageProvider";
 
-
-import { PageEndCircle } from "./PageEndCircle";
+// Decorative Matter.js disc — purely visual, never above the fold.
+const PageEndCircle = lazy(() =>
+  import("./PageEndCircle").then((m) => ({ default: m.PageEndCircle })),
+);
 
 export function ContactSection() {
   const { data } = useSiteData();
@@ -20,7 +23,9 @@ export function ContactSection() {
         style={{ background: "color-mix(in oklab, var(--primary-glow) 60%, transparent)", animationDelay: "5s" }} />
 
       {/* Section-top illuminating disc — descends behind the heading */}
-      <PageEndCircle />
+      <Suspense fallback={null}>
+        <PageEndCircle />
+      </Suspense>
 
       <div className="container mx-auto px-6 max-w-5xl relative text-center">
         <Reveal>

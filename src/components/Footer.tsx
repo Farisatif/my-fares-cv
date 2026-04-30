@@ -1,7 +1,14 @@
 import { Github, Linkedin, Mail, MapPin, Heart } from "lucide-react";
+import { lazy, Suspense } from "react";
 import { useSiteData } from "./SiteDataProvider";
 import { useLang } from "./LanguageProvider";
-import { SettingsDrawer } from "./cms/SettingsDrawer";
+
+// Admin CMS — never used by visitors; load on demand only when the
+// trigger button is rendered/interacted with. Saves ~1500 lines + all
+// of the form sub-components from the initial bundle.
+const SettingsDrawer = lazy(() =>
+  import("./cms/SettingsDrawer").then((m) => ({ default: m.SettingsDrawer })),
+);
 
 /**
  * Global Footer — appears on all pages.
@@ -86,7 +93,9 @@ export function Footer() {
             </span>
           </div>
 
-          <SettingsDrawer />
+          <Suspense fallback={null}>
+            <SettingsDrawer />
+          </Suspense>
         </div>
       </div>
     </footer>

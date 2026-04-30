@@ -1,14 +1,32 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowLeft, Sparkles } from "lucide-react";
+import { lazy } from "react";
 
-import { ProjectsSection } from "@/components/ProjectsSection";
-import { GithubActivitySection } from "@/components/GithubActivitySection";
-import { TechMarquee } from "@/components/TechMarquee";
 import { SectionBand } from "@/components/SectionBand";
 import { ScrollProgress } from "@/components/motion-primitives";
+import { LazyOnVisible } from "@/components/LazyOnVisible";
 import { useLang } from "@/components/LanguageProvider";
 import exploreSplash from "@/assets/explore-splash.jpg";
+
+// Heavy below-the-fold sections — split into their own chunks and only
+// downloaded when the user scrolls toward them. The hero header (above)
+// stays in the route bundle so first paint is instant.
+const ProjectsSection = lazy(() =>
+  import("@/components/ProjectsSection").then((m) => ({ default: m.ProjectsSection })),
+);
+const GithubActivitySection = lazy(() =>
+  import("@/components/GithubActivitySection").then((m) => ({ default: m.GithubActivitySection })),
+);
+const TechMarquee = lazy(() =>
+  import("@/components/TechMarquee").then((m) => ({ default: m.TechMarquee })),
+);
+
+// Reserve roughly the same vertical space the real section will occupy
+// so deferred mounting doesn't cause layout shift while scrolling.
+const SectionPlaceholder = ({ minH = 480 }: { minH?: number }) => (
+  <div aria-hidden style={{ minHeight: minH }} className="w-full" />
+);
 
 export const Route = createFileRoute("/explore")({
   head: () => ({
@@ -44,11 +62,19 @@ function ExplorePage() {
         id="top"
         className="relative isolate overflow-hidden min-h-[88vh] sm:min-h-[92vh] flex items-end pt-28 pb-16 sm:pb-20"
       >
-        {/* Background image — fills the hero at full clarity, no overlays */}
-        <div
+        {/* Background image — fills the hero at full clarity, no overlays.
+            Rendered as <img> (not background-image) so the browser can apply
+            `loading="eager"` + `fetchPriority="high"` and start the download
+            immediately as part of the LCP candidate set. */}
+        <img
+          src={exploreSplash}
+          alt=""
           aria-hidden
-          className="absolute inset-0 -z-20 bg-cover bg-center"
-          style={{ backgroundImage: `url(${exploreSplash})` }}
+          loading="eager"
+          decoding="async"
+          fetchPriority="high"
+          draggable={false}
+          className="pointer-events-none absolute inset-0 -z-20 h-full w-full object-cover object-center"
         />
 
         <div className="container relative mx-auto px-6 max-w-7xl">
@@ -109,17 +135,26 @@ function ExplorePage() {
 
       {/* Projects — kept on a soft band so card content reads cleanly */}
       <SectionBand variant="dark" pattern="chevron" divider roundTop roundBottom>
-        <ProjectsSection />
+        <LazyOnVisible
+          load={ProjectsSection as never}
+          placeholder={<SectionPlaceholder minH={720} />}
+        />
       </SectionBand>
 
       {/* Tech Marquee — animated tech stack showcase before GitHub */}
       <SectionBand variant="surface" pattern="gradient" divider roundTop roundBottom>
-        <TechMarquee />
+        <LazyOnVisible
+          load={TechMarquee as never}
+          placeholder={<SectionPlaceholder minH={300} />}
+        />
       </SectionBand>
 
       {/* GitHub activity — inverted band: light background in dark mode, dark in light mode */}
       <SectionBand variant="dark" pattern="none" divider roundTop>
-        <GithubActivitySection />
+        <LazyOnVisible
+          load={GithubActivitySection as never}
+          placeholder={<SectionPlaceholder minH={640} />}
+        />
       </SectionBand>
     </div>
   );
