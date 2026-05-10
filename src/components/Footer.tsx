@@ -35,10 +35,10 @@ export function Footer() {
         <div className="py-16 sm:py-24">
           {/* Large title */}
           <h2 className="font-display text-[clamp(2.5rem,8vw,6rem)] leading-[0.9] tracking-[-0.04em]">
-            {t("Let's create", "لنصنع")}
+            {t(data.content?.footer?.title_en ?? "Let's create", data.content?.footer?.title_ar ?? "لنصنع")}
             <br />
             <span className="italic text-primary">
-              {t("something great.", "شيئاً عظيماً.")}
+              {t(data.content?.footer?.subtitle_en ?? "something great.", data.content?.footer?.subtitle_ar ?? "شيئاً عظيماً.")}
             </span>
           </h2>
 
@@ -85,11 +85,11 @@ export function Footer() {
           </div>
           
           <div className="flex items-center gap-2 opacity-70">
-            <span>{t("Crafted with", "صُنع بـ")}</span>
+            <span>{t(data.content?.footer?.crafted_en ?? "Crafted with", data.content?.footer?.crafted_ar ?? "صُنع بـ")}</span>
             <Heart className="h-3.5 w-3.5 text-primary fill-primary" />
             <span className="inline-flex items-center gap-1.5">
               <MapPin className="h-3.5 w-3.5" />
-              {t("Sana'a, Yemen", "صنعاء، اليمن")}
+              {t(data.content?.footer?.location_en ?? "Sana'a, Yemen", data.content?.footer?.location_ar ?? "صنعاء، اليمن")}
             </span>
           </div>
 

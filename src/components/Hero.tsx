@@ -299,7 +299,10 @@ export function Hero() {
                 whileHover={reduce ? undefined : { scale: 1.05, y: -2 }}
                 className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-foreground text-background text-sm px-5 py-2 rounded-full font-medium shadow-lg"
               >
-                {t("Full-Stack Developer", "مطور فول ستاك")}
+                {t(
+                  data.content?.hero?.floatingBadge_en ?? "Full-Stack Developer",
+                  data.content?.hero?.floatingBadge_ar ?? "مطور فول ستاك",
+                )}
               </motion.div>
             </div>
           </motion.div>

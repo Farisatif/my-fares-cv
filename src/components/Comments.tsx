@@ -4,6 +4,7 @@ import { Send, MessageSquareText } from "lucide-react";
 import { toast } from "sonner";
 import { Reveal } from "./Reveal";
 import { useLang } from "./LanguageProvider";
+import { useSiteData } from "./SiteDataProvider";
 import { Skeleton, DotPulse } from "@/components/ui/skeleton";
 
 type Comment = {
@@ -15,6 +16,9 @@ type Comment = {
 
 export function Comments() {
   const { t } = useLang();
+  const { data } = useSiteData();
+  const c = data.content?.comments;
+
   const [items, setItems] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
   const [name, setName] = useState("");
@@ -52,7 +56,6 @@ export function Comments() {
   useEffect(() => {
     load();
     if (typeof window === "undefined") return;
-    // Poll for new approved comments every 10s (replaces the realtime stream).
     const id = window.setInterval(() => load(false), 10000);
     return () => window.clearInterval(id);
   }, []);
@@ -180,8 +183,8 @@ export function Comments() {
         },
       });
       toast.success(
-        t("Submitted for review", "تم الإرسال للمراجعة"),
-        { description: t("Your comment will appear once approved.", "سيظهر تعليقك بعد الموافقة عليه.") },
+        t(c?.pendingNote_en ?? "Submitted for review", c?.pendingNote_ar ?? "تم الإرسال للمراجعة"),
+        { description: t(c?.pendingDesc_en ?? "Your comment will appear once approved.", c?.pendingDesc_ar ?? "سيظهر تعليقك بعد الموافقة عليه.") },
       );
       setMessage("");
       setIsTyping(false);
@@ -198,18 +201,19 @@ export function Comments() {
       <Reveal className="lg:col-span-5">
         <div className="sticky top-28">
           <div className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-muted-foreground mb-5">
-            <MessageSquareText className="h-3.5 w-3.5" /> {t("Guestbook", "سجل الزوار")}
+            <MessageSquareText className="h-3.5 w-3.5" />
+            {t(c?.eyebrow_en ?? "Guestbook", c?.eyebrow_ar ?? "سجل الزوار")}
           </div>
           <h2 className="font-display h-display-lg pb-2">
-            {t("Leave a ", "اترك ")}
+            {t(c?.titlePrefix_en ?? "Leave a ", c?.titlePrefix_ar ?? "اترك ")}
             <span className="italic text-[oklch(0.42_0.2_255)]">
-              {t("trace.", "أثرًا.")}
+              {t(c?.titleAccent_en ?? "trace.", c?.titleAccent_ar ?? "أثرًا.")}
             </span>
           </h2>
           <p className="mt-5 text-base text-muted-foreground max-w-md leading-relaxed">
             {t(
-              "Drop a note, a kind word, a question — anything. Comments stream in real-time.",
-              "اترك ملاحظة، كلمة لطيفة، أو سؤالاً — أي شيء. التعليقات تظهر في الزمن الحقيقي.",
+              c?.description_en ?? "Drop a note, a kind word, a question — anything. Comments stream in real-time.",
+              c?.description_ar ?? "اترك ملاحظة، كلمة لطيفة، أو سؤالاً — أي شيء. التعليقات تظهر في الزمن الحقيقي.",
             )}
           </p>
 
@@ -219,7 +223,7 @@ export function Comments() {
             data-cursor="link"
           >
             <label className="block text-xs uppercase tracking-[0.2em] text-muted-foreground mb-2">
-              {t("Your name", "اسمك")}
+              {t(c?.nameLabel_en ?? "Your name", c?.nameLabel_ar ?? "اسمك")}
             </label>
             <input
               type="text"
@@ -228,10 +232,10 @@ export function Comments() {
               maxLength={80}
               required
               className="w-full bg-transparent border-b border-border focus:border-foreground outline-none py-2 text-base"
-              placeholder={t("Ada Lovelace", "أحمد العربي")}
+              placeholder={t(c?.namePlaceholder_en ?? "Ada Lovelace", c?.namePlaceholder_ar ?? "أحمد العربي")}
             />
             <label className="block text-xs uppercase tracking-[0.2em] text-muted-foreground mt-6 mb-2">
-              {t("Message", "الرسالة")}
+              {t(c?.messageLabel_en ?? "Message", c?.messageLabel_ar ?? "الرسالة")}
             </label>
             <textarea
               value={message}
@@ -240,7 +244,7 @@ export function Comments() {
               required
               rows={4}
               className="w-full bg-transparent border-b border-border focus:border-foreground outline-none py-2 text-base resize-none"
-              placeholder={t("Say hi…", "قل مرحبا…")}
+              placeholder={t(c?.messagePlaceholder_en ?? "Say hi…", c?.messagePlaceholder_ar ?? "قل مرحبا…")}
             />
             <div className="mt-6 flex items-center justify-between text-xs text-muted-foreground gap-3">
               <span className="flex items-center gap-3">
@@ -265,7 +269,7 @@ export function Comments() {
                 className="inline-flex items-center gap-2 rounded-full bg-foreground text-background px-5 py-2.5 text-sm hover:bg-foreground/90 transition-colors disabled:opacity-60 will-change-transform"
               >
                 {submitting ? <DotPulse /> : <Send className="h-4 w-4" />}
-                {t("Post", "نشر")}
+                {t(c?.postLabel_en ?? "Post", c?.postLabel_ar ?? "نشر")}
               </button>
             </div>
           </form>
@@ -300,31 +304,31 @@ export function Comments() {
           </div>
         ) : items.length === 0 ? (
           <div className="text-sm text-muted-foreground py-12 text-center rounded-3xl border border-dashed border-[var(--hairline)] bg-[var(--surface-1)]/40">
-            {t("No comments yet — be the first.", "لا توجد تعليقات بعد — كن الأول.")}
+            {t(c?.emptyState_en ?? "No comments yet — be the first.", c?.emptyState_ar ?? "لا توجد تعليقات بعد — كن الأول.")}
           </div>
         ) : (
-          items.map((c) => (
+          items.map((item) => (
             <div
-              key={c.id}
-              data-cid={c.id}
+              key={item.id}
+              data-cid={item.id}
               className="skeleton-content-in comment-card-enter group rounded-3xl bg-[var(--surface-1)] border border-[var(--hairline)] brand-shadow p-6 sm:p-7 transition-all hover:-translate-y-0.5 hover:border-[color-mix(in_oklab,var(--primary)_30%,var(--hairline))]"
             >
               <div className="flex items-start gap-4">
                 <div className="h-11 w-11 rounded-2xl bg-gradient-to-br from-[oklch(0.55_0.22_255)] to-[oklch(0.78_0.12_270)] text-white flex items-center justify-center font-display text-lg shrink-0">
-                  {c.author_name.trim().charAt(0).toUpperCase()}
+                  {item.author_name.trim().charAt(0).toUpperCase()}
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center justify-between gap-3 flex-wrap">
-                    <span className="font-medium text-foreground">{c.author_name}</span>
+                    <span className="font-medium text-foreground">{item.author_name}</span>
                     <span className="text-[11px] text-muted-foreground tabular-nums">
-                      {new Date(c.created_at).toLocaleString(undefined, {
+                      {new Date(item.created_at).toLocaleString(undefined, {
                         dateStyle: "medium",
                         timeStyle: "short",
                       })}
                     </span>
                   </div>
                   <p className="mt-2 text-base text-foreground/80 leading-relaxed whitespace-pre-wrap break-words">
-                    {c.message}
+                    {item.message}
                   </p>
                 </div>
               </div>

@@ -4,7 +4,7 @@ import {
   Settings2, X, Save, Lock, LogOut, KeyRound, Copy, Check,
   User, Code2, Briefcase, FolderKanban, GraduationCap, Trophy, Languages,
   MessageSquare, Shield, AlertTriangle, Sparkles, Menu, Database, WifiOff,
-  FileJson, Cpu,
+  FileJson, Cpu, FileText,
 } from "lucide-react";
 import { DotPulse } from "@/components/ui/skeleton";
 import { motion, AnimatePresence } from "framer-motion";
@@ -30,6 +30,7 @@ import { HeroForm } from "./sections/HeroForm";
 import { NavigationForm } from "./sections/NavigationForm";
 import { JsonForm } from "./sections/JsonForm";
 import { TechMarqueeForm } from "./sections/TechMarqueeForm";
+import { ContentForm } from "./sections/ContentForm";
 
 const MAX_LOCAL = 5;
 const LOCAL_LOCK_MS = 60 * 1000;
@@ -38,6 +39,7 @@ const TABS = [
   { id: "personal", label: "Personal", icon: User },
   { id: "hero", label: "Hero", icon: Sparkles },
   { id: "navigation", label: "Navigation", icon: Menu },
+  { id: "content", label: "Content", icon: FileText },
   { id: "skills", label: "Skills", icon: Code2 },
   { id: "experience", label: "Experience", icon: Briefcase },
   { id: "projects", label: "Projects", icon: FolderKanban },
@@ -253,6 +255,7 @@ export function SettingsDrawer() {
       case "personal": return <PersonalForm data={draft} onChange={setDraft} />;
       case "hero": return <HeroForm data={draft} onChange={setDraft} />;
       case "navigation": return <NavigationForm data={draft} onChange={setDraft} />;
+      case "content": return <ContentForm data={draft} onChange={setDraft} />;
       case "skills": return <SkillsForm data={draft} onChange={setDraft} />;
       case "experience": return <ExperienceForm data={draft} onChange={setDraft} />;
       case "projects": return <ProjectsForm data={draft} onChange={setDraft} />;
@@ -346,7 +349,7 @@ export function SettingsDrawer() {
                     </div>
                   </div>
                   <div className="text-[11px] sm:text-xs text-muted-foreground mt-0.5" aria-live="polite">
-                    {unlocked ? "Edit mode — saves to Lovable Cloud" : "Read-only — enter password to edit"}
+                    {unlocked ? "Edit mode — saves to database" : "Read-only — enter password to edit"}
                   </div>
                 </div>
                 <div className="flex items-center gap-2">

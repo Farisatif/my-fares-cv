@@ -91,8 +91,8 @@ export function AchievementsSection() {
             </h2>
             <p className="mt-6 text-base sm:text-lg opacity-60 leading-relaxed max-w-xl mx-auto">
               {t(
-                "Milestones from a journey of building, shipping, and learning in public.",
-                "محطات من رحلة البناء والشحن والتعلّم على الملأ.",
+                (data.content?.achievements as Record<string, string> | undefined)?.description_en ?? "Milestones from a journey of building, shipping, and learning in public.",
+                (data.content?.achievements as Record<string, string> | undefined)?.description_ar ?? "محطات من رحلة البناء والشحن والتعلّم على الملأ.",
               )}
             </p>
           </div>

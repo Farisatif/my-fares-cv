@@ -360,7 +360,9 @@
       "scrollPrompt_en": "Scroll to explore",
       "scrollPrompt_ar": "مرر للاستكشاف",
       "tagline_en": "Engineering · Systems · Product",
-      "tagline_ar": "هندسة · أنظمة · منتج"
+      "tagline_ar": "هندسة · أنظمة · منتج",
+      "floatingBadge_en": "Full-Stack Developer",
+      "floatingBadge_ar": "مطور فول ستاك"
     },
     "about": {
       "eyebrow_en": "About",
@@ -368,7 +370,9 @@
       "titlePrefix_en": "Crafting software ",
       "titlePrefix_ar": "أصنع برمجيات ",
       "titleAccent_en": "that ships.",
-      "titleAccent_ar": "تصل للمستخدم."
+      "titleAccent_ar": "تصل للمستخدم.",
+      "codeComment_en": "I started coding in 2019 — middle school. Today I build full-stack web apps, mobile experiences, and systems-level tools. I care about details: spacing, motion, edge cases, and the small joys that make software feel alive.",
+      "codeComment_ar": "بدأت البرمجة في ٢٠١٩ في المرحلة الإعدادية. اليوم أبني تطبيقات ويب متكاملة وتجارب جوال وأدوات أنظمة. أهتم بالتفاصيل: التباعد، الحركة، الحالات الحدية، والتفاصيل الصغيرة التي تمنح البرمجيات حياة."
     },
     "skills": {
       "eyebrow_en": "Toolkit",
@@ -384,7 +388,9 @@
       "titlePrefix_en": "Where I've ",
       "titlePrefix_ar": "أين قضيت ",
       "titleAccent_en": "put in the hours.",
-      "titleAccent_ar": "ساعات العمل."
+      "titleAccent_ar": "ساعات العمل.",
+      "description_en": "A timeline of roles where I've shipped real software, collaborated with thoughtful teams, and grown as an engineer.",
+      "description_ar": "سجلٌّ مهني يرصد المحطات التي شحنت فيها برمجيات حقيقية وتعاونت مع فرق مميزة ونمَوت فيها كمهندس."
     },
     "achievements": {
       "eyebrow_en": "Milestones",
@@ -392,7 +398,9 @@
       "titlePrefix_en": "A few ",
       "titlePrefix_ar": "بعض ",
       "titleAccent_en": "proud moments.",
-      "titleAccent_ar": "اللحظات المُشرّفة."
+      "titleAccent_ar": "اللحظات المُشرّفة.",
+      "description_en": "Milestones from a journey of building, shipping, and learning in public.",
+      "description_ar": "محطات من رحلة البناء والشحن والتعلّم على الملأ."
     },
     "languages": {
       "eyebrow_en": "Languages",
@@ -400,7 +408,9 @@
       "titlePrefix_en": "Fluent in ",
       "titlePrefix_ar": "أتحدث ",
       "titleAccent_en": "many tongues.",
-      "titleAccent_ar": "لغات عديدة."
+      "titleAccent_ar": "لغات عديدة.",
+      "description_en": "A live snapshot of where my coding hours actually go — measured by the languages I reach for most.",
+      "description_ar": "لمحة حية عن اللغات التي أعتمد عليها فعليًا — مرتبطة بساعات البرمجة التي أقضيها في كلٍ منها."
     },
     "contact": {
       "eyebrow_en": "Let's talk",
@@ -416,6 +426,16 @@
       "footerCredit_en": "Built with care · Sana'a, YE",
       "footerCredit_ar": "صُنع بعناية · صنعاء، اليمن"
     },
+    "footer": {
+      "title_en": "Let's create",
+      "title_ar": "لنصنع",
+      "subtitle_en": "something great.",
+      "subtitle_ar": "شيئاً عظيماً.",
+      "crafted_en": "Crafted with",
+      "crafted_ar": "صُنع بـ",
+      "location_en": "Sana'a, Yemen",
+      "location_ar": "صنعاء، اليمن"
+    },
     "comments": {
       "eyebrow_en": "Guestbook",
       "eyebrow_ar": "سجل الزوار",
@@ -424,7 +444,7 @@
       "titleAccent_en": "trace.",
       "titleAccent_ar": "أثرًا.",
       "description_en": "Drop a note, a kind word, a question — anything. Comments stream in real-time.",
-      "description_ar": "اترك ملاحظة، كلمة طيبة، سؤالًا — أيًا كان. التعليقات تتدفق فورًا.",
+      "description_ar": "اترك ملاحظة، كلمة لطيفة، أو سؤالاً — أي شيء. التعليقات تظهر في الزمن الحقيقي.",
       "nameLabel_en": "Your name",
       "nameLabel_ar": "اسمك",
       "namePlaceholder_en": "Ada Lovelace",
@@ -436,7 +456,11 @@
       "postLabel_en": "Post",
       "postLabel_ar": "نشر",
       "emptyState_en": "No comments yet — be the first.",
-      "emptyState_ar": "لا توجد تعليقات بعد — كن الأول."
+      "emptyState_ar": "لا توجد تعليقات بعد — كن الأول.",
+      "pendingNote_en": "Submitted for review",
+      "pendingNote_ar": "تم الإرسال للمراجعة",
+      "pendingDesc_en": "Your comment will appear once approved.",
+      "pendingDesc_ar": "سيظهر تعليقك بعد الموافقة عليه."
     }
   }
 }

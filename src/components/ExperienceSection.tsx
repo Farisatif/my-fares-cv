@@ -51,8 +51,8 @@ export function ExperienceSection() {
             </h2>
             <p className="mt-5 text-base sm:text-lg opacity-65 max-w-2xl leading-relaxed">
               {t(
-                "A timeline of roles where I've shipped real software, collaborated with thoughtful teams, and grown as an engineer.",
-                "سجلٌّ مهني يرصد المحطات التي شحنت فيها برمجيات حقيقية وتعاونت مع فرق مميزة ونمَوت فيها كمهندس.",
+                (data.content?.experience as Record<string, string> | undefined)?.description_en ?? "A timeline of roles where I've shipped real software, collaborated with thoughtful teams, and grown as an engineer.",
+                (data.content?.experience as Record<string, string> | undefined)?.description_ar ?? "سجلٌّ مهني يرصد المحطات التي شحنت فيها برمجيات حقيقية وتعاونت مع فرق مميزة ونمَوت فيها كمهندس.",
               )}
             </p>
           </Reveal>

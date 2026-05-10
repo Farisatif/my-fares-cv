@@ -90,8 +90,8 @@ export function LanguagesSection() {
           </h2>
           <p className="mt-5 text-base sm:text-lg opacity-65 max-w-2xl leading-relaxed">
             {t(
-              "A live snapshot of where my coding hours actually go — measured by the languages I reach for most.",
-              "لمحة حية عن اللغات التي أعتمد عليها فعليًا — مرتبطة بساعات البرمجة التي أقضيها في كلٍ منها.",
+              (data.content?.languages as Record<string, string> | undefined)?.description_en ?? "A live snapshot of where my coding hours actually go — measured by the languages I reach for most.",
+              (data.content?.languages as Record<string, string> | undefined)?.description_ar ?? "لمحة حية عن اللغات التي أعتمد عليها فعليًا — مرتبطة بساعات البرمجة التي أقضيها في كلٍ منها.",
             )}
           </p>
         </Reveal>

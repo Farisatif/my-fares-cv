@@ -634,10 +634,10 @@ export function AboutSection() {
             </p>
             <CodeCommentCard
               language={lang === "ar" ? "ar" : "en"}
-              filename={lang === "ar" ? "about.dev.ts" : "about.dev.ts"}
+              filename="about.dev.ts"
               text={t(
-                "I started coding in 2019 — middle school. Today I build full-stack web apps, mobile experiences, and systems-level tools. I care about details: spacing, motion, edge cases, and the small joys that make software feel alive.",
-                "بدأت البرمجة في ٢٠١٩ في المرحلة الإعدادية. اليوم أبني تطبيقات ويب متكاملة وتجارب جوال وأدوات أنظمة. أهتم بالتفاصيل: التباعد، الحركة، الحالات الحدية، والتفاصيل الصغيرة التي تمنح البرمجيات حياة.",
+                data.content?.about?.codeComment_en ?? "I started coding in 2019 — middle school. Today I build full-stack web apps, mobile experiences, and systems-level tools. I care about details: spacing, motion, edge cases, and the small joys that make software feel alive.",
+                data.content?.about?.codeComment_ar ?? "بدأت البرمجة في ٢٠١٩ في المرحلة الإعدادية. اليوم أبني تطبيقات ويب متكاملة وتجارب جوال وأدوات أنظمة. أهتم بالتفاصيل: التباعد، الحركة، الحالات الحدية، والتفاصيل الصغيرة التي تمنح البرمجيات حياة.",
               )}
             />
           </Reveal>
