@@ -1,7 +1,8 @@
 import { defineConfig } from "vite";
-import { tanstackStart } from "@tanstack/react-start/plugin/vite";
-import { nitro } from "nitro/vite";
 import react from "@vitejs/plugin-react";
+import { nitro } from "nitro/vite";
+import tsconfigPaths from "vite-tsconfig-paths";
+import tailwindcss from "@tailwindcss/vite";
 import { fileURLToPath, URL } from "node:url";
 
 export default defineConfig({
@@ -12,7 +13,7 @@ export default defineConfig({
       "@server": fileURLToPath(new URL("./server", import.meta.url)),
     },
   },
-  plugins: [tanstackStart(), nitro(), react()],
+  plugins: [tsconfigPaths(), tailwindcss(), react(), nitro()],
   server: {
     host: "0.0.0.0",
     port: 5000,
