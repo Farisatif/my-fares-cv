@@ -3,13 +3,18 @@ import { storage } from "@server/storage";
 
 // Public: list approved comments
 export const listApprovedComments = createServerFn({ method: "GET" }).handler(async () => {
-  const rows = await storage.listApprovedComments(50);
-  return rows.map((c) => ({
-    id: c.id,
-    author_name: c.authorName,
-    message: c.message,
-    created_at: c.createdAt.toISOString(),
-  }));
+  try {
+    const rows = await storage.listApprovedComments(50);
+    return rows.map((c) => ({
+      id: c.id,
+      author_name: c.authorName,
+      message: c.message,
+      created_at: c.createdAt.toISOString(),
+    }));
+  } catch (err) {
+    console.error("[comments] listApprovedComments failed:", err);
+    return [];
+  }
 });
 
 // Public: post a new comment (starts as 'pending' until an admin approves it)

@@ -4,11 +4,16 @@ import * as schema from "@shared/schema";
 
 const { Pool } = pg;
 
-if (!process.env.DATABASE_URL) {
+// DATABASE_URL is only required when Supabase is NOT configured.
+// When SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY are present the app uses
+// SupabaseStorage and this module is never imported.
+if (!process.env.DATABASE_URL && !process.env.SUPABASE_URL) {
   throw new Error(
-    "DATABASE_URL must be set. Did you forget to provision a database?",
+    "Either DATABASE_URL (Replit Postgres) or SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY must be set.",
   );
 }
 
-export const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-export const db = drizzle(pool, { schema });
+// Lazy — only initialised when DbStorage actually calls into this module.
+const connectionString = process.env.DATABASE_URL ?? "";
+export const pool = connectionString ? new Pool({ connectionString }) : null!;
+export const db = connectionString ? drizzle(pool, { schema }) : null!;

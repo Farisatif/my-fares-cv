@@ -19,10 +19,15 @@ type JsonObject = { [key: string]: JsonValue };
 // then falls back to the default resume bundled in the build.
 export const getSiteSettings = createServerFn({ method: "GET" }).handler(
   async (): Promise<JsonObject | null> => {
-    const data = await storage.getSiteSettingsData();
-    if (!data || typeof data !== "object" || Object.keys(data as object).length === 0) {
+    try {
+      const data = await storage.getSiteSettingsData();
+      if (!data || typeof data !== "object" || Object.keys(data as object).length === 0) {
+        return null;
+      }
+      return data as JsonObject;
+    } catch (err) {
+      console.error("[site-settings] getSiteSettings failed — falling back to null:", err);
       return null;
     }
-    return data as JsonObject;
   },
 );

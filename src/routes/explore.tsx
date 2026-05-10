@@ -71,6 +71,16 @@ function ExplorePage() {
           className="pointer-events-none absolute inset-0 -z-20 h-full w-full object-cover object-center"
         />
 
+        {/* Dark gradient — bottom-weighted so the text panel always reads cleanly */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 -z-10"
+          style={{
+            background:
+              "linear-gradient(to top, rgba(4,10,28,0.88) 0%, rgba(4,10,28,0.55) 40%, rgba(4,10,28,0.15) 70%, transparent 100%)",
+          }}
+        />
+
         <div className="container relative mx-auto px-6 max-w-7xl">
           {/* Back-to-CV link */}
           <motion.div
@@ -117,7 +127,7 @@ function ExplorePage() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.5 }}
-            className="mt-8 max-w-xl text-base sm:text-lg text-white/75 leading-relaxed"
+            className="mt-8 max-w-xl text-base sm:text-lg text-white leading-relaxed [text-shadow:0_2px_20px_rgba(4,10,28,0.8)]"
           >
             {t(
               "A look beyond the resume — open source projects, live GitHub activity, and the experiments that don't always fit on a CV.",
