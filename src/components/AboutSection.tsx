@@ -629,9 +629,6 @@ export function AboutSection() {
           </Reveal>
 
           <Reveal delay={0.15} className="lg:col-span-7 lg:pt-4">
-            <p className="text-xl sm:text-2xl leading-relaxed text-foreground/80 font-light">
-              {loc.bio}
-            </p>
             <CodeCommentCard
               language={lang === "ar" ? "ar" : "en"}
               filename="about.dev.ts"
