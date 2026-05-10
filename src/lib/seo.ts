@@ -1,8 +1,8 @@
 import resume from "@/data/resume.json";
 
-const SITE_URL = "https://github.com/Farisatif/my-fares-cv";
+const SITE_URL = "https://cv-fares.netlify.app";
 const SITE_NAME = "Fares Ahmed — Portfolio";
-const DEFAULT_OG = "/og-image.png";
+const DEFAULT_OG = "/og-image.svg";
 
 /**
  * Build a deduplicated meta array for a TanStack route's `head()` function.
@@ -21,6 +21,8 @@ export function buildMeta(opts: {
 }) {
   const { title, description, image = DEFAULT_OG, ogType = "website" } = opts;
   const url = opts.path ? `${SITE_URL}${opts.path}` : undefined;
+  // Ensure og:image is always an absolute URL for social crawler compatibility
+  const absoluteImage = image.startsWith("http") ? image : `${SITE_URL}${image}`;
   return [
     { title },
     { name: "description", content: description },
@@ -30,13 +32,19 @@ export function buildMeta(opts: {
     { property: "og:title", content: title },
     { property: "og:description", content: description },
     { property: "og:type", content: ogType },
-    { property: "og:image", content: image },
+    { property: "og:image", content: absoluteImage },
+    { property: "og:image:width", content: "1200" },
+    { property: "og:image:height", content: "630" },
+    { property: "og:image:alt", content: `${resume.personal.name} — Portfolio` },
     ...(url ? [{ property: "og:url", content: url }] : []),
     // Twitter
     { name: "twitter:card", content: "summary_large_image" },
     { name: "twitter:title", content: title },
     { name: "twitter:description", content: description },
-    { name: "twitter:image", content: image },
+    { name: "twitter:image", content: absoluteImage },
+    { name: "twitter:image:alt", content: `${resume.personal.name} — Portfolio` },
+    { name: "twitter:creator", content: "@farisatif" },
+    { name: "twitter:site", content: "@farisatif" },
   ];
 }
 
