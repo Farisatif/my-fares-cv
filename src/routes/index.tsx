@@ -33,8 +33,10 @@ const SectionPlaceholder = ({ minH = 480 }: { minH?: number }) => (
 );
 
 import { buildMeta } from "@/lib/seo";
+import { PageSkeleton } from "@/components/PageSkeleton";
 
 export const Route = createFileRoute("/")({
+  pendingComponent: PageSkeleton,
   head: () => ({
     meta: buildMeta({
       title: "Fares Ahmed — Software Engineer & Builder",
