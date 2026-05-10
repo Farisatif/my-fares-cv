@@ -19,9 +19,9 @@ import { useSiteData } from "./SiteDataProvider";
  *  • Scroll progress bar integrated into the outer edge
  */
 export function Navbar() {
-  const [scrolled, setScrolled]     = useState(false);
-  const [scrollPct, setScrollPct]   = useState(0);
-  const [railHovered, setRailHovered] = useState(false);
+  const [scrolled, setScrolled]   = useState(false);
+  const [scrollPct, setScrollPct] = useState(0);
+  const [hoveredKey, setHoveredKey] = useState<string | null>(null);
   const loc = useLocation();
   const { lang, t, toggle: toggleLang } = useLang();
   const { theme, toggle: toggleTheme }  = useTheme();
@@ -117,14 +117,11 @@ export function Navbar() {
           </div>
 
           {/* ── Rail ────────────────────────────────────────────────────── */}
-          <nav
-            className="relative flex flex-col items-stretch gap-1.5"
-            onMouseEnter={() => setRailHovered(true)}
-            onMouseLeave={() => setRailHovered(false)}
-          >
+          <nav className="relative flex flex-col items-stretch gap-1.5">
             {items.map((item) => (
               <RailChip
                 key={item.key}
+                itemKey={item.key}
                 icon={item.icon}
                 label={item.label}
                 to={item.to}
@@ -138,7 +135,8 @@ export function Navbar() {
                 chipShadow={chipShadow}
                 isRTL={isRTL}
                 pillSpring={pillSpring}
-                railHovered={railHovered}
+                isHovered={hoveredKey === item.key}
+                onHoverChange={(h) => setHoveredKey(h ? item.key : null)}
                 scrolled={scrolled}
               />
             ))}
@@ -152,7 +150,8 @@ export function Navbar() {
               tooltipSide={tooltipSide}
               halfPillRadius={halfPillRadius}
               isRTL={isRTL}
-              railHovered={railHovered}
+              isHovered={hoveredKey === "contact"}
+              onHoverChange={(h) => setHoveredKey(h ? "contact" : null)}
               chipBg="linear-gradient(140deg, oklch(0.42 0.16 260) 0%, oklch(0.30 0.13 265) 100%)"
               chipBorder="inset 0 1px 0 0 color-mix(in oklab, #ffffff 18%, transparent)"
               chipText="#ffffff"
@@ -170,7 +169,8 @@ export function Navbar() {
               tooltipSide={tooltipSide}
               halfPillRadius={halfPillRadius}
               isRTL={isRTL}
-              railHovered={railHovered}
+              isHovered={hoveredKey === "lang"}
+              onHoverChange={(h) => setHoveredKey(h ? "lang" : null)}
               chipBg={chipBg}
               chipBorder={chipBorder}
               chipText={chipText}
@@ -203,7 +203,8 @@ export function Navbar() {
               tooltipSide={tooltipSide}
               halfPillRadius={halfPillRadius}
               isRTL={isRTL}
-              railHovered={railHovered}
+              isHovered={hoveredKey === "theme"}
+              onHoverChange={(h) => setHoveredKey(h ? "theme" : null)}
               chipBg={chipBg}
               chipBorder={chipBorder}
               chipText={chipText}
