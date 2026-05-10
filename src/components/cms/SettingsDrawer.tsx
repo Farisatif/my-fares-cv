@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import {
   Settings2, X, Save, Lock, LogOut, KeyRound, Copy, Check,
@@ -74,8 +74,18 @@ const TAB_GROUPS = [
   },
 ] as const;
 
-const TABS = TAB_GROUPS.flatMap((g) => g.tabs);
-type Tab = (typeof TABS)[number]["id"];
+type Tab =
+  | "personal" | "hero" | "navigation" | "content" | "skills"
+  | "experience" | "projects" | "education" | "achievements"
+  | "languages" | "techMarquee" | "comments" | "json" | "security" | "danger";
+
+type TabDef = { id: Tab; label: string; icon: React.ComponentType<{ className?: string; strokeWidth?: number }> };
+
+type TabGroup = { label: string; tabs: TabDef[] };
+
+const TAB_GROUPS_TYPED: TabGroup[] = TAB_GROUPS as unknown as TabGroup[];
+
+const TABS: TabDef[] = TAB_GROUPS_TYPED.flatMap((g) => g.tabs);
 
 function fmtTime(d: Date) {
   return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
